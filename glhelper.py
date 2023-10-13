@@ -93,4 +93,5 @@ def _clear_display_in_projection_mode(window: Window):
 
 
 def _reset_display_in_modelview_mode():
-    glLoadIdentity()
+    # glLoadIdentity()
+    pass
