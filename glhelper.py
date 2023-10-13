@@ -57,7 +57,7 @@ def run_block_in_matrix_mode(mode, block_func):
 def reset_display(window: Window):
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
-    def clear_modelview_mode():
+    def clear_display_in_modelview_mode():
         glLoadIdentity()
         glViewport(
             window.position_x, # x
@@ -67,10 +67,10 @@ def reset_display(window: Window):
         )
     run_block_in_matrix_mode(
         mode=GL_MODELVIEW,
-        block_func=clear_modelview_mode,
+        block_func=clear_display_in_modelview_mode,
     )
     
-    def clear_projection_mode():
+    def clear_display_in_projection_mode():
         glLoadIdentity()
         glOrtho(
             window.position_x, # left
@@ -82,12 +82,12 @@ def reset_display(window: Window):
         )
     run_block_in_matrix_mode(
         mode=GL_PROJECTION,
-        block_func=clear_projection_mode,
+        block_func=clear_display_in_projection_mode,
     )
     
-    def reset_modelview_mode():
+    def reset_display_in_modelview_mode():
         glLoadIdentity()
     run_block_in_matrix_mode(
         mode=GL_MODELVIEW,
-        block_func=reset_modelview_mode,
+        block_func=reset_display_in_modelview_mode,
     )
