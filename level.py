@@ -1,11 +1,11 @@
-from OpenGL.GL import *
-from OpenGL.GLU import *
-from OpenGL.GLUT import *
+from OpenGL.GL import * # TODO: Delete
+from OpenGL.GLU import * # TODO: Delete
+from OpenGL.GLUT import * # TODO: Delete
 from PIL import Image
-import numpy
 
-from window import Window
+import glhelper as GLHelper
 from map import Map
+from window import Window
 
 
 COLOR_WHITE = (1.0, 1.0, 1.0)
@@ -14,25 +14,14 @@ COLOR_GRAY = (0.4, 0.4, 0.4)
 
 class Level:
     def __init__(self, title: str, window: Window, map: Map):
-        self.title = title
         self.window = window
         self.map = map
         self._temp_x = 0.0
         self._temp_y = 0.0
-        self._init_gl()
-        self._init_assets_as_textures()
+        self.glut_window = GLHelper.init_glut_window(window=window, title=title)
         # TODO: Compute size of cells based on grid in map
         self._cell_size = 110
-
-
-    def _init_gl(self):
-        glutInit()
-        glutInitDisplayMode(GLUT_RGB)
-        glutInitWindowPosition(self.window.position_x, self.window.position_y)
-        glutInitWindowSize(self.window.width, self.window.height)
-        self.glut_window = glutCreateWindow(self.title)
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-        glEnable(GL_BLEND)
+        self._init_assets_as_textures()
 
 
     def _init_assets_as_textures(self):
@@ -40,68 +29,21 @@ class Level:
         # TODO: Handle opening all assets one by one
         for name in ["test.png"]:
             image = Image.open(f"assets/{name}").convert("RGB").transpose(Image.FLIP_TOP_BOTTOM)
-            texture_id = glGenTextures(1)
-            self.texture_map[name] = texture_id
-            glBindTexture(GL_TEXTURE_2D, texture_id)
-            glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
-            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP)
-            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP)
-            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-            glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL)
-            # TODO: Probably store the actual width and height for use to calculate the scaling later
-            print(image.size)
-            glTexImage2D(
-                GL_TEXTURE_2D, # target
-                0, # level
-                GL_RGB, # internal_format
-                image.size[0], # width
-                image.size[1], # height
-                0, # border
-                GL_RGB, # format
-                GL_UNSIGNED_BYTE, # type
-                numpy.array(list(image.getdata()), numpy.int8) # *pixels
-            )
+            self.texture_map[name] = GLHelper.store_asset_as_texture(image=image)
 
 
     def start_main_loop(self):
-        glutDisplayFunc(self._display_func)
-        glutIdleFunc(self._display_func)
-        glutKeyboardFunc(self._keyboard_func)
-        glutMainLoop()
+        GLHelper.start_main_loop(
+            display_func=self._display_func,
+            keyboard_func=self._keyboard_func
+        )
 
 
     def _display_func(self):
-        self._gl_display_reset()
+        GLHelper.reset_display(window=self.window)
         self._display_grid()
         self._display_map()
         self._gl_display_commit()
-
-
-    def _gl_display_reset(self):
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        # TODO: Let's make a 'run in XXX matrix mode' with function block a thing
-        glLoadIdentity()
-        glViewport(
-            self.window.position_x, # x
-            self.window.position_y, # y
-            self.window.width, # width
-            self.window.height, # height
-        )
-        # TODO: Let's make a 'run in XXX matrix mode' with function block a thing
-        glMatrixMode(GL_PROJECTION)
-        glLoadIdentity()
-        glOrtho(
-            self.window.position_x, # left
-            self.window.position_x + self.window.width, # right
-            self.window.position_y, # bottom
-            self.window.position_y + self.window.height, # top
-            0.0, # zNear
-            1.0, # zFar
-        )
-        # TODO: Let's make a 'run in XXX matrix mode' with function block a thing
-        glMatrixMode(GL_MODELVIEW)
-        glLoadIdentity()
 
 
     def _display_grid(self):
