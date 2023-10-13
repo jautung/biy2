@@ -71,6 +71,7 @@ def reset_display(window: Window):
 
 
 def _clear_display_in_modelview_mode(window: Window):
+    # TODO: This should be named reset
     glLoadIdentity()
     glViewport(
         window.position_x, # x
@@ -81,6 +82,7 @@ def _clear_display_in_modelview_mode(window: Window):
 
 
 def _clear_display_in_projection_mode(window: Window):
+    # TODO: This should be named reset
     glLoadIdentity()
     glOrtho(
         window.position_x, # left
@@ -93,5 +95,6 @@ def _clear_display_in_projection_mode(window: Window):
 
 
 def _reset_display_in_modelview_mode():
-    # glLoadIdentity()
+    # This is just used to reset mode -- we should be able to get rid of everything if things are refactored properly
+    # TODO: Get rid of this
     pass
