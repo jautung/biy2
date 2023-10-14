@@ -1,6 +1,6 @@
 from piecetype import PieceType
 
-class Piece:
+class MapPiece:
     def __init__(self, x, y, piece_type: PieceType):
         self.x = x
         self.y = y

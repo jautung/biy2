@@ -1,6 +1,6 @@
 from level import Level
 from map import Map
-from piece import Piece
+from mappiece import MapPiece
 from piecetype import WordIsPieceType, BabaObjectPieceType, FlagObjectPieceType, BabaWordPieceType, FlagWordPieceType, WinWordPieceType, YouWordPieceType
 from window import Window
 
@@ -24,27 +24,27 @@ if __name__ == '__main__':
             number_rows=8,
             number_columns=10,
             pieces=[
-                Piece(
+                MapPiece(
                     x=0,
                     y=0,
                     piece_type=BabaWordPieceType()
                 ),
-                Piece(
+                MapPiece(
                     x=1,
                     y=0,
                     piece_type=WordIsPieceType()
                 ),
-                Piece(
+                MapPiece(
                     x=2,
                     y=0,
                     piece_type=YouWordPieceType()
                 ),
-                Piece(
+                MapPiece(
                     x=3,
                     y=0,
                     piece_type=BabaObjectPieceType()
                 ),
-                Piece(
+                MapPiece(
                     x=4,
                     y=0,
                     piece_type=FlagObjectPieceType()

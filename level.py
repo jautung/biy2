@@ -6,7 +6,7 @@ import glhelper as GLHelper
 import levelhelper as LevelHelper
 from asset import Asset
 from map import Map, MoveDirection
-from piece import Piece
+from mappiece import MapPiece
 from window import Window
 
 
@@ -79,7 +79,7 @@ class Level:
             self._draw_piece(piece=piece)
 
 
-    def _draw_piece(self, piece: Piece):
+    def _draw_piece(self, piece: MapPiece):
         x, y = LevelHelper.calculate_asset_position(
             row_index=piece.y,
             column_index=piece.x,
@@ -97,7 +97,6 @@ class Level:
 
 
     def _keyboard_func(self, key, x, y):
-        # TODO: Actually implement logic
         if key == b'w':
             self.map.execute_move(direction=MoveDirection.UP)
         elif key == b'a':

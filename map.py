@@ -1,5 +1,5 @@
 from enum import Enum, auto
-from piece import Piece
+from mappiece import MapPiece
 
 
 class MoveDirection(Enum):
@@ -11,7 +11,7 @@ class MoveDirection(Enum):
 
 
 class Map:
-    def __init__(self, number_rows, number_columns, pieces: list[Piece]):
+    def __init__(self, number_rows, number_columns, pieces: list[MapPiece]):
         self.number_rows = number_rows
         self.number_columns = number_columns
         self.pieces = pieces
