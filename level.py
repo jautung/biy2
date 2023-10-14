@@ -82,8 +82,8 @@ class Level:
 
     def _draw_piece(self, piece: Piece):
         x, y = LevelHelper.calculate_asset_position(
-            row_index=piece.x,
-            column_index=piece.y,
+            row_index=piece.y,
+            column_index=piece.x,
             cell_size=self.cell_size,
             asset_size=self.asset_size,
             window_padding_horizontal=self.window_padding_horizontal,

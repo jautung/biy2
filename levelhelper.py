@@ -25,6 +25,6 @@ def calculate_asset_size(cell_size: int):
 
 
 def calculate_asset_position(row_index: int, column_index: int, cell_size: int, asset_size: int, window_padding_horizontal: int, window_padding_vertical: int):
-    x = window_padding_horizontal + row_index * cell_size + (cell_size - asset_size) / 2
-    y = window_padding_vertical + column_index * cell_size + (cell_size - asset_size) / 2
+    x = window_padding_horizontal + column_index * cell_size + (cell_size - asset_size) / 2
+    y = window_padding_vertical + row_index * cell_size + (cell_size - asset_size) / 2
     return (x, y)
