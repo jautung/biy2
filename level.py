@@ -76,7 +76,7 @@ class Level:
 
 
     def _draw_map(self):
-        for piece in self.map.pieces:
+        for piece in self.map.get_pieces():
             self._draw_piece(piece=piece)
 
 
