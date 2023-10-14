@@ -5,6 +5,7 @@ import glhelper as GLHelper
 import levelhelper as LevelHelper
 from asset import Asset
 from map import Map
+from piece import Piece
 from window import Window
 
 
@@ -75,18 +76,21 @@ class Level:
 
 
     def _draw_map(self):
-        # TODO: Display map and pieces!
-        # TODO: We need an asset for each piece and an asset-name to piece mapping!
+        for piece in self.map.pieces:
+            self._draw_piece(piece=piece)
+
+
+    def _draw_piece(self, piece: Piece):
         x, y = LevelHelper.calculate_asset_position(
-            row_index=self._temp_x,
-            column_index=self._temp_y,
+            row_index=piece.x,
+            column_index=piece.y,
             cell_size=self.cell_size,
             asset_size=self.asset_size,
             window_padding_horizontal=self.window_padding_horizontal,
             window_padding_vertical=self.window_padding_vertical,
         )
         GLHelper.draw_square_asset(
-            asset=self.asset_map["word_baba.png"],
+            asset=self.asset_map[piece.piece_type.asset_name],
             x0=x,
             y0=y,
             size=self.asset_size
