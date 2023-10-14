@@ -19,8 +19,8 @@ if __name__ == '__main__':
             height=WINDOW_HEIGHT,
         ),
         map=Map(
-            number_rows=3,
-            number_columns=3,
+            number_rows=8,
+            number_columns=10,
             pieces=[]
         )
     )

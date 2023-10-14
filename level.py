@@ -1,6 +1,7 @@
 from PIL import Image
 
 import glhelper as GLHelper
+import levelhelper as LevelHelper
 from map import Map
 from window import Window
 
@@ -14,12 +15,13 @@ class Level:
     def __init__(self, title: str, window: Window, map: Map):
         self.window = window
         self.map = map
+        self.cell_size = LevelHelper.calculate_cell_size(window=window, map=map)
+        self.window_paddings = LevelHelper.calculate_window_paddings(window=window, map=map, cell_size=self.cell_size)
+        self.glut_window = GLHelper.init_glut_window(window=window, title=title)
+        self._init_assets_as_textures()
+
         self._temp_x = 0.0
         self._temp_y = 0.0
-        self.glut_window = GLHelper.init_glut_window(window=window, title=title)
-        # TODO: Compute size of cells based on grid in map
-        self._cell_size = 110
-        self._init_assets_as_textures()
 
 
     def _init_assets_as_textures(self):
@@ -45,13 +47,22 @@ class Level:
 
 
     def _draw_grid(self):
-        # TODO: Use map number of rows and columns correctly
-        GLHelper.draw_line(color=COLOR_GRAY, x0=self.window.width/5, y0=3*self.window.height/5, x1=self.window.width, y1=3*self.window.height/5)
-        GLHelper.draw_line(color=COLOR_GRAY, x0=self.window.width/5, y0=4*self.window.height/5, x1=self.window.width, y1=4*self.window.height/5)
-        GLHelper.draw_line(color=COLOR_GRAY, x0=self.window.width/5, y0=2*self.window.height/5, x1=self.window.width, y1=2*self.window.height/5)
-        GLHelper.draw_line(color=COLOR_GRAY, x0=3*self.window.width/5, y0=self.window.height/5, x1=3*self.window.width/5, y1=self.window.height)
-        GLHelper.draw_line(color=COLOR_GRAY, x0=4*self.window.width/5, y0=self.window.height/5, x1=4*self.window.width/5, y1=self.window.height)
-        GLHelper.draw_line(color=COLOR_GRAY, x0=2*self.window.width/5, y0=self.window.height/5, x1=2*self.window.width/5, y1=self.window.height)
+        for row_index in range(self.map.number_rows + 1):
+            GLHelper.draw_line(
+                color=COLOR_WHITE if row_index == 0 or row_index == self.map.number_rows else COLOR_GRAY,
+                x0=self.window_paddings[0],
+                y0=self.window_paddings[1] + row_index * self.cell_size,
+                x1=self.window.width - self.window_paddings[0],
+                y1=self.window_paddings[1] + row_index * self.cell_size,
+            )
+        for column_index in range(self.map.number_columns + 1):
+            GLHelper.draw_line(
+                color=COLOR_WHITE if column_index == 0 or column_index == self.map.number_columns else COLOR_GRAY,
+                x0=self.window_paddings[0] + column_index * self.cell_size,
+                y0=self.window_paddings[1],
+                x1=self.window_paddings[0] + column_index * self.cell_size,
+                y1=self.window.height - self.window_paddings[1],
+            )
 
 
     def _draw_map(self):
@@ -61,7 +72,7 @@ class Level:
             texture_id=self.texture_map["test.png"],
             x0=self._temp_x*1000,
             y0=self._temp_y*1000,
-            size=self._cell_size
+            size=100
         )
 
 
