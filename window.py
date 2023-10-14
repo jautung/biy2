@@ -1,6 +1,6 @@
 class Window:
-    def __init__( self, position_x, position_y, width, height):
-        self.position_x = position_x
-        self.position_y = position_y
+    def __init__(self, x, y, width, height):
+        self.x = x
+        self.y = y
         self.width = width
         self.height = height

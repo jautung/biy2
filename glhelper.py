@@ -10,7 +10,7 @@ from window import Window
 def init_glut_window(window: Window, title):
     glutInit()
     glutInitDisplayMode(GLUT_RGB)
-    glutInitWindowPosition(window.position_x, window.position_y)
+    glutInitWindowPosition(window.x, window.y)
     glutInitWindowSize(window.width, window.height)
     glut_window = glutCreateWindow(title)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
@@ -89,8 +89,8 @@ def reset_display(window: Window):
 def _reset_display_in_modelview_mode(window: Window):
     glLoadIdentity()
     glViewport(
-        window.position_x, # x
-        window.position_y, # y
+        window.x, # x
+        window.y, # y
         window.width, # width
         window.height, # height
     )
@@ -99,10 +99,10 @@ def _reset_display_in_modelview_mode(window: Window):
 def _reset_display_in_projection_mode(window: Window):
     glLoadIdentity()
     glOrtho(
-        window.position_x, # left
-        window.position_x + window.width, # right
-        window.position_y, # bottom
-        window.position_y + window.height, # top
+        window.x, # left
+        window.x + window.width, # right
+        window.y, # bottom
+        window.y + window.height, # top
         0.0, # zNear
         1.0, # zFar
     )
