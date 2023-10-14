@@ -1,13 +1,5 @@
-from enum import Enum, auto
 from mappiece import MapPiece
-
-
-class MoveDirection(Enum):
-    UP = auto()
-    DOWN = auto()
-    LEFT = auto()
-    RIGHT = auto()
-    WAIT = auto()
+from movedirection import MoveDirection
 
 
 class Map:
@@ -17,5 +9,10 @@ class Map:
         self.pieces = pieces
 
 
+    def generate_rules(self):
+        return []
+
+
     def execute_move(self, direction: MoveDirection):
-        print(direction)
+        for piece in self.pieces:
+            piece.execute_move(direction=direction)

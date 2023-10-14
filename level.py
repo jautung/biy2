@@ -5,7 +5,8 @@ from PIL import Image
 import glhelper as GLHelper
 import levelhelper as LevelHelper
 from asset import Asset
-from map import Map, MoveDirection
+from map import Map
+from movedirection import MoveDirection
 from mappiece import MapPiece
 from window import Window
 
