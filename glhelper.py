@@ -2,6 +2,7 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
 from PIL import Image
+import os
 import numpy
 
 from window import Window
@@ -12,10 +13,7 @@ def init_glut_window(window: Window, title):
     glutInitDisplayMode(GLUT_RGB)
     glutInitWindowPosition(window.x, window.y)
     glutInitWindowSize(window.width, window.height)
-    glut_window = glutCreateWindow(title)
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-    glEnable(GL_BLEND)
-    return glut_window
+    return glutCreateWindow(title)
 
 
 def destroy_glut_window(glut_window):
@@ -28,9 +26,8 @@ def destroy_glut_window(glut_window):
 
 
 def store_asset_as_texture(image: Image.Image):
-    texture_id = glGenTextures(1)
+    texture_id = glGenTextures(1) # number of textures to alloc
     glBindTexture(GL_TEXTURE_2D, texture_id)
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
@@ -40,13 +37,13 @@ def store_asset_as_texture(image: Image.Image):
     glTexImage2D(
         GL_TEXTURE_2D, # target
         0, # level
-        GL_RGB, # internal_format
+        GL_RGB, # internalformat
         image.size[0], # width
         image.size[1], # height
         0, # border
         GL_RGB, # format
         GL_UNSIGNED_BYTE, # type
-        numpy.array(list(image.getdata()), numpy.int8), # *pixels
+        numpy.array(list(image.getdata()), numpy.int8), # pixels
     )
     return texture_id
 
@@ -75,7 +72,7 @@ def _draw_shape(shape, block_func):
 
 
 def reset_display(window: Window):
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    glClear(GL_COLOR_BUFFER_BIT)
     _run_block_in_matrix_mode(
         mode=GL_MODELVIEW,
         block_func=lambda: _reset_display_in_modelview_mode(window=window),
@@ -119,7 +116,7 @@ def draw_line(color, x0, y0, x1, y1):
                 y0=y0,
                 x1=x1,
                 y1=y1,
-            )
+            ),
         ),
     )
 
@@ -129,18 +126,18 @@ def _draw_line_inner(x0, y0, x1, y1):
     glVertex2f(x1, y1)
 
 
-def draw_square_asset(texture_id, x, y, size):
+def draw_square_asset(texture_id, x0, y0, size):
     _run_block_in_matrix_mode(
         mode=GL_TEXTURE,
-        # This is probably going from window 1200 / 800 into our sizes
+        # TODO: This is probably going from window 1200 / 800 into our sizes
         block_func=lambda: _scale_texture(scale=0.01),
     )
     _run_block_in_matrix_mode(
         mode=GL_MODELVIEW,
         block_func=lambda: _draw_texture(
             texture_id=texture_id,
-            x=x,
-            y=y,
+            x0=x0,
+            y0=y0,
             size=size,
         ),
     )
@@ -155,7 +152,7 @@ def _scale_texture(scale):
     glScalef(
         scale, # x
         scale, # y
-        1, # z
+        scale, # z
     )
 
 
@@ -163,31 +160,28 @@ def _unscale_texture():
     glPopMatrix()
 
 
-def _draw_texture(texture_id, x, y, size):
+def _draw_texture(texture_id, x0, y0, size):
     glEnable(GL_TEXTURE_2D)
     glEnable(GL_TEXTURE_GEN_S)
     glEnable(GL_TEXTURE_GEN_T)
     glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR)
     glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR)
     glBindTexture(GL_TEXTURE_2D, texture_id)
-
     glPushMatrix()
     glTranslatef(
-        x, # x
-        y, # y
+        x0, # x
+        y0, # y
         0, # z
     )
     _draw_shape(
         shape=GL_QUADS,
-        block_func=lambda: _draw_texture_inner(
-            size=size, # TODO
-        )
+        block_func=lambda: _draw_square_inner(size=size),
     )
     glPopMatrix()
     glDisable(GL_TEXTURE_2D)
 
 
-def _draw_texture_inner(size):
+def _draw_square_inner(size):
     glVertex2f(0, 0)
     glVertex2f(0, size)
     glVertex2f(size, size)

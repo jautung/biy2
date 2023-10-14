@@ -5,6 +5,7 @@ from map import Map
 from window import Window
 
 
+# Colors in RGB
 COLOR_WHITE = (1.0, 1.0, 1.0)
 COLOR_GRAY = (0.4, 0.4, 0.4)
 
@@ -58,8 +59,8 @@ class Level:
         # TODO: We need an asset for each piece and an asset-name to piece mapping!
         GLHelper.draw_square_asset(
             texture_id=self.texture_map["test.png"],
-            x=self._temp_x*1000,
-            y=self._temp_y*1000,
+            x0=self._temp_x*1000,
+            y0=self._temp_y*1000,
             size=self._cell_size
         )
 
