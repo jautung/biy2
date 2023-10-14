@@ -52,10 +52,11 @@ def store_asset_as_texture(image: Image.Image):
     return texture_id
 
 
-def start_main_loop(display_func, keyboard_func):
+def start_main_loop(display_func, keyboard_func, special_func):
     glutDisplayFunc(display_func)
     glutIdleFunc(display_func)
     glutKeyboardFunc(keyboard_func)
+    glutSpecialFunc(special_func)
     glutMainLoop()
 
 

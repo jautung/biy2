@@ -1,10 +1,11 @@
 import os
+from OpenGL.GLUT import GLUT_KEY_UP, GLUT_KEY_DOWN, GLUT_KEY_LEFT, GLUT_KEY_RIGHT
 from PIL import Image
 
 import glhelper as GLHelper
 import levelhelper as LevelHelper
 from asset import Asset
-from map import Map
+from map import Map, MoveDirection
 from piece import Piece
 from window import Window
 
@@ -27,9 +28,6 @@ class Level:
         self.glut_window = GLHelper.init_glut_window(window=window, title=title)
         self._init_assets_as_textures()
 
-        self._temp_x = 0
-        self._temp_y = 0
-
 
     def _init_assets_as_textures(self):
         self.asset_map = {}
@@ -45,7 +43,8 @@ class Level:
     def start_main_loop(self):
         GLHelper.start_main_loop(
             display_func=self._display_func,
-            keyboard_func=self._keyboard_func
+            keyboard_func=self._keyboard_func,
+            special_func=self._special_func,
         )
 
 
@@ -100,13 +99,25 @@ class Level:
     def _keyboard_func(self, key, x, y):
         # TODO: Actually implement logic
         if key == b'w':
-            self._temp_y += 1
+            self.map.execute_move(direction=MoveDirection.UP)
         elif key == b'a':
-            self._temp_x -= 1
+            self.map.execute_move(direction=MoveDirection.LEFT)
         elif key == b's':
-            self._temp_y -= 1
+            self.map.execute_move(direction=MoveDirection.DOWN)
         elif key == b'd':
-            self._temp_x += 1
+            self.map.execute_move(direction=MoveDirection.RIGHT)
+        elif key == b' ':
+            self.map.execute_move(direction=MoveDirection.WAIT)
         elif key == b'q':
             GLHelper.destroy_glut_window(self.glut_window)
 
+
+    def _special_func(self, key, x, y):
+        if key == GLUT_KEY_UP:
+            self.map.execute_move(direction=MoveDirection.UP)
+        elif key == GLUT_KEY_DOWN:
+            self.map.execute_move(direction=MoveDirection.DOWN)
+        elif key == GLUT_KEY_LEFT:
+            self.map.execute_move(direction=MoveDirection.LEFT)
+        elif key == GLUT_KEY_RIGHT:
+            self.map.execute_move(direction=MoveDirection.RIGHT)
