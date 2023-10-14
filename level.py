@@ -1,3 +1,4 @@
+import os
 from PIL import Image
 
 import glhelper as GLHelper
@@ -10,6 +11,9 @@ from window import Window
 # Colors in RGB
 COLOR_WHITE = (1.0, 1.0, 1.0)
 COLOR_GRAY = (0.4, 0.4, 0.4)
+
+
+ASSET_DIRECTORY = "assets"
 
 
 class Level:
@@ -28,10 +32,9 @@ class Level:
 
     def _init_assets_as_textures(self):
         self.asset_map = {}
-        # TODO: Handle opening all assets one by one
-        for name in ["test.png"]:
-            image = Image.open(f"assets/{name}").convert("RGB").transpose(Image.FLIP_TOP_BOTTOM)
-            self.asset_map[name] = Asset(
+        for asset_filename in os.listdir(ASSET_DIRECTORY):
+            image = Image.open(os.path.join(ASSET_DIRECTORY, asset_filename)).convert("RGB").transpose(Image.FLIP_TOP_BOTTOM)
+            self.asset_map[asset_filename] = Asset(
                 texture_id=GLHelper.store_asset_as_texture(image=image),
                 width=image.size[0],
                 height=image.size[1],
@@ -83,7 +86,7 @@ class Level:
             window_padding_vertical=self.window_padding_vertical,
         )
         GLHelper.draw_square_asset(
-            asset=self.asset_map["test.png"],
+            asset=self.asset_map["test2.png"],
             x0=x,
             y0=y,
             size=self.asset_size
