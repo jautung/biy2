@@ -129,8 +129,7 @@ def _draw_line_inner(x0, y0, x1, y1):
 def draw_square_asset(texture_id, x0, y0, size):
     _run_block_in_matrix_mode(
         mode=GL_TEXTURE,
-        # TODO: This is probably going from window 1200 / 800 into our sizes
-        block_func=lambda: _scale_texture(scale=0.01),
+        block_func=lambda: _scale_texture(scale=0.02),
     )
     _run_block_in_matrix_mode(
         mode=GL_MODELVIEW,

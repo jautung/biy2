@@ -16,7 +16,8 @@ class Level:
         self.window = window
         self.map = map
         self.cell_size = LevelHelper.calculate_cell_size(window=window, map=map)
-        self.window_paddings = LevelHelper.calculate_window_paddings(window=window, map=map, cell_size=self.cell_size)
+        self.asset_size = LevelHelper.calculate_asset_size(cell_size=self.cell_size)
+        self.window_padding_horizontal, self.window_padding_vertical = LevelHelper.calculate_window_paddings(window=window, map=map, cell_size=self.cell_size)
         self.glut_window = GLHelper.init_glut_window(window=window, title=title)
         self._init_assets_as_textures()
 
@@ -50,42 +51,50 @@ class Level:
         for row_index in range(self.map.number_rows + 1):
             GLHelper.draw_line(
                 color=COLOR_WHITE if row_index == 0 or row_index == self.map.number_rows else COLOR_GRAY,
-                x0=self.window_paddings[0],
-                y0=self.window_paddings[1] + row_index * self.cell_size,
-                x1=self.window.width - self.window_paddings[0],
-                y1=self.window_paddings[1] + row_index * self.cell_size,
+                x0=self.window_padding_horizontal,
+                y0=self.window_padding_vertical + row_index * self.cell_size,
+                x1=self.window.width - self.window_padding_horizontal,
+                y1=self.window_padding_vertical + row_index * self.cell_size,
             )
         for column_index in range(self.map.number_columns + 1):
             GLHelper.draw_line(
                 color=COLOR_WHITE if column_index == 0 or column_index == self.map.number_columns else COLOR_GRAY,
-                x0=self.window_paddings[0] + column_index * self.cell_size,
-                y0=self.window_paddings[1],
-                x1=self.window_paddings[0] + column_index * self.cell_size,
-                y1=self.window.height - self.window_paddings[1],
+                x0=self.window_padding_horizontal + column_index * self.cell_size,
+                y0=self.window_padding_vertical,
+                x1=self.window_padding_horizontal + column_index * self.cell_size,
+                y1=self.window.height - self.window_padding_vertical,
             )
 
 
     def _draw_map(self):
         # TODO: Display map and pieces!
         # TODO: We need an asset for each piece and an asset-name to piece mapping!
+        x, y = LevelHelper.calculate_asset_position(
+            row_index=self._temp_x,
+            column_index=self._temp_y,
+            cell_size=self.cell_size,
+            asset_size=self.asset_size,
+            window_padding_horizontal=self.window_padding_horizontal,
+            window_padding_vertical=self.window_padding_vertical,
+        )
         GLHelper.draw_square_asset(
             texture_id=self.texture_map["test.png"],
-            x0=self._temp_x*1000,
-            y0=self._temp_y*1000,
-            size=100
+            x0=x,
+            y0=y,
+            size=self.asset_size
         )
 
 
     def _keyboard_func(self, key, x, y):
         # TODO: Actually implement logic
         if key == b'w':
-            self._temp_y += 0.1
+            self._temp_y += 1
         elif key == b'a':
-            self._temp_x -= 0.1
+            self._temp_x -= 1
         elif key == b's':
-            self._temp_y -= 0.1
+            self._temp_y -= 1
         elif key == b'd':
-            self._temp_x += 0.1
+            self._temp_x += 1
         elif key == b'q':
             GLHelper.destroy_glut_window(self.glut_window)
 
