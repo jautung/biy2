@@ -10,7 +10,7 @@ from window import Window
 
 
 # TODO: Figure out how scaling works and get rid of this
-MYSTERIOUS_FUDGE_SCALING_FACTOR = 25
+MYSTERIOUS_FUDGE_SCALING_FACTOR = 120
 
 
 def init_glut_window(window: Window, title):

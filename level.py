@@ -86,7 +86,7 @@ class Level:
             window_padding_vertical=self.window_padding_vertical,
         )
         GLHelper.draw_square_asset(
-            asset=self.asset_map["test2.png"],
+            asset=self.asset_map["word_baba.png"],
             x0=x,
             y0=y,
             size=self.asset_size
