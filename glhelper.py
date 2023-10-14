@@ -5,7 +5,12 @@ from PIL import Image
 import os
 import numpy
 
+from asset import Asset
 from window import Window
+
+
+# TODO: Figure out how scaling works and get rid of this
+MYSTERIOUS_FUDGE_SCALING_FACTOR = 25
 
 
 def init_glut_window(window: Window, title):
@@ -33,7 +38,6 @@ def store_asset_as_texture(image: Image.Image):
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL)
-    # TODO: Probably store the actual width and height for use to calculate the scaling later
     glTexImage2D(
         GL_TEXTURE_2D, # target
         0, # level
@@ -126,15 +130,18 @@ def _draw_line_inner(x0, y0, x1, y1):
     glVertex2f(x1, y1)
 
 
-def draw_square_asset(texture_id, x0, y0, size):
+def draw_square_asset(asset: Asset, x0, y0, size):
     _run_block_in_matrix_mode(
         mode=GL_TEXTURE,
-        block_func=lambda: _scale_texture(scale=0.02),
+        block_func=lambda: _scale_texture(
+            scale_x=size / asset.width / MYSTERIOUS_FUDGE_SCALING_FACTOR,
+            scale_y=size / asset.height / MYSTERIOUS_FUDGE_SCALING_FACTOR,
+        ),
     )
     _run_block_in_matrix_mode(
         mode=GL_MODELVIEW,
         block_func=lambda: _draw_texture(
-            texture_id=texture_id,
+            texture_id=asset.texture_id,
             x0=x0,
             y0=y0,
             size=size,
@@ -146,12 +153,12 @@ def draw_square_asset(texture_id, x0, y0, size):
     )
 
 
-def _scale_texture(scale):
+def _scale_texture(scale_x, scale_y):
     glPushMatrix()
     glScalef(
-        scale, # x
-        scale, # y
-        scale, # z
+        scale_x, # x
+        scale_y, # y
+        1, # z
     )
 
 

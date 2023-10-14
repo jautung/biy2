@@ -2,6 +2,7 @@ from PIL import Image
 
 import glhelper as GLHelper
 import levelhelper as LevelHelper
+from asset import Asset
 from map import Map
 from window import Window
 
@@ -21,16 +22,20 @@ class Level:
         self.glut_window = GLHelper.init_glut_window(window=window, title=title)
         self._init_assets_as_textures()
 
-        self._temp_x = 0.0
-        self._temp_y = 0.0
+        self._temp_x = 0
+        self._temp_y = 0
 
 
     def _init_assets_as_textures(self):
-        self.texture_map = {}
+        self.asset_map = {}
         # TODO: Handle opening all assets one by one
         for name in ["test.png"]:
             image = Image.open(f"assets/{name}").convert("RGB").transpose(Image.FLIP_TOP_BOTTOM)
-            self.texture_map[name] = GLHelper.store_asset_as_texture(image=image)
+            self.asset_map[name] = Asset(
+                texture_id=GLHelper.store_asset_as_texture(image=image),
+                width=image.size[0],
+                height=image.size[1],
+            )
 
 
     def start_main_loop(self):
@@ -78,7 +83,7 @@ class Level:
             window_padding_vertical=self.window_padding_vertical,
         )
         GLHelper.draw_square_asset(
-            texture_id=self.texture_map["test.png"],
+            asset=self.asset_map["test.png"],
             x0=x,
             y0=y,
             size=self.asset_size
