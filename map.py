@@ -4,41 +4,25 @@ from movedirection import MoveDirection
 
 
 class Map:
-    def __init__(self, number_rows, number_columns, pieces: list[MapPiece]):
+    def __init__(self, number_rows, number_columns, map_pieces: list[MapPiece]):
         self.number_rows = number_rows
         self.number_columns = number_columns
-        self._init_grid(pieces)
+        self.map_pieces = map_pieces
 
 
-    def _init_grid(self, pieces: list[MapPiece]):
-        self.grid = [[None for _ in range(self.number_columns)] for _ in range(self.number_rows)]
-        for piece in pieces:
-            assert(piece.x >= 0 and piece.x < self.number_columns)
-            assert(piece.y >= 0 and piece.y < self.number_rows)
-            self.grid[piece.y][piece.x] = piece.piece_type
-
-
-    def get_pieces(self) -> list[MapPiece]:
-        pieces = []
-        for column_index, row in enumerate(self.grid):
-            for row_index, piece_type in enumerate(row):
-                if piece_type is not None:
-                    pieces.append(
-                        MapPiece(
-                            x=row_index,
-                            y=column_index,
-                            piece_type=piece_type
-                        )
-                    )
-        return pieces
+    def _get_piece_type_at(self, x, y):
+        for map_piece in self.map_pieces:
+            if map_piece.x == x and map_piece.y == y:
+                return map_piece.piece_type
+        return None
 
 
     def _generate_rules_for_grid(self):
         rules = []
-        for row in self.grid:
-            rules += RuleHelper.generate_rules_for_row(row)
+        for row_index in range(self.number_rows):
+            rules += RuleHelper.generate_rules_for_row([self._get_piece_type_at(x=column_index, y=row_index) for column_index in range(self.number_columns)])
         for column_index in range(self.number_columns):
-            rules += RuleHelper.generate_rules_for_row([self.grid[row_index][column_index] for row_index in range(self.number_rows)])
+            rules += RuleHelper.generate_rules_for_row([self._get_piece_type_at(x=column_index, y=row_index) for row_index in range(self.number_rows)])
         print(rules)
         return rules
 
@@ -46,14 +30,14 @@ class Map:
     def execute_move(self, direction: MoveDirection):
         # TODO: Only affect pieces that are you, based on rules
         rules = self._generate_rules_for_grid()
-        for piece in self.get_pieces():
+        for map_piece in self.map_pieces:
             if direction == MoveDirection.UP:
-                piece.y += 1
+                map_piece.y += 1
             elif direction == MoveDirection.DOWN:
-                piece.y -= 1
+                map_piece.y -= 1
             elif direction == MoveDirection.LEFT:
-                piece.x -= 1
+                map_piece.x -= 1
             elif direction == MoveDirection.RIGHT:
-                piece.x += 1
+                map_piece.x += 1
             elif direction == MoveDirection.WAIT:
                 pass

@@ -76,21 +76,21 @@ class Level:
 
 
     def _draw_map(self):
-        for piece in self.map.get_pieces():
-            self._draw_piece(piece=piece)
+        for map_piece in self.map.map_pieces:
+            self._draw_piece(map_piece=map_piece)
 
 
-    def _draw_piece(self, piece: MapPiece):
+    def _draw_piece(self, map_piece: MapPiece):
         x, y = LevelHelper.calculate_asset_position(
-            row_index=piece.y,
-            column_index=piece.x,
+            row_index=map_piece.y,
+            column_index=map_piece.x,
             cell_size=self.cell_size,
             asset_size=self.asset_size,
             window_padding_horizontal=self.window_padding_horizontal,
             window_padding_vertical=self.window_padding_vertical,
         )
         GLHelper.draw_square_asset(
-            asset=self.asset_map[piece.piece_type.asset_name],
+            asset=self.asset_map[map_piece.piece_type.asset_name],
             x0=x,
             y0=y,
             size=self.asset_size

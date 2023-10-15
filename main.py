@@ -23,7 +23,7 @@ if __name__ == '__main__':
         map=Map(
             number_rows=8,
             number_columns=10,
-            pieces=[
+            map_pieces=[
                 MapPiece(
                     x=0,
                     y=0,
