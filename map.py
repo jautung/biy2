@@ -53,13 +53,13 @@ class Map:
 
 
     def _execute_object_move(self, map_piece: MapPiece, direction: MoveDirection, rules: list[list[PieceType]]):
-            if direction == MoveDirection.UP:
+            if direction == MoveDirection.UP and map_piece.y < self.number_rows - 1:
                 map_piece.y += 1
-            elif direction == MoveDirection.DOWN:
+            elif direction == MoveDirection.DOWN and map_piece.y > 0:
                 map_piece.y -= 1
-            elif direction == MoveDirection.LEFT:
+            elif direction == MoveDirection.LEFT and map_piece.x > 0:
                 map_piece.x -= 1
-            elif direction == MoveDirection.RIGHT:
+            elif direction == MoveDirection.RIGHT and map_piece.x < self.number_columns - 1:
                 map_piece.x += 1
             elif direction == MoveDirection.WAIT:
                 pass
