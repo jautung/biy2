@@ -1,3 +1,4 @@
+import piecetypehelper as PieceTypeHelper
 import rulehelper as RuleHelper
 from mappiece import MapPiece
 from movedirection import MoveDirection
@@ -11,19 +12,29 @@ class Map:
         self.map_pieces = map_pieces
 
 
-    def _get_piece_type_at(self, x, y):
+    def _get_piece_types_at(self, x, y) -> set[PieceType]:
+        piece_types = []
         for map_piece in self.map_pieces:
             if map_piece.x == x and map_piece.y == y:
-                return map_piece.piece_type
-        return None
+                piece_types.append(map_piece.piece_type)
+        return piece_types
 
 
-    def _generate_rules(self):
+    def _get_word_piece_type_at(self, x, y) -> PieceType:
+        piece_types = self._get_piece_types_at(x=x, y=y)
+        word_piece_types = list(filter(lambda piece_type: PieceTypeHelper.is_word_piece_type(piece_type), piece_types))
+        assert(len(word_piece_types) <= 1)
+        if len(word_piece_types) == 0:
+            return None
+        return word_piece_types[0]
+
+
+    def _generate_rules(self) -> list[list[PieceType]]:
         rules = []
         for row_index in range(self.number_rows):
-            rules += RuleHelper.generate_rules_for_row([self._get_piece_type_at(x=column_index, y=row_index) for column_index in range(self.number_columns)])
+            rules += RuleHelper.generate_rules_for_row([self._get_word_piece_type_at(x=column_index, y=row_index) for column_index in range(self.number_columns)])
         for column_index in range(self.number_columns):
-            rules += RuleHelper.generate_rules_for_row([self._get_piece_type_at(x=column_index, y=row_index) for row_index in range(self.number_rows)])
+            rules += RuleHelper.generate_rules_for_row([self._get_word_piece_type_at(x=column_index, y=row_index) for row_index in range(self.number_rows)])
         return rules
 
 
@@ -57,5 +68,9 @@ class Map:
         piece_types_that_are_win = RuleHelper.get_piece_types_that_are_win(rules)
         for row_index in range(self.number_rows):
             for column_index in range(self.number_columns):
-                self._get_piece_type_at(x=column_index, y=row_index)
+                piece_types = self._get_piece_types_at(x=column_index, y=row_index)
+                piece_types_contains_you = any([any([isinstance(piece_type, piece_type_that_is_you) for piece_type_that_is_you in piece_types_that_are_you]) for piece_type in piece_types])
+                piece_types_contains_win = any([any([isinstance(piece_type, piece_type_that_is_win) for piece_type_that_is_win in piece_types_that_are_win]) for piece_type in piece_types])
+                if piece_types_contains_you and piece_types_contains_win:
+                    return True
         return False

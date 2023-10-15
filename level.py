@@ -127,3 +127,4 @@ class Level:
         self.map.execute_move(direction=direction)
         if self.map.check_for_win():
             print("WIN!")
+            GLHelper.destroy_glut_window(self.glut_window)
