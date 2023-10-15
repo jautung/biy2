@@ -22,3 +22,12 @@ def _generate_longest_possible_rule_given_start(row: list[PieceType]):
     if len(row) <= 2 or not isinstance(row[2], WordAttributePieceType):
         return None
     return 3
+
+
+def get_piece_types_that_are_you(rules: list[list[PieceType]]):
+    # TODO: Incorporate 'NOT', 'AND', etc. etc.
+    piece_types_that_are_you = []
+    for rule in rules:
+        if len(rule) == 3 and isinstance(rule[0], WordNounPieceType) and isinstance(rule[1], WordIsPieceType) and isinstance(rule[2], YouWordPieceType):
+            piece_types_that_are_you.append(rule[0].associated_object_piece_type)
+    return piece_types_that_are_you
