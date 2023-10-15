@@ -7,3 +7,7 @@ class MapPiece:
         self.x = x
         self.y = y
         self.piece_type = piece_type
+
+
+    def __repr__(self):
+        return f"{self.piece_type}@({self.x}, {self.y})"

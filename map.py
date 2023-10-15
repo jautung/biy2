@@ -20,9 +20,15 @@ class Map:
     def get_pieces(self) -> list[MapPiece]:
         pieces = []
         for column_index, row in enumerate(self.grid):
-            for row_index, piece_type in row:
+            for row_index, piece_type in enumerate(row):
                 if piece_type is not None:
-                    pieces.append(MapPiece(x=row_index, y=column_index, piece_type=piece_type))
+                    pieces.append(
+                        MapPiece(
+                            x=row_index,
+                            y=column_index,
+                            piece_type=piece_type
+                        )
+                    )
         return pieces
 
 
@@ -33,7 +39,7 @@ class Map:
 
     def execute_move(self, direction: MoveDirection):
         # TODO: Only affect pieces that are you, based on rules
-        for piece in self.pieces:
+        for piece in self.get_pieces():
             if direction == MoveDirection.UP:
                 piece.y += 1
             elif direction == MoveDirection.DOWN:
@@ -44,4 +50,3 @@ class Map:
                 piece.x += 1
             elif direction == MoveDirection.WAIT:
                 pass
-
