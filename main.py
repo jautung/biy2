@@ -40,13 +40,28 @@ if __name__ == '__main__':
                     piece_type=YouWordPieceType()
                 ),
                 MapPiece(
-                    x=3,
-                    y=0,
+                    x=0,
+                    y=1,
+                    piece_type=FlagWordPieceType()
+                ),
+                MapPiece(
+                    x=1,
+                    y=1,
+                    piece_type=WordIsPieceType()
+                ),
+                MapPiece(
+                    x=2,
+                    y=1,
+                    piece_type=WinWordPieceType()
+                ),
+                MapPiece(
+                    x=0,
+                    y=5,
                     piece_type=BabaObjectPieceType()
                 ),
                 MapPiece(
-                    x=4,
-                    y=0,
+                    x=8,
+                    y=5,
                     piece_type=FlagObjectPieceType()
                 ),
             ]
