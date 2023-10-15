@@ -36,10 +36,13 @@ class Map:
 
 
     def _generate_rules_for_grid(self):
-        row_rules = [self._generate_rules_for_row(row) for row in self.grid]
-        column_rules = [self._generate_rules_for_row([self.grid[row_index][column_index] for row_index in range(self.number_rows)]) for column_index in range(self.number_columns)]
-        print(row_rules + column_rules)
-        return row_rules + column_rules
+        rules = []
+        for row in self.grid:
+            rules += self._generate_rules_for_row(row)
+        for column_index in range(self.number_columns):
+            rules += self._generate_rules_for_row([self.grid[row_index][column_index] for row_index in range(self.number_rows)])
+        print(rules)
+        return rules
 
 
     def _generate_rules_for_row(self, row: list[PieceType]):
@@ -54,11 +57,11 @@ class Map:
 
     def _generate_logest_possible_rule_given_start(self, row: list[PieceType]):
         # TODO: Incorporate 'NOT', 'AND', etc. etc.
-        if row[0] is not WordNounPieceType:
+        if not isinstance(row[0], WordNounPieceType):
             return None
-        if len(row) <= 1 or row[1] is not WordIsPieceType:
+        if len(row) <= 1 or not isinstance(row[1], WordIsPieceType):
             return None
-        if len(row) <= 2 or row[2] is not WordAttributePieceType:
+        if len(row) <= 2 or not isinstance(row[2], WordAttributePieceType):
             return None
         return 3
 
