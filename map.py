@@ -64,7 +64,7 @@ class Map:
             elif direction == MoveDirection.WAIT:
                 pass
             piece_types_in_new_spot = self._get_piece_types_at(x=map_piece.x, y=map_piece.y)
-            RuleHelper.get_piece_types_that_are_push()
+            RuleHelper.get_piece_types_that_are_push(rules=rules)
             # TODO: Do some propagated pushing
 
 
