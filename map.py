@@ -48,8 +48,11 @@ class Map:
     def _execute_player_move(self, direction: MoveDirection, rules: list[list[PieceType]]):
         piece_types_that_are_you = RuleHelper.get_piece_types_that_are_you(rules)
         for map_piece in self.map_pieces:
-            if not any([isinstance(map_piece.piece_type, piece_type_that_is_you) for piece_type_that_is_you in piece_types_that_are_you]):
-                continue
+            if any([isinstance(map_piece.piece_type, piece_type_that_is_you) for piece_type_that_is_you in piece_types_that_are_you]):
+                self._execute_object_move(map_piece=map_piece, direction=direction, rules=rules)
+
+
+    def _execute_object_move(self, map_piece: MapPiece, direction: MoveDirection, rules: list[list[PieceType]]):
             if direction == MoveDirection.UP:
                 map_piece.y += 1
             elif direction == MoveDirection.DOWN:
