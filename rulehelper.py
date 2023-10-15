@@ -31,3 +31,12 @@ def get_piece_types_that_are_you(rules: list[list[PieceType]]):
         if len(rule) == 3 and isinstance(rule[0], WordNounPieceType) and isinstance(rule[1], WordIsPieceType) and isinstance(rule[2], YouWordPieceType):
             piece_types_that_are_you.append(rule[0].associated_object_piece_type)
     return piece_types_that_are_you
+
+
+def get_piece_types_that_are_win(rules: list[list[PieceType]]):
+    # TODO: Incorporate 'NOT', 'AND', etc. etc.
+    piece_types_that_are_win = []
+    for rule in rules:
+        if len(rule) == 3 and isinstance(rule[0], WordNounPieceType) and isinstance(rule[1], WordIsPieceType) and isinstance(rule[2], WinWordPieceType):
+            piece_types_that_are_win.append(rule[0].associated_object_piece_type)
+    return piece_types_that_are_win

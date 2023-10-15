@@ -99,25 +99,31 @@ class Level:
 
     def _keyboard_func(self, key, x, y):
         if key == b'w':
-            self.map.execute_move(direction=MoveDirection.UP)
+            self._execute_move(direction=MoveDirection.UP)
         elif key == b'a':
-            self.map.execute_move(direction=MoveDirection.LEFT)
+            self._execute_move(direction=MoveDirection.LEFT)
         elif key == b's':
-            self.map.execute_move(direction=MoveDirection.DOWN)
+            self._execute_move(direction=MoveDirection.DOWN)
         elif key == b'd':
-            self.map.execute_move(direction=MoveDirection.RIGHT)
+            self._execute_move(direction=MoveDirection.RIGHT)
         elif key == b' ':
-            self.map.execute_move(direction=MoveDirection.WAIT)
+            self._execute_move(direction=MoveDirection.WAIT)
         elif key == b'q':
             GLHelper.destroy_glut_window(self.glut_window)
 
 
     def _special_func(self, key, x, y):
         if key == GLUT_KEY_UP:
-            self.map.execute_move(direction=MoveDirection.UP)
+            self._execute_move(direction=MoveDirection.UP)
         elif key == GLUT_KEY_DOWN:
-            self.map.execute_move(direction=MoveDirection.DOWN)
+            self._execute_move(direction=MoveDirection.DOWN)
         elif key == GLUT_KEY_LEFT:
-            self.map.execute_move(direction=MoveDirection.LEFT)
+            self._execute_move(direction=MoveDirection.LEFT)
         elif key == GLUT_KEY_RIGHT:
-            self.map.execute_move(direction=MoveDirection.RIGHT)
+            self._execute_move(direction=MoveDirection.RIGHT)
+
+
+    def _execute_move(self, direction: MoveDirection):
+        self.map.execute_move(direction=direction)
+        if self.map.check_for_win():
+            print("WIN!")
