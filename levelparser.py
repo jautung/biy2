@@ -11,12 +11,9 @@ from piecetype import *
 from window import Window
 
 
-LEVELS_DIRECTORY = "levels"
-
-
-def get_level_by_name(level_name: str, window: Window) -> Level:
+def get_level_by_name(level_name: str, window: Window, levels_directory: str, assets_directory: str) -> Level:
     name_to_piece_type_dict = _get_name_to_piece_type_dict()
-    filename = os.path.join(LEVELS_DIRECTORY, f"{level_name}.json")
+    filename = os.path.join(levels_directory, f"{level_name}.json")
     with open(filename) as file:
         data = json.load(file)
         return Level(
@@ -35,7 +32,8 @@ def get_level_by_name(level_name: str, window: Window) -> Level:
                     )
                     for piece in data["pieces"]
                 ]
-            )
+            ),
+            assets_directory=assets_directory,
         )
 
 

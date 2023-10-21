@@ -1,6 +1,7 @@
 from movedirection import MoveDirection
 from pieceposition import PiecePosition
 
+
 def get_position_after_move(position: PiecePosition, direction: MoveDirection) -> PiecePosition:
     if direction == MoveDirection.UP:
         return PiecePosition(

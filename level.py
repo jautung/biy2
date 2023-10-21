@@ -16,26 +16,23 @@ COLOR_WHITE = (1.0, 1.0, 1.0)
 COLOR_GRAY = (0.4, 0.4, 0.4)
 
 
-ASSETS_DIRECTORY = "assets"
-
-
 class Level:
-    def __init__(self, title: str, window: Window, map: Map):
+    def __init__(self, title: str, window: Window, map: Map, assets_directory: str):
         self.window = window
         self.map = map
         self.cell_size = LevelHelper.calculate_cell_size(window=window, map=map)
         self.asset_size = LevelHelper.calculate_asset_size(cell_size=self.cell_size)
         self.window_padding_horizontal, self.window_padding_vertical = LevelHelper.calculate_window_paddings(window=window, map=map, cell_size=self.cell_size)
         self.glut_window = GLHelper.init_glut_window(window=window, title=title)
-        self._init_assets_as_textures()
+        self._init_assets_as_textures(assets_directory=assets_directory)
 
 
-    def _init_assets_as_textures(self):
+    def _init_assets_as_textures(self, assets_directory: str):
         self.asset_map = {}
-        for asset_filename in os.listdir(ASSETS_DIRECTORY):
+        for asset_filename in os.listdir(assets_directory):
             if not asset_filename.endswith(".png"):
                 continue
-            image = Image.open(os.path.join(ASSETS_DIRECTORY, asset_filename)).convert("RGB").transpose(Image.FLIP_TOP_BOTTOM)
+            image = Image.open(os.path.join(assets_directory, asset_filename)).convert("RGB").transpose(Image.FLIP_TOP_BOTTOM)
             self.asset_map[asset_filename] = Asset(
                 texture_id=GLHelper.store_asset_as_texture(image=image),
                 width=image.size[0],
