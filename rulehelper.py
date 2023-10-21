@@ -4,7 +4,7 @@ import copy
 from piecetype import *
 
 
-def generate_rules_for_row(row: list[PieceType]) -> list[list[PieceType]]:
+def generate_rules_for_row(row: list[PieceType]) -> list[list[TextPieceType]]:
     rules = []
     for start_index in range(len(row)):
         length = _generate_longest_possible_rule_given_start(row[start_index:])
@@ -25,19 +25,19 @@ def _generate_longest_possible_rule_given_start(row: list[PieceType]) -> int:
     return 3
 
 
-def get_object_piece_types_that_are_you(rules: list[list[PieceType]]) -> list[Type[ObjectPieceType]]:
+def get_object_piece_types_that_are_you(rules: list[list[TextPieceType]]) -> list[Type[ObjectPieceType]]:
     return _get_object_piece_types_that_have_attribute(rules=rules, attribute_text_piece_type=YouTextPieceType)
 
 
-def get_object_piece_types_that_are_win(rules: list[list[PieceType]]) -> list[Type[ObjectPieceType]]:
+def get_object_piece_types_that_are_win(rules: list[list[TextPieceType]]) -> list[Type[ObjectPieceType]]:
     return _get_object_piece_types_that_have_attribute(rules=rules, attribute_text_piece_type=WinTextPieceType)
 
 
-def get_object_piece_types_that_are_push(rules: list[list[PieceType]]) -> list[Type[ObjectPieceType]]:
+def get_object_piece_types_that_are_push(rules: list[list[TextPieceType]]) -> list[Type[ObjectPieceType]]:
     return _get_object_piece_types_that_have_attribute(rules=rules, attribute_text_piece_type=PushTextPieceType)
 
 
-def _get_object_piece_types_that_have_attribute(rules: list[list[PieceType]], attribute_text_piece_type: Type[TextPieceType]) -> list[Type[ObjectPieceType]]:
+def _get_object_piece_types_that_have_attribute(rules: list[list[TextPieceType]], attribute_text_piece_type: Type[TextPieceType]) -> list[Type[ObjectPieceType]]:
     # TODO: Incorporate 'NOT', 'AND', etc. etc.
     object_piece_types_that_are_attribute: list[Type[ObjectPieceType]] = []
     for rule in rules:

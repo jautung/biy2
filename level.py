@@ -108,6 +108,7 @@ class Level:
             self._execute_move(direction=MoveDirection.RIGHT)
         elif key == b' ':
             self._execute_move(direction=MoveDirection.WAIT)
+        # TODO: Implement undo and reset
         elif key == b'q':
             GLHelper.destroy_glut_window(self.glut_window)
         elif key == b'/':

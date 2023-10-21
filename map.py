@@ -28,7 +28,7 @@ class Map:
         return [map_piece.piece_type for map_piece in self._get_map_pieces_at(position=position)]
 
 
-    def _get_text_piece_type_at(self, position: PiecePosition) -> PieceType:
+    def _get_text_piece_type_at(self, position: PiecePosition) -> TextPieceType:
         piece_types = self._get_piece_types_at(position=position)
         text_piece_types = list(filter(lambda piece_type: isinstance(piece_type, TextPieceType), piece_types))
         assert(len(text_piece_types) <= 1) # There can never be more than 1 text piece at a given position
@@ -37,8 +37,8 @@ class Map:
         return text_piece_types[0]
 
 
-    def _generate_rules(self) -> list[list[PieceType]]:
-        rules: list[list[PieceType]] = []
+    def _generate_rules(self) -> list[list[TextPieceType]]:
+        rules: list[list[TextPieceType]] = []
         # By default, without any overrides, "TEXT IS PUSH" is always a rule
         rules.append([TextTextPieceType(), IsTextPieceType(), PushTextPieceType()])
         for row_index in range(self.number_rows):
@@ -55,7 +55,7 @@ class Map:
         # TODO execute checks for 'MOVE', 'SINK', 'DEFEAT', each other interaction
 
 
-    def _execute_player_move(self, direction: MoveDirection, rules: list[list[PieceType]]):
+    def _execute_player_move(self, direction: MoveDirection, rules: list[list[TextPieceType]]):
         object_piece_types_that_are_you = RuleHelper.get_object_piece_types_that_are_you(rules)
         for map_piece in self.map_pieces:
             if self._is_piece_type_within_object_piece_types(
@@ -65,7 +65,7 @@ class Map:
                 self._execute_object_move(map_piece=map_piece, direction=direction, rules=rules)
 
 
-    def _execute_object_move(self, map_piece: MapPiece, direction: MoveDirection, rules: list[list[PieceType]]):
+    def _execute_object_move(self, map_piece: MapPiece, direction: MoveDirection, rules: list[list[TextPieceType]]):
         if not self._can_object_move(map_piece=map_piece, direction=direction, rules=rules):
             return
         new_position = PiecePositionHelper.get_position_after_move(position=map_piece.position, direction=direction)
@@ -75,7 +75,7 @@ class Map:
             self._execute_object_move(map_piece=map_piece, direction=direction, rules=rules)
 
 
-    def _can_object_move(self, map_piece: MapPiece, direction: MoveDirection, rules: list[list[PieceType]]) -> bool:
+    def _can_object_move(self, map_piece: MapPiece, direction: MoveDirection, rules: list[list[TextPieceType]]) -> bool:
         # TODO: Check is map_piece is 'STOP' and if so, return False
         new_position = PiecePositionHelper.get_position_after_move(position=map_piece.position, direction=direction)
         if not self._can_object_enter_position(position=new_position, rules=rules):
@@ -86,7 +86,7 @@ class Map:
         )
 
 
-    def _get_map_pieces_in_position_that_are_push(self, position: PiecePosition, rules: list[list[PieceType]]) -> list[MapPiece]:
+    def _get_map_pieces_in_position_that_are_push(self, position: PiecePosition, rules: list[list[TextPieceType]]) -> list[MapPiece]:
         map_pieces_in_new_position = self._get_map_pieces_at(position=position)
         object_piece_types_that_are_push = RuleHelper.get_object_piece_types_that_are_push(rules=rules)
         return list(filter(
@@ -97,7 +97,7 @@ class Map:
         ))
 
 
-    def _can_object_enter_position(self, position: PiecePosition, rules: list[list[PieceType]]) -> bool:
+    def _can_object_enter_position(self, position: PiecePosition, rules: list[list[TextPieceType]]) -> bool:
         if position.x < 0:
             return False
         if position.y < 0:
