@@ -20,10 +20,10 @@ class TextPieceType(PieceType):
 
 
 class TextNounPieceType(TextPieceType):
-    def __init__(self, asset_name: str, associated_object_piece_type):
+    def __init__(self, asset_name: str, associated_object_piece_types):
         super().__init__(asset_name=asset_name)
-        # The object that this noun text should be controlling on the board
-        self.associated_object_piece_type = associated_object_piece_type
+        # The object(s) that this noun text should be controlling on the board
+        self.associated_object_piece_types = associated_object_piece_types
     def __repr__(self):
         return "WordNounPieceType"
 
@@ -58,21 +58,21 @@ class FlagObjectPieceType(ObjectPieceType):
 
 class BabaTextPieceType(TextNounPieceType):
     def __init__(self):
-        super().__init__(asset_name="text_baba.png", associated_object_piece_type=BabaObjectPieceType)
+        super().__init__(asset_name="text_baba.png", associated_object_piece_types=[BabaObjectPieceType])
     def __repr__(self):
         return "BabaWordPieceType"
 
 
 class FlagTextPieceType(TextNounPieceType):
     def __init__(self):
-        super().__init__(asset_name="text_flag.png", associated_object_piece_type=FlagObjectPieceType)
+        super().__init__(asset_name="text_flag.png", associated_object_piece_types=[FlagObjectPieceType])
     def __repr__(self):
         return "FlagWordPieceType"
 
 
 class TextTextPieceType(TextNounPieceType):
     def __init__(self):
-        super().__init__(asset_name="text_text.png", associated_object_piece_type=TextPieceType)
+        super().__init__(asset_name="text_text.png", associated_object_piece_types=[TextPieceType])
     def __repr__(self):
         return "TextWordPieceType"
 
