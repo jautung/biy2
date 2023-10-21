@@ -38,7 +38,9 @@ class Map:
 
 
     def _generate_rules(self) -> list[list[PieceType]]:
-        rules = []
+        rules: list[list[PieceType]] = []
+        # By default, without any overrides, "TEXT IS PUSH" is always a rule
+        rules.append([TextTextPieceType, IsTextPieceType, PushTextPieceType])
         for row_index in range(self.number_rows):
             rules += RuleHelper.generate_rules_for_row([self._get_word_piece_type_at(PiecePosition(x=column_index, y=row_index)) for column_index in range(self.number_columns)])
         for column_index in range(self.number_columns):
