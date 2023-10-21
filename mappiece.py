@@ -1,5 +1,4 @@
-from piecetype import PieceType
-from movedirection import MoveDirection
+from piecetype import *
 
 
 class MapPiece:

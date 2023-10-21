@@ -1,8 +1,7 @@
-import piecetypehelper as PieceTypeHelper
 import rulehelper as RuleHelper
 from mappiece import MapPiece
 from movedirection import MoveDirection
-from piecetype import PieceType
+from piecetype import *
 
 
 class Map:
@@ -22,7 +21,7 @@ class Map:
 
     def _get_word_piece_type_at(self, x, y) -> PieceType:
         piece_types = self._get_piece_types_at(x=x, y=y)
-        word_piece_types = list(filter(lambda piece_type: PieceTypeHelper.is_word_piece_type(piece_type), piece_types))
+        word_piece_types = list(filter(lambda piece_type: isinstance(piece_type, TextPieceType), piece_types))
         assert(len(word_piece_types) <= 1)
         if len(word_piece_types) == 0:
             return None

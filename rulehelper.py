@@ -1,6 +1,6 @@
 import copy
 
-from piecetype import PieceType, TextNounPieceType, TextIsPieceType, TextAttributePieceType, BabaObjectPieceType, FlagObjectPieceType, BabaTextPieceType, FlagTextPieceType, WinWordPieceType, YouWordPieceType
+from piecetype import *
 
 
 def generate_rules_for_row(row: list[PieceType]):
@@ -15,33 +15,31 @@ def generate_rules_for_row(row: list[PieceType]):
 
 def _generate_longest_possible_rule_given_start(row: list[PieceType]):
     # TODO: Incorporate 'NOT', 'AND', etc. etc.
-    if not isinstance(row[0], TextNounPieceType):
+    if not isinstance(row[0], NounTextPieceType):
         return None
-    if len(row) <= 1 or not isinstance(row[1], TextIsPieceType):
+    if len(row) <= 1 or not isinstance(row[1], IsTextPieceType):
         return None
-    if len(row) <= 2 or not isinstance(row[2], TextAttributePieceType):
+    if len(row) <= 2 or not isinstance(row[2], AttributeTextPieceType):
         return None
     return 3
 
 
 def get_piece_types_that_are_you(rules: list[list[PieceType]]):
-    # TODO: Incorporate 'NOT', 'AND', etc. etc.
-    piece_types_that_are_you = []
-    for rule in rules:
-        if len(rule) == 3 and isinstance(rule[0], TextNounPieceType) and isinstance(rule[1], TextIsPieceType) and isinstance(rule[2], YouWordPieceType):
-            piece_types_that_are_you += rule[0].associated_object_piece_types
-    return piece_types_that_are_you
+    return _get_object_piece_types_that_have_attribute(rules=rules, attribute_text_piece_type=YouTextPieceType)
 
 
 def get_piece_types_that_are_win(rules: list[list[PieceType]]):
-    # TODO: Incorporate 'NOT', 'AND', etc. etc.
-    piece_types_that_are_win = []
-    for rule in rules:
-        if len(rule) == 3 and isinstance(rule[0], TextNounPieceType) and isinstance(rule[1], TextIsPieceType) and isinstance(rule[2], WinWordPieceType):
-            piece_types_that_are_win += rule[0].associated_object_piece_types
-    return piece_types_that_are_win
+    return _get_object_piece_types_that_have_attribute(rules=rules, attribute_text_piece_type=WinTextPieceType)
 
 
 def get_piece_types_that_are_push(rules: list[list[PieceType]]):
-    # TODO
-    return []
+    return _get_object_piece_types_that_have_attribute(rules=rules, attribute_text_piece_type=PushTextPieceType)
+
+
+def _get_object_piece_types_that_have_attribute(rules: list[list[PieceType]], attribute_text_piece_type):
+    # TODO: Incorporate 'NOT', 'AND', etc. etc.
+    piece_types_that_are_attribute = []
+    for rule in rules:
+        if len(rule) == 3 and isinstance(rule[0], NounTextPieceType) and isinstance(rule[1], IsTextPieceType) and isinstance(rule[2], attribute_text_piece_type):
+            piece_types_that_are_attribute += rule[0].associated_object_piece_types
+    return piece_types_that_are_attribute

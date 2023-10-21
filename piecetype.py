@@ -16,30 +16,30 @@ class TextPieceType(PieceType):
     def __init__(self, asset_name: str):
         super().__init__(asset_name=asset_name)
     def __repr__(self):
-        return "WordPieceType"
+        return "TextPieceType"
 
 
-class TextNounPieceType(TextPieceType):
+class NounTextPieceType(TextPieceType):
     def __init__(self, asset_name: str, associated_object_piece_types):
         super().__init__(asset_name=asset_name)
         # The object(s) that this noun text should be controlling on the board
         self.associated_object_piece_types = associated_object_piece_types
     def __repr__(self):
-        return "WordNounPieceType"
+        return "NounTextPieceType"
 
 
-class TextIsPieceType(TextPieceType):
+class IsTextPieceType(TextPieceType):
     def __init__(self):
         super().__init__(asset_name="text_is.png")
     def __repr__(self):
-        return "WordIsPieceType"
+        return "IsTextPieceType"
 
 
-class TextAttributePieceType(TextPieceType):
+class AttributeTextPieceType(TextPieceType):
     def __init__(self, asset_name: str):
         super().__init__(asset_name=asset_name)
     def __repr__(self):
-        return "WordAttributePieceType"
+        return "AttributeTextPieceType"
 
 
 class BabaObjectPieceType(ObjectPieceType):
@@ -56,43 +56,43 @@ class FlagObjectPieceType(ObjectPieceType):
         return "FlagObjectPieceType"
 
 
-class BabaTextPieceType(TextNounPieceType):
+class BabaTextPieceType(NounTextPieceType):
     def __init__(self):
         super().__init__(asset_name="text_baba.png", associated_object_piece_types=[BabaObjectPieceType])
     def __repr__(self):
-        return "BabaWordPieceType"
+        return "BabaTextPieceType"
 
 
-class FlagTextPieceType(TextNounPieceType):
+class FlagTextPieceType(NounTextPieceType):
     def __init__(self):
         super().__init__(asset_name="text_flag.png", associated_object_piece_types=[FlagObjectPieceType])
     def __repr__(self):
-        return "FlagWordPieceType"
+        return "FlagTextPieceType"
 
 
-class TextTextPieceType(TextNounPieceType):
+class TextTextPieceType(NounTextPieceType):
     def __init__(self):
         super().__init__(asset_name="text_text.png", associated_object_piece_types=[TextPieceType])
     def __repr__(self):
-        return "TextWordPieceType"
+        return "TextTextPieceType"
 
 
-class WinWordPieceType(TextAttributePieceType):
+class WinTextPieceType(AttributeTextPieceType):
     def __init__(self):
         super().__init__(asset_name="text_win.png")
     def __repr__(self):
-        return "WinWordPieceType"
+        return "WinTextPieceType"
 
 
-class YouWordPieceType(TextAttributePieceType):
+class YouTextPieceType(AttributeTextPieceType):
     def __init__(self):
         super().__init__(asset_name="text_you.png")
     def __repr__(self):
-        return "YouWordPieceType"
+        return "YouTextPieceType"
 
 
-class PushWordPieceType(TextAttributePieceType):
+class PushTextPieceType(AttributeTextPieceType):
     def __init__(self):
         super().__init__(asset_name="text_push.png")
     def __repr__(self):
-        return "PushWordPieceType"
+        return "PushTextPieceType"
