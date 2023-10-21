@@ -121,7 +121,7 @@ class Level:
         elif key == b"r":
             self._reset_level()
         elif key == b"q":
-            GLHelper.destroy_glut_window(self.glut_window)
+            GLHelper.destroy_glut_window(glut_window=self.glut_window)
         elif key == b"/":
             # Printing rules for debugging
             rules = self.map._generate_rules()
@@ -149,7 +149,7 @@ class Level:
         self.map.execute_move(direction=direction)
         if self.map.is_in_win_state():
             print("WIN!")
-            GLHelper.destroy_glut_window(self.glut_window)
+            GLHelper.destroy_glut_window(glut_window=self.glut_window)
 
     def _undo(self):
         if len(self.undo_map_stack) == 0:  # Nothing to undo

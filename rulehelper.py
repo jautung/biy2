@@ -49,6 +49,14 @@ def get_object_piece_types_that_are_push(
     )
 
 
+def get_object_piece_types_that_are_stop(
+    rules: list[list[TextPieceType]],
+) -> list[Type[ObjectPieceType]]:
+    return _get_object_piece_types_that_have_attribute(
+        rules=rules, attribute_text_piece_type=StopTextPieceType
+    )
+
+
 def _get_object_piece_types_that_have_attribute(
     rules: list[list[TextPieceType]], attribute_text_piece_type: Type[TextPieceType]
 ) -> list[Type[ObjectPieceType]]:

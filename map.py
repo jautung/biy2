@@ -48,7 +48,7 @@ class Map:
         rules.append([TextTextPieceType(), IsTextPieceType(), PushTextPieceType()])
         for row_index in range(self.number_rows):
             rules += RuleHelper.generate_rules_for_row(
-                [
+                row=[
                     self._get_text_piece_type_at(
                         PiecePosition(x=column_index, y=row_index)
                     )
@@ -57,7 +57,7 @@ class Map:
             )
         for column_index in range(self.number_columns):
             rules += RuleHelper.generate_rules_for_row(
-                [
+                row=[
                     self._get_text_piece_type_at(
                         PiecePosition(x=column_index, y=row_index)
                     )
@@ -78,7 +78,7 @@ class Map:
         self, direction: MoveDirection, rules: list[list[TextPieceType]]
     ):
         object_piece_types_that_are_you = (
-            RuleHelper.get_object_piece_types_that_are_you(rules)
+            RuleHelper.get_object_piece_types_that_are_you(rules=rules)
         )
         for map_piece in self.map_pieces:
             if self._is_piece_type_within_object_piece_types(
@@ -119,7 +119,13 @@ class Map:
         direction: MoveDirection,
         rules: list[list[TextPieceType]],
     ) -> bool:
-        # TODO: Check is map_piece is 'STOP' and if so, return False
+        if self._is_piece_type_within_object_piece_types(
+            piece_type=map_piece.piece_type,
+            object_piece_types=RuleHelper.get_object_piece_types_that_are_stop(
+                rules=rules
+            ),
+        ):
+            return False
         new_position = PiecePositionHelper.get_position_after_move(
             position=map_piece.position, direction=direction
         )
@@ -167,8 +173,25 @@ class Map:
             return False
         if position.y >= self.number_rows:
             return False
-        # TODO: Check for 'STOP' pieces in position and if so, return False
+        if self._has_map_piece_in_position_that_is_stop(position=position, rules=rules):
+            return False
         return True
+
+    def _has_map_piece_in_position_that_is_stop(
+        self, position: PiecePosition, rules: list[list[TextPieceType]]
+    ) -> bool:
+        object_piece_types_that_are_stop = (
+            RuleHelper.get_object_piece_types_that_are_stop(rules=rules)
+        )
+        return any(
+            [
+                self._is_piece_type_within_object_piece_types(
+                    piece_type=map_piece.piece_type,
+                    object_piece_types=object_piece_types_that_are_stop,
+                )
+                for map_piece in self._get_map_pieces_at(position=position)
+            ]
+        )
 
     def is_in_win_state(self) -> bool:
         rules = self._generate_rules()
