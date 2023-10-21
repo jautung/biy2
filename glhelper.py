@@ -9,10 +9,6 @@ from asset import Asset
 from window import Window
 
 
-# TODO: Figure out how scaling works and get rid of this
-MYSTERIOUS_FUDGE_SCALING_FACTOR = 50
-
-
 def init_glut_window(window: Window, title):
     glutInit()
     glutInitDisplayMode(GLUT_RGB)
@@ -135,8 +131,8 @@ def draw_square_asset(asset: Asset, x0, y0, size):
     _run_block_in_matrix_mode(
         mode=GL_TEXTURE,
         block_func=lambda: _scale_texture(
-            scale_x=size / asset.width / MYSTERIOUS_FUDGE_SCALING_FACTOR,
-            scale_y=size / asset.height / MYSTERIOUS_FUDGE_SCALING_FACTOR,
+            scale_x=1.0 / size,
+            scale_y=1.0 / size,
         ),
     )
     _run_block_in_matrix_mode(
