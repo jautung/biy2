@@ -1,6 +1,6 @@
 import copy
 
-from piecetype import PieceType, WordNounPieceType, WordIsPieceType, WordAttributePieceType, BabaObjectPieceType, FlagObjectPieceType, BabaWordPieceType, FlagWordPieceType, WinWordPieceType, YouWordPieceType
+from piecetype import PieceType, TextNounPieceType, TextIsPieceType, TextAttributePieceType, BabaObjectPieceType, FlagObjectPieceType, BabaTextPieceType, FlagTextPieceType, WinWordPieceType, YouWordPieceType
 
 
 def generate_rules_for_row(row: list[PieceType]):
@@ -15,11 +15,11 @@ def generate_rules_for_row(row: list[PieceType]):
 
 def _generate_longest_possible_rule_given_start(row: list[PieceType]):
     # TODO: Incorporate 'NOT', 'AND', etc. etc.
-    if not isinstance(row[0], WordNounPieceType):
+    if not isinstance(row[0], TextNounPieceType):
         return None
-    if len(row) <= 1 or not isinstance(row[1], WordIsPieceType):
+    if len(row) <= 1 or not isinstance(row[1], TextIsPieceType):
         return None
-    if len(row) <= 2 or not isinstance(row[2], WordAttributePieceType):
+    if len(row) <= 2 or not isinstance(row[2], TextAttributePieceType):
         return None
     return 3
 
@@ -28,7 +28,7 @@ def get_piece_types_that_are_you(rules: list[list[PieceType]]):
     # TODO: Incorporate 'NOT', 'AND', etc. etc.
     piece_types_that_are_you = []
     for rule in rules:
-        if len(rule) == 3 and isinstance(rule[0], WordNounPieceType) and isinstance(rule[1], WordIsPieceType) and isinstance(rule[2], YouWordPieceType):
+        if len(rule) == 3 and isinstance(rule[0], TextNounPieceType) and isinstance(rule[1], TextIsPieceType) and isinstance(rule[2], YouWordPieceType):
             piece_types_that_are_you.append(rule[0].associated_object_piece_type)
     return piece_types_that_are_you
 
@@ -37,7 +37,7 @@ def get_piece_types_that_are_win(rules: list[list[PieceType]]):
     # TODO: Incorporate 'NOT', 'AND', etc. etc.
     piece_types_that_are_win = []
     for rule in rules:
-        if len(rule) == 3 and isinstance(rule[0], WordNounPieceType) and isinstance(rule[1], WordIsPieceType) and isinstance(rule[2], WinWordPieceType):
+        if len(rule) == 3 and isinstance(rule[0], TextNounPieceType) and isinstance(rule[1], TextIsPieceType) and isinstance(rule[2], WinWordPieceType):
             piece_types_that_are_win.append(rule[0].associated_object_piece_type)
     return piece_types_that_are_win
 
