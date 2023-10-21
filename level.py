@@ -16,7 +16,7 @@ COLOR_WHITE = (1.0, 1.0, 1.0)
 COLOR_GRAY = (0.4, 0.4, 0.4)
 
 
-ASSET_DIRECTORY = "assets"
+ASSETS_DIRECTORY = "assets"
 
 
 class Level:
@@ -32,10 +32,10 @@ class Level:
 
     def _init_assets_as_textures(self):
         self.asset_map = {}
-        for asset_filename in os.listdir(ASSET_DIRECTORY):
+        for asset_filename in os.listdir(ASSETS_DIRECTORY):
             if not asset_filename.endswith(".png"):
                 continue
-            image = Image.open(os.path.join(ASSET_DIRECTORY, asset_filename)).convert("RGB").transpose(Image.FLIP_TOP_BOTTOM)
+            image = Image.open(os.path.join(ASSETS_DIRECTORY, asset_filename)).convert("RGB").transpose(Image.FLIP_TOP_BOTTOM)
             self.asset_map[asset_filename] = Asset(
                 texture_id=GLHelper.store_asset_as_texture(image=image),
                 width=image.size[0],

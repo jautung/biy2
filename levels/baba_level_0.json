@@ -1,0 +1,202 @@
+{
+    "title": "Baba is You",
+    "rows": 18,
+    "columns": 33,
+    "pieces": [
+        {
+            "x": 11,
+            "y": 3,
+            "type": "WallText"
+        },
+        {
+            "x": 12,
+            "y": 3,
+            "type": "IsText"
+        },
+        {
+            "x": 13,
+            "y": 3,
+            "type": "StopText"
+        },
+        {
+            "x": 19,
+            "y": 3,
+            "type": "RockText"
+        },
+        {
+            "x": 20,
+            "y": 3,
+            "type": "IsText"
+        },
+        {
+            "x": 21,
+            "y": 3,
+            "type": "PushText"
+        },
+        {
+            "x": 11,
+            "y": 5,
+            "type": "WallObject"
+        },
+        {
+            "x": 12,
+            "y": 5,
+            "type": "WallObject"
+        },
+        {
+            "x": 13,
+            "y": 5,
+            "type": "WallObject"
+        },
+        {
+            "x": 14,
+            "y": 5,
+            "type": "WallObject"
+        },
+        {
+            "x": 15,
+            "y": 5,
+            "type": "WallObject"
+        },
+        {
+            "x": 16,
+            "y": 5,
+            "type": "WallObject"
+        },
+        {
+            "x": 17,
+            "y": 5,
+            "type": "WallObject"
+        },
+        {
+            "x": 18,
+            "y": 5,
+            "type": "WallObject"
+        },
+        {
+            "x": 19,
+            "y": 5,
+            "type": "WallObject"
+        },
+        {
+            "x": 20,
+            "y": 5,
+            "type": "WallObject"
+        },
+        {
+            "x": 21,
+            "y": 5,
+            "type": "WallObject"
+        },
+        {
+            "x": 12,
+            "y": 7,
+            "type": "BabaObject"
+        },
+        {
+            "x": 16,
+            "y": 6,
+            "type": "RockObject"
+        },
+        {
+            "x": 16,
+            "y": 7,
+            "type": "RockObject"
+        },
+        {
+            "x": 16,
+            "y": 8,
+            "type": "RockObject"
+        },
+        {
+            "x": 20,
+            "y": 7,
+            "type": "FlagObject"
+        },
+        {
+            "x": 11,
+            "y": 9,
+            "type": "WallObject"
+        },
+        {
+            "x": 12,
+            "y": 9,
+            "type": "WallObject"
+        },
+        {
+            "x": 13,
+            "y": 9,
+            "type": "WallObject"
+        },
+        {
+            "x": 14,
+            "y": 9,
+            "type": "WallObject"
+        },
+        {
+            "x": 15,
+            "y": 9,
+            "type": "WallObject"
+        },
+        {
+            "x": 16,
+            "y": 9,
+            "type": "WallObject"
+        },
+        {
+            "x": 17,
+            "y": 9,
+            "type": "WallObject"
+        },
+        {
+            "x": 18,
+            "y": 9,
+            "type": "WallObject"
+        },
+        {
+            "x": 19,
+            "y": 9,
+            "type": "WallObject"
+        },
+        {
+            "x": 20,
+            "y": 9,
+            "type": "WallObject"
+        },
+        {
+            "x": 21,
+            "y": 9,
+            "type": "WallObject"
+        },
+        {
+            "x": 11,
+            "y": 11,
+            "type": "BabaText"
+        },
+        {
+            "x": 12,
+            "y": 11,
+            "type": "IsText"
+        },
+        {
+            "x": 13,
+            "y": 11,
+            "type": "YouText"
+        },
+        {
+            "x": 19,
+            "y": 11,
+            "type": "FlagText"
+        },
+        {
+            "x": 20,
+            "y": 11,
+            "type": "IsText"
+        },
+        {
+            "x": 21,
+            "y": 11,
+            "type": "WinText"
+        }
+    ]
+}

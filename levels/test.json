@@ -1,0 +1,47 @@
+{
+    "title": "Test",
+    "rows": 8,
+    "columns": 10,
+    "pieces": [
+        {
+            "x": 0,
+            "y": 0,
+            "type": "BabaText"
+        },
+        {
+            "x": 1,
+            "y": 0,
+            "type": "IsText"
+        },
+        {
+            "x": 2,
+            "y": 0,
+            "type": "YouText"
+        },
+        {
+            "x": 0,
+            "y": 3,
+            "type": "FlagText"
+        },
+        {
+            "x": 0,
+            "y": 2,
+            "type": "IsText"
+        },
+        {
+            "x": 1,
+            "y": 1,
+            "type": "WinText"
+        },
+        {
+            "x": 0,
+            "y": 5,
+            "type": "BabaObject"
+        },
+        {
+            "x": 8,
+            "y": 5,
+            "type": "FlagObject"
+        }
+    ]
+}
