@@ -73,6 +73,7 @@ class Map:
         self._execute_player_move(direction=direction, rules=rules)
         # TODO execute mutations of e.g. NOUN IS NOUN
         # TODO execute checks for 'MOVE', 'SINK', 'DEFEAT', each other interaction
+        # TODO for 'MOVE' to work, we need to add the concept of directions to map pieces
 
     def _execute_player_move(
         self, direction: MoveDirection, rules: list[list[TextPieceType]]
