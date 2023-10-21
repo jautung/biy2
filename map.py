@@ -110,7 +110,7 @@ class Map:
         return True
 
 
-    def check_for_win(self) -> bool:
+    def is_in_win_state(self) -> bool:
         rules = self._generate_rules()
         object_piece_types_that_are_you = RuleHelper.get_object_piece_types_that_are_you(rules)
         object_piece_types_that_are_win = RuleHelper.get_object_piece_types_that_are_win(rules)

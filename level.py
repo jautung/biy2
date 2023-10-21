@@ -1,3 +1,4 @@
+import copy
 import os
 from OpenGL.GLUT import GLUT_KEY_UP, GLUT_KEY_DOWN, GLUT_KEY_LEFT, GLUT_KEY_RIGHT
 from PIL import Image
@@ -25,6 +26,8 @@ class Level:
         self.window_padding_horizontal, self.window_padding_vertical = LevelHelper.calculate_window_paddings(window=window, map=map, cell_size=self.cell_size)
         self.glut_window = GLHelper.init_glut_window(window=window, title=title)
         self._init_assets_as_textures(assets_directory=assets_directory)
+        self.original_map = copy.deepcopy(map)
+        self.undo_map_stack: list[Map] = []
 
 
     def _init_assets_as_textures(self, assets_directory: str):
@@ -92,7 +95,7 @@ class Level:
             asset=self.asset_map[map_piece.piece_type.asset_name],
             x0=x,
             y0=y,
-            size=self.asset_size
+            size=self.asset_size,
         )
 
 
@@ -107,7 +110,10 @@ class Level:
             self._execute_move(direction=MoveDirection.RIGHT)
         elif key == b' ':
             self._execute_move(direction=MoveDirection.WAIT)
-        # TODO: Implement undo and reset
+        elif key == b'z' or key == b'u':
+            self._undo()
+        elif key == b'r':
+            self._reset_level()
         elif key == b'q':
             GLHelper.destroy_glut_window(self.glut_window)
         elif key == b'/':
@@ -131,7 +137,19 @@ class Level:
 
 
     def _execute_move(self, direction: MoveDirection):
+        self.undo_map_stack.append(copy.deepcopy(self.map))
         self.map.execute_move(direction=direction)
-        if self.map.check_for_win():
+        if self.map.is_in_win_state():
             print("WIN!")
             GLHelper.destroy_glut_window(self.glut_window)
+
+
+    def _undo(self):
+        if len(self.undo_map_stack) == 0: # Nothing to undo
+            return
+        self.map = self.undo_map_stack.pop()
+
+
+    def _reset_level(self):
+        self.map = copy.deepcopy(self.original_map)
+        self.undo_map_stack = []
