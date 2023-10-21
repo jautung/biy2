@@ -121,16 +121,7 @@ class Level:
         elif key == b"q":
             GLHelper.destroy_glut_window(glut_window=self.glut_window)
         elif key == b"/":
-            # Printing rules for debugging
-            rules = self.map._generate_rules()
-            print("Rules:")
-            for rule in rules:
-                print(
-                    " ".join(
-                        [text_piece_type._debug_repr() for text_piece_type in rule]
-                    )
-                )
-            print()
+            rules = self.map.print_rules()
 
     def _special_func(self, key, x, y):
         if key == GLUT_KEY_UP:

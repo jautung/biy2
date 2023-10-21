@@ -66,6 +66,16 @@ class Map:
             )  # Reversed because (0, 0) is the bottom left corner
         return rules
 
+    def print_rules(self):
+        rules = self._generate_rules()
+        print("Rules:")
+        for rule in rules:
+            print(
+                "* "
+                + " ".join([text_piece_type._debug_repr() for text_piece_type in rule])
+            )
+        print()
+
     def execute_move(self, direction: MoveDirection):
         rules = (
             self._generate_rules()
