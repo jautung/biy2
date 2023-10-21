@@ -111,8 +111,12 @@ class Level:
         elif key == b'q':
             GLHelper.destroy_glut_window(self.glut_window)
         elif key == b'/':
-            # For debugging
-            print(self.map._generate_rules())
+            # Printing rules for debugging
+            rules = self.map._generate_rules()
+            print("Rules:")
+            for rule in rules:
+                print(" ".join([text_piece_type._debug_repr() for text_piece_type in rule]))
+            print()
 
 
     def _special_func(self, key, x, y):

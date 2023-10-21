@@ -20,6 +20,8 @@ class TextPieceType(PieceType):
         super().__init__(asset_name=asset_name)
     def __repr__(self) -> str:
         return "TextPieceType"
+    def _debug_repr(self) -> str:
+        return self.__repr__()[:-len("TextPieceType")]
 
 
 class NounTextPieceType(TextPieceType):
