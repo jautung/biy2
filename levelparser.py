@@ -11,7 +11,9 @@ from piecetype import *
 from window import Window
 
 
-def get_level_by_name(level_name: str, window: Window, levels_directory: str, assets_directory: str) -> Level:
+def get_level_by_name(
+    level_name: str, window: Window, levels_directory: str, assets_directory: str
+) -> Level:
     name_to_piece_type_dict = _get_name_to_piece_type_dict()
     filename = os.path.join(levels_directory, f"{level_name}.json")
     with open(filename) as file:
@@ -31,7 +33,7 @@ def get_level_by_name(level_name: str, window: Window, levels_directory: str, as
                         piece_type=name_to_piece_type_dict[piece["type"]](),
                     )
                     for piece in data["pieces"]
-                ]
+                ],
             ),
             assets_directory=assets_directory,
         )
@@ -39,12 +41,16 @@ def get_level_by_name(level_name: str, window: Window, levels_directory: str, as
 
 def _get_name_to_piece_type_dict() -> dict[str, Type[PieceType]]:
     name_to_piece_type_dict: dict[str, Type[PieceType]] = {}
-    def add_piece_type_subclasses_to_name_to_piece_type_dict(piece_type: Type[PieceType]):
+
+    def add_piece_type_subclasses_to_name_to_piece_type_dict(
+        piece_type: Type[PieceType],
+    ):
         # We only care about concrete classes that can be instantiated with PieceType(),
         # and not the PieceType, ObjectPieceType, etc. super-classes
         if len(inspect.signature(piece_type.__init__).parameters) == 1:
             name_to_piece_type_dict[piece_type().json_repr()] = piece_type
         for subclass_piece_type in piece_type.__subclasses__():
             add_piece_type_subclasses_to_name_to_piece_type_dict(subclass_piece_type)
+
     add_piece_type_subclasses_to_name_to_piece_type_dict(PieceType)
     return name_to_piece_type_dict

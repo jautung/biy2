@@ -31,7 +31,7 @@ def destroy_glut_window(glut_window):
 
 
 def store_asset_as_texture(image: Image.Image):
-    texture_id = glGenTextures(1) # number of textures to alloc
+    texture_id = glGenTextures(1)  # number of textures to alloc
     glBindTexture(GL_TEXTURE_2D, texture_id)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP)
@@ -39,15 +39,15 @@ def store_asset_as_texture(image: Image.Image):
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL)
     glTexImage2D(
-        GL_TEXTURE_2D, # target
-        0, # level
-        GL_RGB, # internalformat
-        image.size[0], # width
-        image.size[1], # height
-        0, # border
-        GL_RGB, # format
-        GL_UNSIGNED_BYTE, # type
-        numpy.array(list(image.getdata()), numpy.int8), # pixels
+        GL_TEXTURE_2D,  # target
+        0,  # level
+        GL_RGB,  # internalformat
+        image.size[0],  # width
+        image.size[1],  # height
+        0,  # border
+        GL_RGB,  # format
+        GL_UNSIGNED_BYTE,  # type
+        numpy.array(list(image.getdata()), numpy.int8),  # pixels
     )
     return texture_id
 
@@ -91,22 +91,22 @@ def reset_display(window: Window):
 def _reset_display_in_modelview_mode(window: Window):
     glLoadIdentity()
     glViewport(
-        window.x, # x
-        window.y, # y
-        window.width, # width
-        window.height, # height
+        window.x,  # x
+        window.y,  # y
+        window.width,  # width
+        window.height,  # height
     )
 
 
 def _reset_display_in_projection_mode(window: Window):
     glLoadIdentity()
     glOrtho(
-        window.x, # left
-        window.x + window.width, # right
-        window.y, # bottom
-        window.y + window.height, # top
-        0.0, # zNear
-        1.0, # zFar
+        window.x,  # left
+        window.x + window.width,  # right
+        window.y,  # bottom
+        window.y + window.height,  # top
+        0.0,  # zNear
+        1.0,  # zFar
     )
 
 
@@ -157,9 +157,9 @@ def draw_square_asset(asset: Asset, x0, y0, size):
 def _scale_texture(scale_x, scale_y):
     glPushMatrix()
     glScalef(
-        scale_x, # x
-        scale_y, # y
-        1, # z
+        scale_x,  # x
+        scale_y,  # y
+        1,  # z
     )
 
 
@@ -176,9 +176,9 @@ def _draw_texture(texture_id, x0, y0, size):
     glBindTexture(GL_TEXTURE_2D, texture_id)
     glPushMatrix()
     glTranslatef(
-        x0, # x
-        y0, # y
-        0, # z
+        x0,  # x
+        y0,  # y
+        0,  # z
     )
     _draw_shape(
         shape=GL_QUADS,
