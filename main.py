@@ -1,6 +1,7 @@
 from level import Level
 from map import Map
 from mappiece import MapPiece
+from pieceposition import PiecePosition
 from piecetype import *
 from window import Window
 
@@ -25,43 +26,59 @@ if __name__ == '__main__':
             number_columns=10,
             map_pieces=[
                 MapPiece(
-                    x=0,
-                    y=0,
+                    position=PiecePosition(
+                        x=0,
+                        y=0
+                    ),
                     piece_type=BabaTextPieceType()
                 ),
                 MapPiece(
-                    x=1,
-                    y=0,
+                    position=PiecePosition(
+                        x=1,
+                        y=0
+                    ),
                     piece_type=IsTextPieceType()
                 ),
                 MapPiece(
-                    x=2,
-                    y=0,
+                    position=PiecePosition(
+                        x=2,
+                        y=0
+                    ),
                     piece_type=YouTextPieceType()
                 ),
                 MapPiece(
-                    x=0,
-                    y=3,
+                    position=PiecePosition(
+                        x=0,
+                        y=3
+                    ),
                     piece_type=FlagTextPieceType()
                 ),
                 MapPiece(
-                    x=0,
-                    y=2,
+                    position=PiecePosition(
+                        x=0,
+                        y=2
+                    ),
                     piece_type=IsTextPieceType()
                 ),
                 MapPiece(
-                    x=0,
-                    y=1,
+                    position=PiecePosition(
+                        x=1,
+                        y=1
+                    ),
                     piece_type=WinTextPieceType()
                 ),
                 MapPiece(
-                    x=0,
-                    y=5,
+                    position=PiecePosition(
+                        x=0,
+                        y=5
+                    ),
                     piece_type=BabaObjectPieceType()
                 ),
                 MapPiece(
-                    x=8,
-                    y=5,
+                    position=PiecePosition(
+                        x=8,
+                        y=5
+                    ),
                     piece_type=FlagObjectPieceType()
                 ),
             ]

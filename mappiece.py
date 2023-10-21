@@ -1,12 +1,12 @@
 from piecetype import *
+from pieceposition import PiecePosition
 
 
 class MapPiece:
-    def __init__(self, x, y, piece_type: PieceType):
-        self.x = x
-        self.y = y
+    def __init__(self, position: PiecePosition, piece_type: PieceType):
+        self.position = position
         self.piece_type = piece_type
 
 
     def __repr__(self):
-        return f"{self.piece_type}@({self.x}, {self.y})"
+        return f"{self.piece_type}@{self.position}"

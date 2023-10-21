@@ -15,7 +15,7 @@ class Map:
     def _get_piece_types_at(self, x, y) -> set[PieceType]:
         piece_types = []
         for map_piece in self.map_pieces:
-            if map_piece.x == x and map_piece.y == y:
+            if map_piece.position.x == x and map_piece.position.y == y:
                 piece_types.append(map_piece.piece_type)
         return piece_types
 
@@ -54,19 +54,19 @@ class Map:
 
 
     def _execute_object_move(self, map_piece: MapPiece, direction: MoveDirection, rules: list[list[PieceType]]):
-            if direction == MoveDirection.UP and map_piece.y < self.number_rows - 1:
-                map_piece.y += 1
-            elif direction == MoveDirection.DOWN and map_piece.y > 0:
-                map_piece.y -= 1
-            elif direction == MoveDirection.LEFT and map_piece.x > 0:
-                map_piece.x -= 1
-            elif direction == MoveDirection.RIGHT and map_piece.x < self.number_columns - 1:
-                map_piece.x += 1
-            elif direction == MoveDirection.WAIT:
-                pass
-            piece_types_in_new_spot = self._get_piece_types_at(x=map_piece.x, y=map_piece.y)
-            RuleHelper.get_piece_types_that_are_push(rules=rules)
-            # TODO: Do some propagated pushing
+        if direction == MoveDirection.UP and map_piece.position.y < self.number_rows - 1:
+            map_piece.position.y += 1
+        elif direction == MoveDirection.DOWN and map_piece.position.y > 0:
+            map_piece.position.y -= 1
+        elif direction == MoveDirection.LEFT and map_piece.position.x > 0:
+            map_piece.position.x -= 1
+        elif direction == MoveDirection.RIGHT and map_piece.position.x < self.number_columns - 1:
+            map_piece.position.x += 1
+        elif direction == MoveDirection.WAIT:
+            pass
+        piece_types_in_new_spot = self._get_piece_types_at(x=map_piece.position.x, y=map_piece.position.y)
+        RuleHelper.get_piece_types_that_are_push(rules=rules)
+        # TODO: Do some propagated pushing
 
 
     def check_for_win(self) -> bool:
