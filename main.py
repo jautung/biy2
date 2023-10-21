@@ -13,6 +13,8 @@ WINDOW_HEIGHT = 800
 
 
 if __name__ == '__main__':
+    # TODO: Encode this in some json format and write a parser to read from file
+    # TODO: Make a level editor to save to json format
     level=Level(
         title="My Level",
         window=Window(
@@ -28,58 +30,58 @@ if __name__ == '__main__':
                 MapPiece(
                     position=PiecePosition(
                         x=0,
-                        y=0
+                        y=0,
                     ),
-                    piece_type=BabaTextPieceType()
+                    piece_type=BabaTextPieceType(),
                 ),
                 MapPiece(
                     position=PiecePosition(
                         x=1,
-                        y=0
+                        y=0,
                     ),
-                    piece_type=IsTextPieceType()
+                    piece_type=IsTextPieceType(),
                 ),
                 MapPiece(
                     position=PiecePosition(
                         x=2,
-                        y=0
+                        y=0,
                     ),
-                    piece_type=YouTextPieceType()
+                    piece_type=YouTextPieceType(),
                 ),
                 MapPiece(
                     position=PiecePosition(
                         x=0,
-                        y=3
+                        y=3,
                     ),
-                    piece_type=FlagTextPieceType()
+                    piece_type=FlagTextPieceType(),
                 ),
                 MapPiece(
                     position=PiecePosition(
                         x=0,
-                        y=2
+                        y=2,
                     ),
-                    piece_type=IsTextPieceType()
+                    piece_type=IsTextPieceType(),
                 ),
                 MapPiece(
                     position=PiecePosition(
                         x=1,
-                        y=1
+                        y=1,
                     ),
-                    piece_type=WinTextPieceType()
+                    piece_type=WinTextPieceType(),
                 ),
                 MapPiece(
                     position=PiecePosition(
                         x=0,
-                        y=5
+                        y=5,
                     ),
-                    piece_type=BabaObjectPieceType()
+                    piece_type=BabaObjectPieceType(),
                 ),
                 MapPiece(
                     position=PiecePosition(
                         x=8,
-                        y=5
+                        y=5,
                     ),
-                    piece_type=FlagObjectPieceType()
+                    piece_type=FlagObjectPieceType(),
                 ),
             ]
         )

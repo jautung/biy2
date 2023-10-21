@@ -8,5 +8,5 @@ class MapPiece:
         self.piece_type = piece_type
 
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{self.piece_type}@{self.position}"
