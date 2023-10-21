@@ -28,13 +28,13 @@ class Map:
         return [map_piece.piece_type for map_piece in self._get_map_pieces_at(position=position)]
 
 
-    def _get_word_piece_type_at(self, position: PiecePosition) -> PieceType:
+    def _get_text_piece_type_at(self, position: PiecePosition) -> PieceType:
         piece_types = self._get_piece_types_at(position=position)
-        word_piece_types = list(filter(lambda piece_type: isinstance(piece_type, TextPieceType), piece_types))
-        assert(len(word_piece_types) <= 1) # There can never be more than 1 text piece at a given position
-        if len(word_piece_types) == 0:
+        text_piece_types = list(filter(lambda piece_type: isinstance(piece_type, TextPieceType), piece_types))
+        assert(len(text_piece_types) <= 1) # There can never be more than 1 text piece at a given position
+        if len(text_piece_types) == 0:
             return None
-        return word_piece_types[0]
+        return text_piece_types[0]
 
 
     def _generate_rules(self) -> list[list[PieceType]]:
@@ -42,9 +42,9 @@ class Map:
         # By default, without any overrides, "TEXT IS PUSH" is always a rule
         rules.append([TextTextPieceType(), IsTextPieceType(), PushTextPieceType()])
         for row_index in range(self.number_rows):
-            rules += RuleHelper.generate_rules_for_row([self._get_word_piece_type_at(PiecePosition(x=column_index, y=row_index)) for column_index in range(self.number_columns)])
+            rules += RuleHelper.generate_rules_for_row([self._get_text_piece_type_at(PiecePosition(x=column_index, y=row_index)) for column_index in range(self.number_columns)])
         for column_index in range(self.number_columns):
-            rules += RuleHelper.generate_rules_for_row([self._get_word_piece_type_at(PiecePosition(x=column_index, y=row_index)) for row_index in reversed(range(self.number_rows))]) # Reversed because (0, 0) is the bottom left corner
+            rules += RuleHelper.generate_rules_for_row([self._get_text_piece_type_at(PiecePosition(x=column_index, y=row_index)) for row_index in reversed(range(self.number_rows))]) # Reversed because (0, 0) is the bottom left corner
         return rules
 
 
