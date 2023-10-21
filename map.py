@@ -4,6 +4,7 @@ from movedirection import MoveDirection
 from piecetype import *
 
 
+# Note that (0, 0) is the bottom left corner
 class Map:
     def __init__(self, number_rows, number_columns, map_pieces: list[MapPiece]):
         self.number_rows = number_rows
@@ -22,7 +23,7 @@ class Map:
     def _get_word_piece_type_at(self, x, y) -> PieceType:
         piece_types = self._get_piece_types_at(x=x, y=y)
         word_piece_types = list(filter(lambda piece_type: isinstance(piece_type, TextPieceType), piece_types))
-        assert(len(word_piece_types) <= 1)
+        assert(len(word_piece_types) <= 1) # There can never be more than 1 text piece at a given position
         if len(word_piece_types) == 0:
             return None
         return word_piece_types[0]
@@ -33,13 +34,14 @@ class Map:
         for row_index in range(self.number_rows):
             rules += RuleHelper.generate_rules_for_row([self._get_word_piece_type_at(x=column_index, y=row_index) for column_index in range(self.number_columns)])
         for column_index in range(self.number_columns):
-            rules += RuleHelper.generate_rules_for_row([self._get_word_piece_type_at(x=column_index, y=row_index) for row_index in range(self.number_rows)])
+            rules += RuleHelper.generate_rules_for_row([self._get_word_piece_type_at(x=column_index, y=row_index) for row_index in reversed(range(self.number_rows))]) # Reversed because (0, 0) is the bottom left corner
         return rules
 
 
     def execute_move(self, direction: MoveDirection):
         rules = self._generate_rules() # statically freeze rules for entire timestep, even if things move
         self._execute_player_move(direction=direction, rules=rules)
+        # TODO execute mutations of e.g. NOUN IS NOUN
         # TODO execute checks for 'MOVE', 'SINK', 'DEFEAT', each other interaction
         # TODO think about how to handle push
 

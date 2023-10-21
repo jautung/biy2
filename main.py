@@ -41,16 +41,16 @@ if __name__ == '__main__':
                 ),
                 MapPiece(
                     x=0,
-                    y=1,
+                    y=3,
                     piece_type=FlagTextPieceType()
                 ),
                 MapPiece(
-                    x=1,
-                    y=1,
+                    x=0,
+                    y=2,
                     piece_type=IsTextPieceType()
                 ),
                 MapPiece(
-                    x=2,
+                    x=0,
                     y=1,
                     piece_type=WinTextPieceType()
                 ),
