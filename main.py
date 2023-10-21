@@ -17,7 +17,6 @@ WINDOW_HEIGHT = 800
 
 
 if __name__ == "__main__":
-    # TODO: Add a linter
     # TODO: Make a level editor to save to json format
     window = Window(
         x=WINDOW_X,
