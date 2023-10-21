@@ -39,11 +39,9 @@ class Level:
         for asset_filename in os.listdir(assets_directory):
             if not asset_filename.endswith(".png"):
                 continue
-            image = (
-                Image.open(os.path.join(assets_directory, asset_filename))
-                .convert("RGB")
-                .transpose(Image.FLIP_TOP_BOTTOM)
-            )
+            image = Image.open(
+                os.path.join(assets_directory, asset_filename)
+            ).transpose(Image.FLIP_TOP_BOTTOM)
             self.asset_map[asset_filename] = Asset(
                 texture_id=GLHelper.store_asset_as_texture(image=image),
                 width=image.size[0],

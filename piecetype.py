@@ -1,6 +1,9 @@
 from typing import Type
 
 
+# Images at https://docs.google.com/presentation/d/1frkfoDgriNW8fC-DpAeI8oB3nAnU9JQ5UQh_VQ3LjvQ/edit
+
+
 class PieceType:
     def __init__(self, asset_name: str):
         self.asset_name = asset_name

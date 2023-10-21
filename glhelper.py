@@ -10,7 +10,7 @@ from window import Window
 
 
 # TODO: Figure out how scaling works and get rid of this
-MYSTERIOUS_FUDGE_SCALING_FACTOR = 120
+MYSTERIOUS_FUDGE_SCALING_FACTOR = 50
 
 
 def init_glut_window(window: Window, title):
@@ -45,7 +45,7 @@ def store_asset_as_texture(image: Image.Image):
         image.size[0],  # width
         image.size[1],  # height
         0,  # border
-        GL_RGB,  # format
+        GL_RGBA,  # format
         GL_UNSIGNED_BYTE,  # type
         numpy.array(list(image.getdata()), numpy.int8),  # pixels
     )
