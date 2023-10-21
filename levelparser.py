@@ -1,3 +1,6 @@
+from typing import Type
+import inspect
+import json
 import os
 
 from level import Level
@@ -12,70 +15,38 @@ LEVELS_DIRECTORY = "levels"
 
 
 def get_level_by_name(level_name: str, window: Window) -> Level:
+    name_to_piece_type_dict = _get_name_to_piece_type_dict()
     filename = os.path.join(LEVELS_DIRECTORY, f"{level_name}.json")
-    return Level(
-        title="My Level",
-        window=window,
-        map=Map(
-            number_rows=8,
-            number_columns=10,
-            map_pieces=[
-                MapPiece(
-                    position=PiecePosition(
-                        x=0,
-                        y=0,
-                    ),
-                    piece_type=BabaTextPieceType(),
-                ),
-                MapPiece(
-                    position=PiecePosition(
-                        x=1,
-                        y=0,
-                    ),
-                    piece_type=IsTextPieceType(),
-                ),
-                MapPiece(
-                    position=PiecePosition(
-                        x=2,
-                        y=0,
-                    ),
-                    piece_type=YouTextPieceType(),
-                ),
-                MapPiece(
-                    position=PiecePosition(
-                        x=0,
-                        y=3,
-                    ),
-                    piece_type=FlagTextPieceType(),
-                ),
-                MapPiece(
-                    position=PiecePosition(
-                        x=0,
-                        y=2,
-                    ),
-                    piece_type=IsTextPieceType(),
-                ),
-                MapPiece(
-                    position=PiecePosition(
-                        x=1,
-                        y=1,
-                    ),
-                    piece_type=WinTextPieceType(),
-                ),
-                MapPiece(
-                    position=PiecePosition(
-                        x=0,
-                        y=5,
-                    ),
-                    piece_type=BabaObjectPieceType(),
-                ),
-                MapPiece(
-                    position=PiecePosition(
-                        x=8,
-                        y=5,
-                    ),
-                    piece_type=FlagObjectPieceType(),
-                ),
-            ]
+    with open(filename) as file:
+        data = json.load(file)
+        return Level(
+            title=data["title"],
+            window=window,
+            map=Map(
+                number_rows=data["rows"],
+                number_columns=data["columns"],
+                map_pieces=[
+                    MapPiece(
+                        position=PiecePosition(
+                            x=piece["x"],
+                            y=piece["y"],
+                        ),
+                        piece_type=name_to_piece_type_dict[piece["type"]](),
+                    )
+                    for piece in data["pieces"]
+                ]
+            )
         )
-    )
+
+
+def _get_name_to_piece_type_dict() -> dict[str, Type[PieceType]]:
+    name_to_piece_type_dict: dict[str, Type[PieceType]] = {}
+    def add_piece_type_subclasses_to_name_to_piece_type_dict(piece_type: Type[PieceType]):
+        # We only care about concrete classes that can be instantiated with PieceType(),
+        # and not the PieceType, ObjectPieceType, etc. super-classes
+        if len(inspect.signature(piece_type.__init__).parameters) == 1:
+            name_to_piece_type_dict[piece_type().json_repr()] = piece_type
+        for subclass_piece_type in piece_type.__subclasses__():
+            add_piece_type_subclasses_to_name_to_piece_type_dict(subclass_piece_type)
+    add_piece_type_subclasses_to_name_to_piece_type_dict(PieceType)
+    return name_to_piece_type_dict

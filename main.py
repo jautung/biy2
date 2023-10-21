@@ -21,5 +21,6 @@ if __name__ == '__main__':
         width=WINDOW_WIDTH,
         height=WINDOW_HEIGHT,
     )
+    # TODO: Make a level selector
     level = LevelParser.get_level_by_name(level_name="test", window=window)
     level.start_main_loop()

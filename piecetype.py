@@ -6,6 +6,8 @@ class PieceType:
         self.asset_name = asset_name
     def __repr__(self) -> str:
         return "PieceType"
+    def json_repr(self) -> str:
+        return self.__repr__()[:-len("PieceType")]
 
 
 class ObjectPieceType(PieceType):
