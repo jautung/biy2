@@ -110,6 +110,9 @@ class Level:
             self._execute_move(direction=MoveDirection.WAIT)
         elif key == b'q':
             GLHelper.destroy_glut_window(self.glut_window)
+        elif key == b'/':
+            # For debugging
+            print(self.map._generate_rules())
 
 
     def _special_func(self, key, x, y):
