@@ -103,16 +103,13 @@ class Map:
         new_position = PiecePositionHelper.get_position_after_move(
             position=map_piece.position, direction=direction
         )
-        map_piece.position = new_position
-        map_pieces_in_new_position_that_are_push = (
-            self._get_map_pieces_in_position_that_are_push(
-                position=new_position, rules=rules
-            )
-        )
-        for map_piece in map_pieces_in_new_position_that_are_push:
+        for pushable_map_piece in self._get_map_pieces_in_position_that_are_push(
+            position=new_position, rules=rules
+        ):
             self._execute_object_move(
-                map_piece=map_piece, direction=direction, rules=rules
+                map_piece=pushable_map_piece, direction=direction, rules=rules
             )
+        map_piece.position = new_position
 
     def _can_object_move(
         self,
