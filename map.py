@@ -14,6 +14,8 @@ class Map:
         self.number_rows = number_rows
         self.number_columns = number_columns
         self.map_pieces = map_pieces
+        # Prevent responding to repeated keystrokes before the current computation is finished
+        self.execute_move_locked = False
 
     def _get_map_pieces_at(self, position: PiecePosition) -> set[MapPiece]:
         map_pieces = []
@@ -77,13 +79,18 @@ class Map:
         print()
 
     def execute_move(self, direction: MoveDirection):
-        rules = (
-            self._generate_rules()
-        )  # statically freeze rules for entire timestep, even if things move
+        if self.execute_move_locked:
+            print("Excuse me, please stop mashing the keyboard!!!")
+            return
+        self.execute_move_locked = True
+        # Statically freeze rules for entire timestep, even if things move
+        rules = self._generate_rules()
         self._execute_player_move(direction=direction, rules=rules)
+        self._apply_noun_mutations()
         # TODO execute mutations of e.g. NOUN IS NOUN
         # TODO execute checks for 'MOVE', 'SINK', 'DEFEAT', each other interaction
         # TODO for 'MOVE' to work, we need to add the concept of directions to map pieces
+        self.execute_move_locked = False
 
     def _execute_player_move(
         self, direction: MoveDirection, rules: list[list[TextPieceType]]
@@ -200,6 +207,9 @@ class Map:
                 for map_piece in self._get_map_pieces_at(position=position)
             ]
         )
+
+    def _apply_noun_mutations(self):
+        pass
 
     def is_in_win_state(self) -> bool:
         rules = self._generate_rules()
