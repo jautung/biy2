@@ -9,12 +9,16 @@ from asset import Asset
 from window import Window
 
 
-def init_glut_window(window: Window, title):
+def init_glut_window(window: Window, title, enable_transparency=True):
     glutInit()
-    glutInitDisplayMode(GLUT_RGB)
+    glutInitDisplayMode(GLUT_RGBA)
     glutInitWindowPosition(window.x, window.y)
     glutInitWindowSize(window.width, window.height)
-    return glutCreateWindow(title)
+    glut_window = glutCreateWindow(title)
+    if enable_transparency:
+        glEnable(GL_BLEND)
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+    return glut_window
 
 
 def destroy_glut_window(glut_window):
