@@ -34,6 +34,7 @@ def store_asset_as_texture(image: Image.Image):
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL)
+    # TODO: Figure out why transparency isn't working to overlap pieces
     glTexImage2D(
         GL_TEXTURE_2D,  # target
         0,  # level

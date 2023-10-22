@@ -30,7 +30,7 @@ class TextPieceType(ObjectPieceType):  # Technically text pieces are themselves 
     def __repr__(self) -> str:
         return "TextPieceType"
 
-    def _debug_repr(self) -> str:
+    def in_rule_repr(self) -> str:
         return self.__repr__()[: -len("TextPieceType")]
 
 
