@@ -95,10 +95,12 @@ class Map:
         self._execute_player_move(direction=direction, rules=rules)
         self._execute_npc_move(rules=rules)
         # TODO Figure out what the actual order of operations of these are in-game
-        self._apply_defeat_interactions()
-        self._apply_sink_interactions()
-        self._apply_melt_interactions()
-        self._apply_open_close_interactions()
+        # I'm 80% sure that we freeze new rules to calculate these after movement, but I could be mistaken
+        rules = self._generate_rules()
+        self._apply_defeat_interactions(rules=rules)
+        self._apply_sink_interactions(rules=rules)
+        self._apply_melt_interactions(rules=rules)
+        self._apply_open_close_interactions(rules=rules)
         self._apply_noun_mutations()
         self.execute_move_locked = False
 
@@ -220,19 +222,19 @@ class Map:
         # TODO for 'MOVE' to work, we need to add the concept of directions to map pieces
         pass
 
-    def _apply_defeat_interactions(self):
+    def _apply_defeat_interactions(self, rules: list[Rule]):
         # TODO
         pass
 
-    def _apply_sink_interactions(self):
+    def _apply_sink_interactions(self, rules: list[Rule]):
         # TODO
         pass
 
-    def _apply_melt_interactions(self):
+    def _apply_melt_interactions(self, rules: list[Rule]):
         # TODO
         pass
 
-    def _apply_open_close_interactions(self):
+    def _apply_open_close_interactions(self, rules: list[Rule]):
         # TODO
         pass
 
