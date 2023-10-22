@@ -93,10 +93,13 @@ class Map:
         # Statically freeze rules for entire timestep, even if things move
         rules = self._generate_rules()
         self._execute_player_move(direction=direction, rules=rules)
+        self._execute_npc_move(rules=rules)
+        # TODO Figure out what the actual order of operations of these are in-game
+        self._apply_defeat_interactions()
+        self._apply_sink_interactions()
+        self._apply_melt_interactions()
+        self._apply_open_close_interactions()
         self._apply_noun_mutations()
-        # TODO execute mutations of e.g. NOUN IS NOUN
-        # TODO execute checks for 'MOVE', 'SINK', 'DEFEAT', each other interaction
-        # TODO for 'MOVE' to work, we need to add the concept of directions to map pieces
         self.execute_move_locked = False
 
     def _execute_player_move(self, direction: MoveDirection, rules: list[Rule]):
@@ -213,7 +216,28 @@ class Map:
             ]
         )
 
+    def _execute_npc_move(self, rules: list[Rule]):
+        # TODO for 'MOVE' to work, we need to add the concept of directions to map pieces
+        pass
+
+    def _apply_defeat_interactions(self):
+        # TODO
+        pass
+
+    def _apply_sink_interactions(self):
+        # TODO
+        pass
+
+    def _apply_melt_interactions(self):
+        # TODO
+        pass
+
+    def _apply_open_close_interactions(self):
+        # TODO
+        pass
+
     def _apply_noun_mutations(self):
+        # TODO
         pass
 
     def is_in_win_state(self) -> bool:

@@ -60,7 +60,6 @@ def get_object_piece_types_that_are_stop(
 def _get_object_piece_types_that_have_attribute(
     rules: list[Rule], attribute_text_piece_type: Type[TextPieceType]
 ) -> list[Type[ObjectPieceType]]:
-    # TODO: Incorporate 'NOT', 'AND', etc. etc.
     object_piece_types_that_are_attribute: list[Type[ObjectPieceType]] = []
     for rule in rules:
         noun_text_piece_type_for_attribute = (
