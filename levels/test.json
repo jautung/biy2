@@ -59,6 +59,11 @@
             "type": "WaterObject"
         },
         {
+            "x": 4,
+            "y": 6,
+            "type": "StopText"
+        },
+        {
             "x": 8,
             "y": 5,
             "type": "FlagObject"

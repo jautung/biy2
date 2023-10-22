@@ -24,16 +24,18 @@ def get_level_by_name(
             map=Map(
                 number_rows=data["rows"],
                 number_columns=data["columns"],
-                map_pieces=[
-                    MapPiece(
-                        position=PiecePosition(
-                            x=piece["x"],
-                            y=piece["y"],
-                        ),
-                        piece_type=name_to_piece_type_dict[piece["type"]](),
-                    )
-                    for piece in data["pieces"]
-                ],
+                map_pieces=set(
+                    [
+                        MapPiece(
+                            position=PiecePosition(
+                                x=piece["x"],
+                                y=piece["y"],
+                            ),
+                            piece_type=name_to_piece_type_dict[piece["type"]](),
+                        )
+                        for piece in data["pieces"]
+                    ]
+                ),
             ),
             assets_directory=assets_directory,
         )

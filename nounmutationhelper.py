@@ -5,8 +5,8 @@ from piecetype import *
 # Despite being similar, intentionally distinct from rules;
 # rules define how things interact with each other,
 # while noun mutations are just one-time mutations
-def generate_noun_mutations_for_row(row: list[PieceType]) -> list[NounMutation]:
-    noun_mutations: list[NounMutation] = []
+def generate_noun_mutations_for_row(row: list[PieceType]) -> set[NounMutation]:
+    noun_mutations: set[NounMutation] = set()
     for start_index in range(len(row) - 2):
         piece_1 = row[start_index]
         piece_2 = row[start_index + 1]
@@ -17,7 +17,7 @@ def generate_noun_mutations_for_row(row: list[PieceType]) -> list[NounMutation]:
             continue
         if not isinstance(piece_3, NounTextPieceType):
             continue
-        noun_mutations.append(
+        noun_mutations.add(
             NounMutation(
                 from_object_piece_type=piece_1.associated_object_piece_type,
                 to_object_piece_type=piece_3.associated_object_piece_type,

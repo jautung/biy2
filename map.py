@@ -15,7 +15,7 @@ from rule import Rule
 
 # Note that (0, 0) is the bottom left corner
 class Map:
-    def __init__(self, number_rows, number_columns, map_pieces: list[MapPiece]):
+    def __init__(self, number_rows, number_columns, map_pieces: set[MapPiece]):
         self.number_rows = number_rows
         self.number_columns = number_columns
         self.map_pieces = map_pieces
@@ -30,10 +30,12 @@ class Map:
         return map_pieces
 
     def _get_piece_types_at(self, position: PiecePosition) -> set[PieceType]:
-        return [
-            map_piece.piece_type
-            for map_piece in self._get_map_pieces_at(position=position)
-        ]
+        return set(
+            [
+                map_piece.piece_type
+                for map_piece in self._get_map_pieces_at(position=position)
+            ]
+        )
 
     def _get_text_piece_type_at(self, position: PiecePosition) -> TextPieceType:
         piece_types = self._get_piece_types_at(position=position)
@@ -49,9 +51,12 @@ class Map:
             return None
         return text_piece_types[0]
 
-    def _generate_rules(self) -> list[Rule]:
-        return [
-            # By default, without any overrides, "TEXT IS PUSH" is always a rule
+    def _generate_rules(self) -> set[Rule]:
+        rules = self._generate_results_for_all_rows_and_columns(
+            generate_from_row=RuleHelper.generate_rules_for_row
+        )
+        # By default, "TEXT IS PUSH" is always a rule
+        rules.add(
             Rule(
                 text_piece_types=[
                     TextTextPieceType(),
@@ -59,9 +64,8 @@ class Map:
                     PushTextPieceType(),
                 ]
             )
-        ] + self._generate_results_for_all_rows_and_columns(
-            generate_from_row=RuleHelper.generate_rules_for_row
         )
+        return rules
 
     def print_rules(self):
         rules = self._generate_rules()
@@ -90,7 +94,7 @@ class Map:
         self._apply_noun_mutations()
         self.execute_move_locked = False
 
-    def _execute_player_move(self, direction: MoveDirection, rules: list[Rule]):
+    def _execute_player_move(self, direction: MoveDirection, rules: set[Rule]):
         object_piece_types_that_are_you = (
             RuleHelper.get_object_piece_types_that_are_you(rules=rules)
         )
@@ -107,7 +111,7 @@ class Map:
         self,
         map_piece: MapPiece,
         direction: MoveDirection,
-        rules: list[Rule],
+        rules: set[Rule],
     ):
         if not self._can_object_move(
             map_piece=map_piece, direction=direction, rules=rules
@@ -128,7 +132,7 @@ class Map:
         self,
         map_piece: MapPiece,
         direction: MoveDirection,
-        rules: list[Rule],
+        rules: set[Rule],
     ) -> bool:
         if self._is_piece_type_within_object_piece_types(
             piece_type=map_piece.piece_type,
@@ -157,24 +161,26 @@ class Map:
         )
 
     def _get_map_pieces_in_position_that_are_push(
-        self, position: PiecePosition, rules: list[Rule]
-    ) -> list[MapPiece]:
+        self, position: PiecePosition, rules: set[Rule]
+    ) -> set[MapPiece]:
         map_pieces_in_new_position = self._get_map_pieces_at(position=position)
         object_piece_types_that_are_push = (
             RuleHelper.get_object_piece_types_that_are_push(rules=rules)
         )
-        return list(
-            filter(
-                lambda map_piece: self._is_piece_type_within_object_piece_types(
-                    piece_type=map_piece.piece_type,
-                    object_piece_types=object_piece_types_that_are_push,
-                ),
-                map_pieces_in_new_position,
+        return set(
+            list(
+                filter(
+                    lambda map_piece: self._is_piece_type_within_object_piece_types(
+                        piece_type=map_piece.piece_type,
+                        object_piece_types=object_piece_types_that_are_push,
+                    ),
+                    map_pieces_in_new_position,
+                )
             )
         )
 
     def _can_object_enter_position(
-        self, position: PiecePosition, rules: list[Rule]
+        self, position: PiecePosition, rules: set[Rule]
     ) -> bool:
         if position.x < 0:
             return False
@@ -189,7 +195,7 @@ class Map:
         return True
 
     def _has_map_piece_in_position_that_is_stop(
-        self, position: PiecePosition, rules: list[Rule]
+        self, position: PiecePosition, rules: set[Rule]
     ) -> bool:
         object_piece_types_that_are_stop = (
             RuleHelper.get_object_piece_types_that_are_stop(rules=rules)
@@ -204,15 +210,15 @@ class Map:
             ]
         )
 
-    def _execute_npc_move(self, rules: list[Rule]):
+    def _execute_npc_move(self, rules: set[Rule]):
         # TODO for 'MOVE' to work, we need to add the concept of directions to map pieces
         pass
 
-    def _execute_shifts(self, rules: list[Rule]):
+    def _execute_shifts(self, rules: set[Rule]):
         # TODO for shift
         pass
 
-    def _apply_defeat_interactions(self, rules: list[Rule]):
+    def _apply_defeat_interactions(self, rules: set[Rule]):
         overlapping_map_pieces = (
             self._get_all_overlapping_map_pieces_between_object_piece_types(
                 object_piece_types_1=RuleHelper.get_object_piece_types_that_are_you(
@@ -225,19 +231,50 @@ class Map:
         )
         for overlapping_map_pieces_that_are_you, _ in overlapping_map_pieces:
             for map_piece in overlapping_map_pieces_that_are_you:
-                self.map_pieces.remove(map_piece)
+                self._remove_map_piece(map_piece=map_piece)
 
-    def _apply_sink_interactions(self, rules: list[Rule]):
-        # TODO for sink
-        pass
+    def _apply_sink_interactions(self, rules: set[Rule]):
+        # TODO: Handle negation here so that floating objects do not sink
+        overlapping_map_pieces = (
+            self._get_all_overlapping_map_pieces_between_object_piece_types(
+                object_piece_types_1=RuleHelper.get_object_piece_types_that_are_sink(
+                    rules
+                ),
+                object_piece_types_2=[ObjectPieceType],
+            )
+        )
+        for (
+            overlapping_map_pieces_that_are_sink,
+            overlapping_map_pieces_to_be_sunk,
+        ) in overlapping_map_pieces:
+            # TODO: Figure out the real in-game logic for multiple pieces sinking simultaneously; for now, sinking everything
+            # Only sink if there are map pieces to be sunk that are not themselves sink
+            should_apply_sink = (
+                len(
+                    overlapping_map_pieces_to_be_sunk.difference(
+                        overlapping_map_pieces_that_are_sink
+                    )
+                )
+                > 0
+            )
+            if not should_apply_sink:
+                continue
+            for map_piece in overlapping_map_pieces_that_are_sink:
+                self._remove_map_piece(map_piece=map_piece)
+            for map_piece in overlapping_map_pieces_to_be_sunk:
+                self._remove_map_piece(map_piece=map_piece)
 
-    def _apply_melt_interactions(self, rules: list[Rule]):
+    def _apply_melt_interactions(self, rules: set[Rule]):
         # TODO for melt
         pass
 
-    def _apply_open_close_interactions(self, rules: list[Rule]):
+    def _apply_open_close_interactions(self, rules: set[Rule]):
         # TODO for open close
         pass
+
+    def _remove_map_piece(self, map_piece: MapPiece):
+        if map_piece in self.map_pieces:
+            self.map_pieces.remove(map_piece)
 
     def _apply_noun_mutations(self):
         noun_mutations = self._generate_results_for_all_rows_and_columns(
@@ -266,62 +303,70 @@ class Map:
 
     def _get_all_overlapping_map_pieces_between_object_piece_types(
         self,
-        object_piece_types_1: list[Type[ObjectPieceType]],
-        object_piece_types_2: list[Type[ObjectPieceType]],
-    ) -> list[tuple[list[MapPiece], list[MapPiece]]]:
-        overlaps: list[tuple[list[MapPiece], list[MapPiece]]] = []
+        object_piece_types_1: set[Type[ObjectPieceType]],
+        object_piece_types_2: set[Type[ObjectPieceType]],
+    ) -> set[tuple[frozenset[MapPiece], frozenset[MapPiece]]]:
+        overlaps: set[tuple[frozenset[MapPiece], frozenset[MapPiece]]] = set()
         for row_index in range(self.number_rows):
             for column_index in range(self.number_columns):
                 map_pieces = self._get_map_pieces_at(
-                    PiecePosition(x=column_index, y=row_index)
+                    position=PiecePosition(x=column_index, y=row_index)
                 )
-                map_pieces_matching_1 = [
-                    map_piece
-                    for map_piece in map_pieces
-                    if self._is_piece_type_within_object_piece_types(
-                        piece_type=map_piece.piece_type,
-                        object_piece_types=object_piece_types_1,
-                    )
-                ]
-                map_pieces_matching_2 = [
-                    map_piece
-                    for map_piece in map_pieces
-                    if self._is_piece_type_within_object_piece_types(
-                        piece_type=map_piece.piece_type,
-                        object_piece_types=object_piece_types_2,
-                    )
-                ]
+                map_pieces_matching_1 = frozenset(
+                    [
+                        map_piece
+                        for map_piece in map_pieces
+                        if self._is_piece_type_within_object_piece_types(
+                            piece_type=map_piece.piece_type,
+                            object_piece_types=object_piece_types_1,
+                        )
+                    ]
+                )
+                map_pieces_matching_2 = frozenset(
+                    [
+                        map_piece
+                        for map_piece in map_pieces
+                        if self._is_piece_type_within_object_piece_types(
+                            piece_type=map_piece.piece_type,
+                            object_piece_types=object_piece_types_2,
+                        )
+                    ]
+                )
                 if len(map_pieces_matching_1) > 0 and len(map_pieces_matching_2) > 0:
-                    overlaps.append((map_pieces_matching_1, map_pieces_matching_2))
+                    overlaps.add((map_pieces_matching_1, map_pieces_matching_2))
         return overlaps
 
     def _generate_results_for_all_rows_and_columns(
-        self, generate_from_row: Callable[[list[PieceType]], list[T]]
-    ) -> list[T]:
-        results: list[T] = []
+        self, generate_from_row: Callable[[list[PieceType]], set[T]]
+    ) -> set[T]:
+        results: set[T] = set()
         for row_index in range(self.number_rows):
-            results += generate_from_row(
-                row=[
-                    self._get_text_piece_type_at(
-                        PiecePosition(x=column_index, y=row_index)
-                    )
-                    for column_index in range(self.number_columns)
-                ]
+            results.update(
+                generate_from_row(
+                    row=[
+                        self._get_text_piece_type_at(
+                            position=PiecePosition(x=column_index, y=row_index)
+                        )
+                        for column_index in range(self.number_columns)
+                    ]
+                )
             )
         for column_index in range(self.number_columns):
-            results += generate_from_row(
-                row=[
-                    self._get_text_piece_type_at(
-                        PiecePosition(x=column_index, y=row_index)
-                    )
-                    # Reversed because (0, 0) is the bottom left corner
-                    for row_index in reversed(range(self.number_rows))
-                ]
+            results.update(
+                generate_from_row(
+                    row=[
+                        self._get_text_piece_type_at(
+                            position=PiecePosition(x=column_index, y=row_index)
+                        )
+                        # Reversed because (0, 0) is the bottom left corner
+                        for row_index in reversed(range(self.number_rows))
+                    ]
+                )
             )
         return results
 
     def _is_piece_type_within_object_piece_types(
-        self, piece_type: PieceType, object_piece_types: list[Type[ObjectPieceType]]
+        self, piece_type: PieceType, object_piece_types: set[Type[ObjectPieceType]]
     ) -> bool:
         return any(
             [

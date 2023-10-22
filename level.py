@@ -35,7 +35,7 @@ class Level:
         self.undo_map_stack: list[Map] = []
 
     def _init_assets_as_textures(self, assets_directory: str):
-        self.asset_map = {}
+        self.asset_map: dict[str, Asset] = {}
         for asset_filename in os.listdir(assets_directory):
             if not asset_filename.endswith(".png"):
                 continue
