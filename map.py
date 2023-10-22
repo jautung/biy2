@@ -3,7 +3,7 @@ from typing import Type, TypeVar
 
 T = TypeVar("T")
 
-import nounmutationhelpers as NounMutationHelper
+import nounmutationhelper as NounMutationHelper
 import piecepositionhelper as PiecePositionHelper
 import rulehelper as RuleHelper
 from mappiece import MapPiece
