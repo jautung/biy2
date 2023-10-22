@@ -97,6 +97,14 @@ class WallObjectPieceType(ObjectPieceType):
         return "WallObjectPieceType"
 
 
+class SkullObjectPieceType(ObjectPieceType):
+    def __init__(self):
+        super().__init__(asset_name="object_skull.png")
+
+    def __repr__(self) -> str:
+        return "SkullObjectPieceType"
+
+
 class BabaTextPieceType(NounTextPieceType):
     def __init__(self):
         super().__init__(
@@ -151,6 +159,17 @@ class WallTextPieceType(NounTextPieceType):
         return "WallTextPieceType"
 
 
+class SkullTextPieceType(NounTextPieceType):
+    def __init__(self):
+        super().__init__(
+            asset_name="text_skull.png",
+            associated_object_piece_type=SkullObjectPieceType,
+        )
+
+    def __repr__(self) -> str:
+        return "SkullTextPieceType"
+
+
 class WinTextPieceType(AttributeTextPieceType):
     def __init__(self):
         super().__init__(asset_name="text_win.png")
@@ -181,3 +200,11 @@ class StopTextPieceType(AttributeTextPieceType):
 
     def __repr__(self) -> str:
         return "StopTextPieceType"
+
+
+class DefeatTextPieceType(AttributeTextPieceType):
+    def __init__(self):
+        super().__init__(asset_name="text_defeat.png")
+
+    def __repr__(self) -> str:
+        return "DefeatTextPieceType"
