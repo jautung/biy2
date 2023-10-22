@@ -4,6 +4,7 @@ import copy
 from piecetype import *
 
 
+# TODO: Somehow implement rule overriding logic
 class Rule:
     def __init__(self, text_piece_types: list[TextPieceType]):
         # TODO: Incorporate 'NOT', 'AND', etc. etc.

@@ -4,7 +4,7 @@ from piecetype import *
 from rule import Rule
 
 
-def generate_rules_for_row(row: list[PieceType]) -> list[Rule]:
+def generate_rules_for_row(row: list[TextPieceType]) -> list[Rule]:
     rules: list[Rule] = []
     for start_index in range(len(row)):
         length = _generate_longest_possible_rule_given_start(row[start_index:])
@@ -14,7 +14,7 @@ def generate_rules_for_row(row: list[PieceType]) -> list[Rule]:
     return rules
 
 
-def _generate_longest_possible_rule_given_start(row: list[PieceType]) -> int:
+def _generate_longest_possible_rule_given_start(row: list[TextPieceType]) -> int:
     # TODO: Incorporate 'NOT', 'AND', etc. etc.
     if not isinstance(row[0], NounTextPieceType):
         return None
@@ -68,7 +68,7 @@ def _get_object_piece_types_that_have_attribute(
             )
         )
         if noun_text_piece_type_for_attribute:
-            object_piece_types_that_are_attribute += (
-                noun_text_piece_type_for_attribute.associated_object_piece_types
+            object_piece_types_that_are_attribute.append(
+                noun_text_piece_type_for_attribute.associated_object_piece_type
             )
     return object_piece_types_that_are_attribute

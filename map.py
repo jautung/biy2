@@ -1,5 +1,9 @@
-from typing import Type
+from collections.abc import Callable
+from typing import Type, TypeVar
 
+T = TypeVar("T")
+
+import nounmutationhelpers as NounMutationHelper
 import piecepositionhelper as PiecePositionHelper
 import rulehelper as RuleHelper
 from mappiece import MapPiece
@@ -46,9 +50,8 @@ class Map:
         return text_piece_types[0]
 
     def _generate_rules(self) -> list[Rule]:
-        rules: list[Rule] = []
-        # By default, without any overrides, "TEXT IS PUSH" is always a rule
-        rules.append(
+        return [
+            # By default, without any overrides, "TEXT IS PUSH" is always a rule
             Rule(
                 text_piece_types=[
                     TextTextPieceType(),
@@ -56,27 +59,9 @@ class Map:
                     PushTextPieceType(),
                 ]
             )
+        ] + self._generate_results_for_all_rows_and_columns(
+            generate_from_row=RuleHelper.generate_rules_for_row
         )
-        for row_index in range(self.number_rows):
-            rules += RuleHelper.generate_rules_for_row(
-                row=[
-                    self._get_text_piece_type_at(
-                        PiecePosition(x=column_index, y=row_index)
-                    )
-                    for column_index in range(self.number_columns)
-                ]
-            )
-        for column_index in range(self.number_columns):
-            rules += RuleHelper.generate_rules_for_row(
-                row=[
-                    self._get_text_piece_type_at(
-                        PiecePosition(x=column_index, y=row_index)
-                    )
-                    # Reversed because (0, 0) is the bottom left corner
-                    for row_index in reversed(range(self.number_rows))
-                ]
-            )
-        return rules
 
     def print_rules(self):
         rules = self._generate_rules()
@@ -239,8 +224,15 @@ class Map:
         pass
 
     def _apply_noun_mutations(self):
-        # TODO
-        pass
+        noun_mutations = self._generate_results_for_all_rows_and_columns(
+            generate_from_row=NounMutationHelper.generate_noun_mutations_for_row
+        )
+        for noun_mutation in noun_mutations:
+            for map_piece in self.map_pieces:
+                if isinstance(
+                    map_piece.piece_type, noun_mutation.from_object_piece_type
+                ):
+                    map_piece.piece_type = noun_mutation.to_object_piece_type()
 
     def is_in_win_state(self) -> bool:
         rules = self._generate_rules()
@@ -276,6 +268,31 @@ class Map:
                 if piece_types_contains_you and piece_types_contains_win:
                     return True
         return False
+
+    def _generate_results_for_all_rows_and_columns(
+        self, generate_from_row: Callable[[list[PieceType]], list[T]]
+    ) -> list[T]:
+        results: list[T] = []
+        for row_index in range(self.number_rows):
+            results += generate_from_row(
+                row=[
+                    self._get_text_piece_type_at(
+                        PiecePosition(x=column_index, y=row_index)
+                    )
+                    for column_index in range(self.number_columns)
+                ]
+            )
+        for column_index in range(self.number_columns):
+            results += generate_from_row(
+                row=[
+                    self._get_text_piece_type_at(
+                        PiecePosition(x=column_index, y=row_index)
+                    )
+                    # Reversed because (0, 0) is the bottom left corner
+                    for row_index in reversed(range(self.number_rows))
+                ]
+            )
+        return results
 
     def _is_piece_type_within_object_piece_types(
         self, piece_type: PieceType, object_piece_types: list[Type[ObjectPieceType]]

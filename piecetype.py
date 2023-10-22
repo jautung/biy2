@@ -38,11 +38,12 @@ class NounTextPieceType(TextPieceType):
     def __init__(
         self,
         asset_name: str,
-        associated_object_piece_types: list[Type[ObjectPieceType]],
+        associated_object_piece_type: Type[ObjectPieceType],
     ):
         super().__init__(asset_name=asset_name)
-        # The object(s) that this noun text should be controlling on the board
-        self.associated_object_piece_types = associated_object_piece_types
+        # The object that this noun text should be controlling on the board
+        # Also the object that other nouns will mutate into for NOUN IS NOUN
+        self.associated_object_piece_type = associated_object_piece_type
 
     def __repr__(self) -> str:
         return "NounTextPieceType"
@@ -100,7 +101,7 @@ class BabaTextPieceType(NounTextPieceType):
     def __init__(self):
         super().__init__(
             asset_name="text_baba.png",
-            associated_object_piece_types=[BabaObjectPieceType],
+            associated_object_piece_type=BabaObjectPieceType,
         )
 
     def __repr__(self) -> str:
@@ -111,7 +112,7 @@ class FlagTextPieceType(NounTextPieceType):
     def __init__(self):
         super().__init__(
             asset_name="text_flag.png",
-            associated_object_piece_types=[FlagObjectPieceType],
+            associated_object_piece_type=FlagObjectPieceType,
         )
 
     def __repr__(self) -> str:
@@ -121,7 +122,7 @@ class FlagTextPieceType(NounTextPieceType):
 class TextTextPieceType(NounTextPieceType):
     def __init__(self):
         super().__init__(
-            asset_name="text_text.png", associated_object_piece_types=[TextPieceType]
+            asset_name="text_text.png", associated_object_piece_type=TextPieceType
         )
 
     def __repr__(self) -> str:
@@ -132,7 +133,7 @@ class RockTextPieceType(NounTextPieceType):
     def __init__(self):
         super().__init__(
             asset_name="text_rock.png",
-            associated_object_piece_types=[RockObjectPieceType],
+            associated_object_piece_type=RockObjectPieceType,
         )
 
     def __repr__(self) -> str:
@@ -143,7 +144,7 @@ class WallTextPieceType(NounTextPieceType):
     def __init__(self):
         super().__init__(
             asset_name="text_wall.png",
-            associated_object_piece_types=[WallObjectPieceType],
+            associated_object_piece_type=WallObjectPieceType,
         )
 
     def __repr__(self) -> str:
