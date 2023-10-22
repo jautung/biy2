@@ -48,7 +48,7 @@ def store_asset_as_texture(image: Image.Image):
         0,  # border
         GL_RGBA,  # format
         GL_UNSIGNED_BYTE,  # type
-        numpy.array(list(image.getdata()), numpy.int8),  # pixels
+        numpy.array(image),  # pixels
     )
     return texture_id
 
