@@ -213,8 +213,19 @@ class Map:
         pass
 
     def _apply_defeat_interactions(self, rules: list[Rule]):
-        # TODO for defeat
-        pass
+        overlapping_map_pieces = (
+            self._get_all_overlapping_map_pieces_between_object_piece_types(
+                object_piece_types_1=RuleHelper.get_object_piece_types_that_are_you(
+                    rules
+                ),
+                object_piece_types_2=RuleHelper.get_object_piece_types_that_are_defeat(
+                    rules
+                ),
+            )
+        )
+        for overlapping_map_pieces_that_are_you, _ in overlapping_map_pieces:
+            for map_piece in overlapping_map_pieces_that_are_you:
+                self.map_pieces.remove(map_piece)
 
     def _apply_sink_interactions(self, rules: list[Rule]):
         # TODO for sink
@@ -241,17 +252,23 @@ class Map:
 
     def is_in_win_state(self) -> bool:
         rules = self._generate_rules()
-        overlaps = self._get_all_overlaps_between_object_piece_types(
-            object_piece_types_1=RuleHelper.get_object_piece_types_that_are_you(rules),
-            object_piece_types_2=RuleHelper.get_object_piece_types_that_are_win(rules),
+        overlapping_map_pieces = (
+            self._get_all_overlapping_map_pieces_between_object_piece_types(
+                object_piece_types_1=RuleHelper.get_object_piece_types_that_are_you(
+                    rules
+                ),
+                object_piece_types_2=RuleHelper.get_object_piece_types_that_are_win(
+                    rules
+                ),
+            )
         )
-        return len(overlaps) > 0
+        return len(overlapping_map_pieces) > 0
 
-    def _get_all_overlaps_between_object_piece_types(
+    def _get_all_overlapping_map_pieces_between_object_piece_types(
         self,
         object_piece_types_1: list[Type[ObjectPieceType]],
         object_piece_types_2: list[Type[ObjectPieceType]],
-    ):
+    ) -> list[tuple[list[MapPiece], list[MapPiece]]]:
         overlaps: list[tuple[list[MapPiece], list[MapPiece]]] = []
         for row_index in range(self.number_rows):
             for column_index in range(self.number_columns):

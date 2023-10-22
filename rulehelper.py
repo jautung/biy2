@@ -57,6 +57,14 @@ def get_object_piece_types_that_are_stop(
     )
 
 
+def get_object_piece_types_that_are_defeat(
+    rules: list[Rule],
+) -> list[Type[ObjectPieceType]]:
+    return _get_object_piece_types_that_have_attribute(
+        rules=rules, attribute_text_piece_type=DefeatTextPieceType
+    )
+
+
 def _get_object_piece_types_that_have_attribute(
     rules: list[Rule], attribute_text_piece_type: Type[TextPieceType]
 ) -> list[Type[ObjectPieceType]]:
