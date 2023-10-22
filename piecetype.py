@@ -105,6 +105,14 @@ class SkullObjectPieceType(ObjectPieceType):
         return "SkullObjectPieceType"
 
 
+class WaterObjectPieceType(ObjectPieceType):
+    def __init__(self):
+        super().__init__(asset_name="object_water.png")
+
+    def __repr__(self) -> str:
+        return "WaterObjectPieceType"
+
+
 class BabaTextPieceType(NounTextPieceType):
     def __init__(self):
         super().__init__(
@@ -170,6 +178,17 @@ class SkullTextPieceType(NounTextPieceType):
         return "SkullTextPieceType"
 
 
+class WaterTextPieceType(NounTextPieceType):
+    def __init__(self):
+        super().__init__(
+            asset_name="text_water.png",
+            associated_object_piece_type=WaterObjectPieceType,
+        )
+
+    def __repr__(self) -> str:
+        return "WaterTextPieceType"
+
+
 class WinTextPieceType(AttributeTextPieceType):
     def __init__(self):
         super().__init__(asset_name="text_win.png")
@@ -208,3 +227,11 @@ class DefeatTextPieceType(AttributeTextPieceType):
 
     def __repr__(self) -> str:
         return "DefeatTextPieceType"
+
+
+class SinkTextPieceType(AttributeTextPieceType):
+    def __init__(self):
+        super().__init__(asset_name="text_sink.png")
+
+    def __repr__(self) -> str:
+        return "SinkTextPieceType"

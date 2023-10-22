@@ -20,23 +20,43 @@
         },
         {
             "x": 0,
-            "y": 3,
-            "type": "FlagText"
-        },
-        {
-            "x": 0,
-            "y": 2,
-            "type": "IsText"
+            "y": 1,
+            "type": "WaterText"
         },
         {
             "x": 1,
             "y": 1,
+            "type": "IsText"
+        },
+        {
+            "x": 2,
+            "y": 1,
+            "type": "SinkText"
+        },
+        {
+            "x": 0,
+            "y": 4,
+            "type": "FlagText"
+        },
+        {
+            "x": 0,
+            "y": 3,
+            "type": "IsText"
+        },
+        {
+            "x": 1,
+            "y": 2,
             "type": "WinText"
         },
         {
             "x": 0,
             "y": 5,
             "type": "BabaObject"
+        },
+        {
+            "x": 4,
+            "y": 5,
+            "type": "WaterObject"
         },
         {
             "x": 8,
