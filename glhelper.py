@@ -38,7 +38,6 @@ def store_asset_as_texture(image: Image.Image):
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL)
-    # TODO: Figure out why transparency isn't working to overlap pieces
     glTexImage2D(
         GL_TEXTURE_2D,  # target
         0,  # level
@@ -132,7 +131,7 @@ def _draw_line_inner(x0, y0, x1, y1):
     glVertex2f(x1, y1)
 
 
-def draw_square_asset(asset: Asset, x0, y0, size):
+def draw_square_asset(asset: Asset, x0, y0, size, alpha):
     _run_block_in_matrix_mode(
         mode=GL_TEXTURE,
         block_func=lambda: _scale_texture(
@@ -143,10 +142,7 @@ def draw_square_asset(asset: Asset, x0, y0, size):
     _run_block_in_matrix_mode(
         mode=GL_MODELVIEW,
         block_func=lambda: _draw_texture(
-            texture_id=asset.texture_id,
-            x0=x0,
-            y0=y0,
-            size=size,
+            texture_id=asset.texture_id, x0=x0, y0=y0, size=size, alpha=alpha
         ),
     )
     _run_block_in_matrix_mode(
@@ -168,7 +164,8 @@ def _unscale_texture():
     glPopMatrix()
 
 
-def _draw_texture(texture_id, x0, y0, size):
+def _draw_texture(texture_id, x0, y0, size, alpha):
+    glColor4f(0.0, 0.0, 0.0, alpha)
     glEnable(GL_TEXTURE_2D)
     glEnable(GL_TEXTURE_GEN_S)
     glEnable(GL_TEXTURE_GEN_T)

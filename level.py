@@ -12,9 +12,9 @@ from mappiece import MapPiece
 from window import Window
 
 
-# Colors in RGB
-COLOR_WHITE = (1.0, 1.0, 1.0)
-COLOR_GRAY = (0.4, 0.4, 0.4)
+RGB_COLOR_WHITE = (1.0, 1.0, 1.0)
+RGB_COLOR_GRAY = (0.4, 0.4, 0.4)
+ALPHA_ASSET = 0.6
 
 
 class Level:
@@ -66,9 +66,9 @@ class Level:
     def _draw_grid(self):
         for row_index in range(self.map.number_rows + 1):
             GLHelper.draw_line(
-                color=COLOR_WHITE
+                color=RGB_COLOR_WHITE
                 if row_index == 0 or row_index == self.map.number_rows
-                else COLOR_GRAY,
+                else RGB_COLOR_GRAY,
                 x0=self.window_padding_horizontal,
                 y0=self.window_padding_vertical + row_index * self.cell_size,
                 x1=self.window.width - self.window_padding_horizontal,
@@ -76,9 +76,9 @@ class Level:
             )
         for column_index in range(self.map.number_columns + 1):
             GLHelper.draw_line(
-                color=COLOR_WHITE
+                color=RGB_COLOR_WHITE
                 if column_index == 0 or column_index == self.map.number_columns
-                else COLOR_GRAY,
+                else RGB_COLOR_GRAY,
                 x0=self.window_padding_horizontal + column_index * self.cell_size,
                 y0=self.window_padding_vertical,
                 x1=self.window_padding_horizontal + column_index * self.cell_size,
@@ -103,6 +103,7 @@ class Level:
             x0=x,
             y0=y,
             size=self.asset_size,
+            alpha=ALPHA_ASSET,
         )
 
     def _keyboard_func(self, key, x, y):
