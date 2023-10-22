@@ -113,6 +113,22 @@ class WaterObjectPieceType(ObjectPieceType):
         return "WaterObjectPieceType"
 
 
+class CrabObjectPieceType(ObjectPieceType):
+    def __init__(self):
+        super().__init__(asset_name="object_crab.png")
+
+    def __repr__(self) -> str:
+        return "CrabObjectPieceType"
+
+
+class JellyObjectPieceType(ObjectPieceType):
+    def __init__(self):
+        super().__init__(asset_name="object_jelly.png")
+
+    def __repr__(self) -> str:
+        return "JellyObjectPieceType"
+
+
 class BabaTextPieceType(NounTextPieceType):
     def __init__(self):
         super().__init__(
@@ -187,6 +203,28 @@ class WaterTextPieceType(NounTextPieceType):
 
     def __repr__(self) -> str:
         return "WaterTextPieceType"
+
+
+class CrabTextPieceType(NounTextPieceType):
+    def __init__(self):
+        super().__init__(
+            asset_name="text_crab.png",
+            associated_object_piece_type=CrabObjectPieceType,
+        )
+
+    def __repr__(self) -> str:
+        return "CrabTextPieceType"
+
+
+class JellyTextPieceType(NounTextPieceType):
+    def __init__(self):
+        super().__init__(
+            asset_name="text_jelly.png",
+            associated_object_piece_type=JellyObjectPieceType,
+        )
+
+    def __repr__(self) -> str:
+        return "JellyTextPieceType"
 
 
 class WinTextPieceType(AttributeTextPieceType):
