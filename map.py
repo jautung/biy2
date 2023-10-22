@@ -241,38 +241,42 @@ class Map:
 
     def is_in_win_state(self) -> bool:
         rules = self._generate_rules()
-        object_piece_types_that_are_you = (
-            RuleHelper.get_object_piece_types_that_are_you(rules)
+        overlaps = self._get_all_overlaps_between_object_piece_types(
+            object_piece_types_1=RuleHelper.get_object_piece_types_that_are_you(rules),
+            object_piece_types_2=RuleHelper.get_object_piece_types_that_are_win(rules),
         )
-        object_piece_types_that_are_win = (
-            RuleHelper.get_object_piece_types_that_are_win(rules)
-        )
+        return len(overlaps) > 0
+
+    def _get_all_overlaps_between_object_piece_types(
+        self,
+        object_piece_types_1: list[Type[ObjectPieceType]],
+        object_piece_types_2: list[Type[ObjectPieceType]],
+    ):
+        overlaps: list[tuple[list[MapPiece], list[MapPiece]]] = []
         for row_index in range(self.number_rows):
             for column_index in range(self.number_columns):
-                piece_types = self._get_piece_types_at(
+                map_pieces = self._get_map_pieces_at(
                     PiecePosition(x=column_index, y=row_index)
                 )
-                piece_types_contains_you = any(
-                    [
-                        self._is_piece_type_within_object_piece_types(
-                            piece_type=piece_type,
-                            object_piece_types=object_piece_types_that_are_you,
-                        )
-                        for piece_type in piece_types
-                    ]
-                )
-                piece_types_contains_win = any(
-                    [
-                        self._is_piece_type_within_object_piece_types(
-                            piece_type=piece_type,
-                            object_piece_types=object_piece_types_that_are_win,
-                        )
-                        for piece_type in piece_types
-                    ]
-                )
-                if piece_types_contains_you and piece_types_contains_win:
-                    return True
-        return False
+                map_pieces_matching_1 = [
+                    map_piece
+                    for map_piece in map_pieces
+                    if self._is_piece_type_within_object_piece_types(
+                        piece_type=map_piece.piece_type,
+                        object_piece_types=object_piece_types_1,
+                    )
+                ]
+                map_pieces_matching_2 = [
+                    map_piece
+                    for map_piece in map_pieces
+                    if self._is_piece_type_within_object_piece_types(
+                        piece_type=map_piece.piece_type,
+                        object_piece_types=object_piece_types_2,
+                    )
+                ]
+                if len(map_pieces_matching_1) > 0 and len(map_pieces_matching_2) > 0:
+                    overlaps.append((map_pieces_matching_1, map_pieces_matching_2))
+        return overlaps
 
     def _generate_results_for_all_rows_and_columns(
         self, generate_from_row: Callable[[list[PieceType]], list[T]]
