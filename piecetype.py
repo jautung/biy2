@@ -11,7 +11,7 @@ class PieceType:
     def __repr__(self) -> str:
         return "PieceType"
 
-    def json_repr(self) -> str:
+    def stored_levels_repr(self) -> str:
         return self.__repr__()[: -len("PieceType")]
 
 

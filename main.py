@@ -17,7 +17,7 @@ WINDOW_HEIGHT = 800
 
 
 if __name__ == "__main__":
-    # TODO: Make a level editor to save to json format
+    # TODO: Make a level editor to save to stored levels format
     window = Window(
         x=WINDOW_X,
         y=WINDOW_Y,
@@ -25,9 +25,9 @@ if __name__ == "__main__":
         height=WINDOW_HEIGHT,
     )
     level_names = [
-        level_filename[: -len(".json")]
+        level_filename[: -len(f".{LevelParser.LEVEL_FILENAME_EXTENSION}")]
         for level_filename in os.listdir(LEVELS_DIRECTORY)
-        if level_filename.endswith(".json")
+        if level_filename.endswith(f".{LevelParser.LEVEL_FILENAME_EXTENSION}")
     ]
     _, level_selected_index = pick.pick(
         options=level_names, title="Choose level!", indicator=PICK_INDICATOR
