@@ -1,3 +1,4 @@
+from assetset import AssetSet
 from typing import Type
 
 
@@ -5,8 +6,8 @@ from typing import Type
 
 
 class PieceType:
-    def __init__(self, asset_name: str):
-        self.asset_name = asset_name
+    def __init__(self, asset_set: AssetSet):
+        self.asset_set = asset_set
 
     def __repr__(self) -> str:
         return "PieceType"
@@ -16,16 +17,16 @@ class PieceType:
 
 
 class ObjectPieceType(PieceType):
-    def __init__(self, asset_name: str):
-        super().__init__(asset_name=asset_name)
+    def __init__(self, asset_set: AssetSet):
+        super().__init__(asset_set=asset_set)
 
     def __repr__(self) -> str:
         return "ObjectPieceType"
 
 
 class TextPieceType(ObjectPieceType):  # Technically text pieces are themselves objects!
-    def __init__(self, asset_name: str):
-        super().__init__(asset_name=asset_name)
+    def __init__(self, asset_set: AssetSet):
+        super().__init__(asset_set=asset_set)
 
     def __repr__(self) -> str:
         return "TextPieceType"
@@ -37,10 +38,10 @@ class TextPieceType(ObjectPieceType):  # Technically text pieces are themselves 
 class NounTextPieceType(TextPieceType):
     def __init__(
         self,
-        asset_name: str,
+        asset_set: AssetSet,
         associated_object_piece_type: Type[ObjectPieceType],
     ):
-        super().__init__(asset_name=asset_name)
+        super().__init__(asset_set=asset_set)
         # The object that this noun text should be controlling on the board
         # Also the object that other nouns will mutate into for NOUN IS NOUN
         self.associated_object_piece_type = associated_object_piece_type
@@ -51,15 +52,19 @@ class NounTextPieceType(TextPieceType):
 
 class IsTextPieceType(TextPieceType):
     def __init__(self):
-        super().__init__(asset_name="text_is.png")
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_is.png"
+            )
+        )
 
     def __repr__(self) -> str:
         return "IsTextPieceType"
 
 
 class AttributeTextPieceType(TextPieceType):
-    def __init__(self, asset_name: str):
-        super().__init__(asset_name=asset_name)
+    def __init__(self, asset_set: AssetSet):
+        super().__init__(asset_set=asset_set)
 
     def __repr__(self) -> str:
         return "AttributeTextPieceType"
@@ -67,7 +72,14 @@ class AttributeTextPieceType(TextPieceType):
 
 class BabaObjectPieceType(ObjectPieceType):
     def __init__(self):
-        super().__init__(asset_name="object_baba_right.png")
+        super().__init__(
+            asset_set=AssetSet.from_directional_assets(
+                up_asset_name="object_baba_up.png",
+                down_asset_name="object_baba_down.png",
+                left_asset_name="object_baba_left.png",
+                right_asset_name="object_baba_right.png",
+            )
+        )
 
     def __repr__(self) -> str:
         return "BabaObjectPieceType"
@@ -75,7 +87,11 @@ class BabaObjectPieceType(ObjectPieceType):
 
 class FlagObjectPieceType(ObjectPieceType):
     def __init__(self):
-        super().__init__(asset_name="object_flag.png")
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="object_flag.png"
+            )
+        )
 
     def __repr__(self) -> str:
         return "FlagObjectPieceType"
@@ -83,7 +99,11 @@ class FlagObjectPieceType(ObjectPieceType):
 
 class RockObjectPieceType(ObjectPieceType):
     def __init__(self):
-        super().__init__(asset_name="object_rock.png")
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="object_rock.png"
+            )
+        )
 
     def __repr__(self) -> str:
         return "RockObjectPieceType"
@@ -91,7 +111,11 @@ class RockObjectPieceType(ObjectPieceType):
 
 class WallObjectPieceType(ObjectPieceType):
     def __init__(self):
-        super().__init__(asset_name="object_wall.png")
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="object_wall.png"
+            )
+        )
 
     def __repr__(self) -> str:
         return "WallObjectPieceType"
@@ -99,7 +123,11 @@ class WallObjectPieceType(ObjectPieceType):
 
 class SkullObjectPieceType(ObjectPieceType):
     def __init__(self):
-        super().__init__(asset_name="object_skull.png")
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="object_skull.png"
+            )
+        )
 
     def __repr__(self) -> str:
         return "SkullObjectPieceType"
@@ -107,7 +135,11 @@ class SkullObjectPieceType(ObjectPieceType):
 
 class WaterObjectPieceType(ObjectPieceType):
     def __init__(self):
-        super().__init__(asset_name="object_water.png")
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="object_water.png"
+            )
+        )
 
     def __repr__(self) -> str:
         return "WaterObjectPieceType"
@@ -115,7 +147,11 @@ class WaterObjectPieceType(ObjectPieceType):
 
 class CrabObjectPieceType(ObjectPieceType):
     def __init__(self):
-        super().__init__(asset_name="object_crab.png")
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="object_crab.png"
+            )
+        )
 
     def __repr__(self) -> str:
         return "CrabObjectPieceType"
@@ -123,7 +159,11 @@ class CrabObjectPieceType(ObjectPieceType):
 
 class JellyObjectPieceType(ObjectPieceType):
     def __init__(self):
-        super().__init__(asset_name="object_jelly.png")
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="object_jelly.png"
+            )
+        )
 
     def __repr__(self) -> str:
         return "JellyObjectPieceType"
@@ -132,7 +172,9 @@ class JellyObjectPieceType(ObjectPieceType):
 class BabaTextPieceType(NounTextPieceType):
     def __init__(self):
         super().__init__(
-            asset_name="text_baba.png",
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_baba.png"
+            ),
             associated_object_piece_type=BabaObjectPieceType,
         )
 
@@ -143,7 +185,9 @@ class BabaTextPieceType(NounTextPieceType):
 class FlagTextPieceType(NounTextPieceType):
     def __init__(self):
         super().__init__(
-            asset_name="text_flag.png",
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_flag.png"
+            ),
             associated_object_piece_type=FlagObjectPieceType,
         )
 
@@ -154,7 +198,10 @@ class FlagTextPieceType(NounTextPieceType):
 class TextTextPieceType(NounTextPieceType):
     def __init__(self):
         super().__init__(
-            asset_name="text_text.png", associated_object_piece_type=TextPieceType
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_text.png"
+            ),
+            associated_object_piece_type=TextPieceType,
         )
 
     def __repr__(self) -> str:
@@ -164,7 +211,9 @@ class TextTextPieceType(NounTextPieceType):
 class RockTextPieceType(NounTextPieceType):
     def __init__(self):
         super().__init__(
-            asset_name="text_rock.png",
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_rock.png"
+            ),
             associated_object_piece_type=RockObjectPieceType,
         )
 
@@ -175,7 +224,9 @@ class RockTextPieceType(NounTextPieceType):
 class WallTextPieceType(NounTextPieceType):
     def __init__(self):
         super().__init__(
-            asset_name="text_wall.png",
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_wall.png"
+            ),
             associated_object_piece_type=WallObjectPieceType,
         )
 
@@ -186,7 +237,9 @@ class WallTextPieceType(NounTextPieceType):
 class SkullTextPieceType(NounTextPieceType):
     def __init__(self):
         super().__init__(
-            asset_name="text_skull.png",
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_skull.png"
+            ),
             associated_object_piece_type=SkullObjectPieceType,
         )
 
@@ -197,7 +250,9 @@ class SkullTextPieceType(NounTextPieceType):
 class WaterTextPieceType(NounTextPieceType):
     def __init__(self):
         super().__init__(
-            asset_name="text_water.png",
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_water.png"
+            ),
             associated_object_piece_type=WaterObjectPieceType,
         )
 
@@ -208,7 +263,9 @@ class WaterTextPieceType(NounTextPieceType):
 class CrabTextPieceType(NounTextPieceType):
     def __init__(self):
         super().__init__(
-            asset_name="text_crab.png",
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_crab.png"
+            ),
             associated_object_piece_type=CrabObjectPieceType,
         )
 
@@ -219,7 +276,9 @@ class CrabTextPieceType(NounTextPieceType):
 class JellyTextPieceType(NounTextPieceType):
     def __init__(self):
         super().__init__(
-            asset_name="text_jelly.png",
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_jelly.png"
+            ),
             associated_object_piece_type=JellyObjectPieceType,
         )
 
@@ -229,7 +288,11 @@ class JellyTextPieceType(NounTextPieceType):
 
 class WinTextPieceType(AttributeTextPieceType):
     def __init__(self):
-        super().__init__(asset_name="text_win.png")
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_win.png"
+            )
+        )
 
     def __repr__(self) -> str:
         return "WinTextPieceType"
@@ -237,7 +300,11 @@ class WinTextPieceType(AttributeTextPieceType):
 
 class YouTextPieceType(AttributeTextPieceType):
     def __init__(self):
-        super().__init__(asset_name="text_you.png")
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_you.png"
+            )
+        )
 
     def __repr__(self) -> str:
         return "YouTextPieceType"
@@ -245,7 +312,11 @@ class YouTextPieceType(AttributeTextPieceType):
 
 class PushTextPieceType(AttributeTextPieceType):
     def __init__(self):
-        super().__init__(asset_name="text_push.png")
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_push.png"
+            )
+        )
 
     def __repr__(self) -> str:
         return "PushTextPieceType"
@@ -253,7 +324,11 @@ class PushTextPieceType(AttributeTextPieceType):
 
 class StopTextPieceType(AttributeTextPieceType):
     def __init__(self):
-        super().__init__(asset_name="text_stop.png")
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_stop.png"
+            )
+        )
 
     def __repr__(self) -> str:
         return "StopTextPieceType"
@@ -261,7 +336,11 @@ class StopTextPieceType(AttributeTextPieceType):
 
 class DefeatTextPieceType(AttributeTextPieceType):
     def __init__(self):
-        super().__init__(asset_name="text_defeat.png")
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_defeat.png"
+            )
+        )
 
     def __repr__(self) -> str:
         return "DefeatTextPieceType"
@@ -269,7 +348,11 @@ class DefeatTextPieceType(AttributeTextPieceType):
 
 class SinkTextPieceType(AttributeTextPieceType):
     def __init__(self):
-        super().__init__(asset_name="text_sink.png")
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_sink.png"
+            )
+        )
 
     def __repr__(self) -> str:
         return "SinkTextPieceType"

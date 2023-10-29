@@ -99,7 +99,7 @@ class Level:
             window_padding_vertical=self.window_padding_vertical,
         )
         GLHelper.draw_square_asset(
-            asset=self.asset_map[map_piece.piece_type.asset_name],
+            asset=self.asset_map[map_piece.get_asset_name()],
             x0=x,
             y0=y,
             size=self.asset_size,
