@@ -1,0 +1,87 @@
+Title: Sunken temple
+Rows: 8
+Columns: 15
+
+WallText
+0 0
+IsText
+1 0
+StopText
+2 0
+
+BabaText
+2 5
+IsText
+3 5
+YouText
+4 5
+
+CrabText
+11 6
+FlagText
+12 6
+JellyText
+14 6
+IsText
+12 5
+IsText
+13 5
+IsText
+14 5
+DefeatText
+12 4
+WinText
+13 4
+PushText
+14 4
+
+RockText
+10 1
+IsText
+11 1
+PushText
+12 1
+
+BabaObject
+3 6
+
+CrabObject
+4 1
+FlagObject
+6 1
+
+RockObject
+8 6
+JellyObject
+9 6
+
+WallObject
+3 0
+4 0
+4 2
+4 3
+5 3
+6 3
+7 3
+8 3
+8 2
+8 1
+8 0
+8 4
+8 5
+8 7
+9 7
+10 7
+11 7
+12 7
+13 7
+14 7
+11 5
+11 4
+11 3
+12 3
+13 3
+14 3
+14 2
+14 1
+14 0

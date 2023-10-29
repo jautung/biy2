@@ -1,0 +1,33 @@
+Title: Test
+Rows: 8
+Columns: 10
+
+BabaText
+0 0
+IsText
+1 0
+YouText
+2 0
+
+WaterText
+0 1
+IsText
+1 1
+SinkText
+2 1
+
+FlagText
+0 4
+IsText
+0 3
+WinText
+1 2
+
+BabaObject
+0 5
+WaterObject
+4 5
+StopText
+4 6
+FlagObject
+8 5

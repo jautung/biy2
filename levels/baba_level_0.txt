@@ -8,24 +8,28 @@ IsText
 12 3
 StopText
 13 3
+
 RockText
 19 3
 IsText
 20 3
 PushText
 21 3
+
 BabaText
 11 11
 IsText
 12 11
 YouText
 13 11
+
 FlagText
 19 11
 IsText
 20 11
 WinText
 21 11
+
 WallObject
 11 5
 12 5
@@ -49,6 +53,7 @@ WallObject
 19 9
 20 9
 21 9
+
 BabaObject
 12 7
 RockObject

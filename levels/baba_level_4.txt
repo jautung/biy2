@@ -1,0 +1,93 @@
+Title: Still out of reach
+Rows: 14
+Columns: 24
+
+RockText
+2 8
+IsText
+3 8
+PushText
+4 8
+
+FlagText
+0 13
+IsText
+1 13
+WinText
+2 13
+
+BabaText
+0 12
+IsText
+1 12
+YouText
+2 12
+
+SkullText
+15 8
+IsText
+15 7
+DefeatText
+15 6
+
+BabaObject
+6 1
+FlagObject
+18 4
+
+RockObject
+6 3
+6 4
+6 5
+
+SkullObject
+3 0
+3 1
+3 2
+3 3
+3 4
+4 4
+5 4
+5 5
+5 6
+9 0
+9 1
+9 2
+9 3
+9 4
+8 4
+7 4
+7 5
+7 6
+13 2
+13 3
+13 4
+13 5
+13 6
+13 7
+13 8
+13 9
+13 10
+14 2
+15 2
+16 2
+17 2
+18 2
+19 2
+20 2
+21 2
+21 3
+21 4
+21 5
+21 6
+21 7
+21 8
+21 9
+21 10
+14 10
+15 10
+16 10
+17 10
+18 10
+19 10
+20 10
