@@ -67,7 +67,7 @@ class AttributeTextPieceType(TextPieceType):
 
 class BabaObjectPieceType(ObjectPieceType):
     def __init__(self):
-        super().__init__(asset_name="object_baba.png")
+        super().__init__(asset_name="object_baba_right.png")
 
     def __repr__(self) -> str:
         return "BabaObjectPieceType"
