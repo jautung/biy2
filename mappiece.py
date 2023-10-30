@@ -4,9 +4,15 @@ from pieceposition import PiecePosition
 
 
 class MapPiece:
-    def __init__(self, position: PiecePosition, piece_type: PieceType):
+    def __init__(
+        self,
+        position: PiecePosition,
+        piece_type: PieceType,
+        move_direction: MoveDirection,
+    ):
         self.position = position
         self.piece_type = piece_type
+        self.move_direction = move_direction
 
     def __repr__(self) -> str:
         return f"{self.piece_type}@{self.position}"

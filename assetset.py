@@ -14,7 +14,6 @@ class AssetSet:
             MoveDirection.DOWN: down_asset_name,
             MoveDirection.LEFT: left_asset_name,
             MoveDirection.RIGHT: right_asset_name,
-            MoveDirection.WAIT: right_asset_name,  # Sensible default
         }
 
     def get_asset_name(self, move_direction: MoveDirection) -> str:
