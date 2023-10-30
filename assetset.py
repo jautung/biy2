@@ -16,8 +16,8 @@ class AssetSet:
             MoveDirection.RIGHT: right_asset_name,
         }
 
-    def get_asset_name(self, move_direction: MoveDirection) -> str:
-        return self.asset_map[move_direction]
+    def get_asset_name(self, direction: MoveDirection) -> str:
+        return self.asset_map[direction]
 
     @classmethod
     def from_directional_assets(

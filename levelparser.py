@@ -15,7 +15,7 @@ LEVEL_FILENAME_EXTENSION = "txt"
 TITLE_PREFIX = "Title: "
 ROWS_PREFIX = "Rows: "
 COLUMNS_PREFIX = "Columns: "
-DEFAULT_MOVE_DIRECTION = MoveDirection.RIGHT  # If unspecified in stored level
+DEFAULT_DIRECTION = MoveDirection.RIGHT  # If unspecified in stored level
 
 
 def get_level_by_name(
@@ -72,29 +72,27 @@ def _get_map_pieces(
             x = int(piece_attributes[0])
             y = int(piece_attributes[1])
             if len(line_split) == 3:
-                move_direction = _get_move_direction(
-                    move_direction_str=piece_attributes[2]
-                )
+                direction = _get_direction(direction_str=piece_attributes[2])
             else:
-                move_direction = DEFAULT_MOVE_DIRECTION
+                direction = DEFAULT_DIRECTION
             map_pieces.add(
                 MapPiece(
                     position=PiecePosition(x=x, y=y),
                     piece_type=current_piece_type(),
-                    move_direction=move_direction,
+                    direction=direction,
                 )
             )
     return map_pieces
 
 
-def _get_move_direction(move_direction_str: str) -> MoveDirection:
-    if move_direction_str.lower() == "up":
+def _get_direction(direction_str: str) -> MoveDirection:
+    if direction_str.lower() == "up":
         return MoveDirection.UP
-    elif move_direction_str.lower() == "down":
+    elif direction_str.lower() == "down":
         return MoveDirection.DOWN
-    elif move_direction_str.lower() == "left":
+    elif direction_str.lower() == "left":
         return MoveDirection.LEFT
-    elif move_direction_str.lower() == "right":
+    elif direction_str.lower() == "right":
         return MoveDirection.RIGHT
 
 
