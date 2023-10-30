@@ -3,6 +3,7 @@ from typing import Type, TypeVar
 
 T = TypeVar("T")
 
+import movedirectionhelper as MoveDirectionHelper
 import nounmutationhelper as NounMutationHelper
 import piecepositionhelper as PiecePositionHelper
 import rulehelper as RuleHelper
@@ -116,6 +117,13 @@ class Map:
                 piece_type=map_piece.piece_type,
                 object_piece_types=object_piece_types_that_are_move,
             ):
+                assert map_piece.direction != MoveDirection.WAIT
+                if not self._can_object_move(
+                    map_piece=map_piece, direction=map_piece.direction, rules=rules
+                ):
+                    map_piece.direction = MoveDirectionHelper.reverse_direction(
+                        map_piece.direction
+                    )
                 self._execute_object_move(
                     map_piece=map_piece, direction=map_piece.direction, rules=rules
                 )
