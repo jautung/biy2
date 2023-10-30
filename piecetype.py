@@ -356,3 +356,15 @@ class SinkTextPieceType(AttributeTextPieceType):
 
     def __repr__(self) -> str:
         return "SinkTextPieceType"
+
+
+class MoveTextPieceType(AttributeTextPieceType):
+    def __init__(self):
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_move.png"
+            )
+        )
+
+    def __repr__(self) -> str:
+        return "MoveTextPieceType"
