@@ -127,6 +127,7 @@ class Map:
                 map_piece=pushable_map_piece, direction=direction, rules=rules
             )
         map_piece.position = new_position
+        map_piece.direction = direction
 
     def _can_object_move(
         self,
