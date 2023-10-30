@@ -73,6 +73,14 @@ def get_object_piece_types_that_are_sink(
     )
 
 
+def get_object_piece_types_that_are_move(
+    rules: set[Rule],
+) -> set[Type[ObjectPieceType]]:
+    return _get_object_piece_types_that_have_attribute(
+        rules=rules, attribute_text_piece_type=MoveTextPieceType
+    )
+
+
 def _get_object_piece_types_that_have_attribute(
     rules: set[Rule], attribute_text_piece_type: Type[TextPieceType]
 ) -> set[Type[ObjectPieceType]]:

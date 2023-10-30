@@ -107,12 +107,31 @@ class Map:
                     map_piece=map_piece, direction=direction, rules=rules
                 )
 
+    def _execute_npc_move(self, rules: set[Rule]):
+        object_piece_types_that_are_move = (
+            RuleHelper.get_object_piece_types_that_are_move(rules=rules)
+        )
+        for map_piece in self.map_pieces:
+            if self._is_piece_type_within_object_piece_types(
+                piece_type=map_piece.piece_type,
+                object_piece_types=object_piece_types_that_are_move,
+            ):
+                self._execute_object_move(
+                    map_piece=map_piece, direction=map_piece.direction, rules=rules
+                )
+
+    def _execute_shifts(self, rules: set[Rule]):
+        # TODO for shift
+        pass
+
     def _execute_object_move(
         self,
         map_piece: MapPiece,
         direction: MoveDirection,
         rules: set[Rule],
     ):
+        if direction == MoveDirection.WAIT:
+            return
         if not self._can_object_move(
             map_piece=map_piece, direction=direction, rules=rules
         ):
@@ -210,14 +229,6 @@ class Map:
                 for map_piece in self._get_map_pieces_at(position=position)
             ]
         )
-
-    def _execute_npc_move(self, rules: set[Rule]):
-        # TODO for 'MOVE' to work, we need to add the concept of directions to map pieces
-        pass
-
-    def _execute_shifts(self, rules: set[Rule]):
-        # TODO for shift
-        pass
 
     def _apply_defeat_interactions(self, rules: set[Rule]):
         overlapping_map_pieces = (
