@@ -6,7 +6,7 @@ from ruletype import RuleType
 
 
 DEFAULT_TEXT_IS_PUSH_RULE = Rule(
-    rule_type=RuleType.NOUN_IS_ATTRIBUTE,
+    rule_type=RuleType.NOUN_CLAUSE_IS_ATTRIBUTE_CLAUSE,
     text_piece_types=[
         TextTextPieceType(),
         IsTextPieceType(),
@@ -69,11 +69,11 @@ def _get_maybe_rule_type(maybe_rule: list[TextPieceType]) -> bool:
         if _is_noun_clause(maybe_noun_clause=clause_before_is) and _is_attribute_clause(
             maybe_attribute_clause=clause_after_is
         ):
-            return RuleType.NOUN_IS_ATTRIBUTE
-        if _is_noun_clause(maybe_noun_clause=clause_before_is) and _is_noun_clause(
-            maybe_noun_clause=clause_after_is
+            return RuleType.NOUN_CLAUSE_IS_ATTRIBUTE_CLAUSE
+        if _is_noun_clause(maybe_noun_clause=clause_before_is) and _is_noun(
+            maybe_noun=clause_after_is
         ):
-            return RuleType.NOUN_IS_NOUN
+            return RuleType.NOUN_CLAUSE_IS_NOUN
     if number_of_is == 0 and number_of_has == 1:
         index_of_has = next(
             index
@@ -82,11 +82,15 @@ def _get_maybe_rule_type(maybe_rule: list[TextPieceType]) -> bool:
         )
         clause_before_has = maybe_rule[:index_of_has]
         clause_after_has = maybe_rule[index_of_has + 1 :]
-        if _is_noun_clause(maybe_noun_clause=clause_before_has) and _is_noun_clause(
-            maybe_noun_clause=clause_after_has
+        if _is_noun_clause(maybe_noun_clause=clause_before_has) and _is_noun(
+            maybe_noun=clause_after_has
         ):
-            return RuleType.NOUN_HAS_NOUN
+            return RuleType.NOUN_CLAUSE_HAS_NOUN
     return None
+
+
+def _is_noun(maybe_noun: list[TextPieceType]) -> bool:
+    return len(maybe_noun) == 1 and isinstance(maybe_noun[0], NounTextPieceType)
 
 
 def _is_noun_clause(maybe_noun_clause: list[TextPieceType]) -> bool:

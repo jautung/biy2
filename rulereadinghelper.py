@@ -82,7 +82,7 @@ def _get_noun_text_piece_type_for_attribute(
 ) -> NounTextPieceType:
     # TODO: Incorporate 'NOT', 'AND', etc. etc.
     if (
-        rule.rule_type == RuleType.NOUN_IS_ATTRIBUTE
+        rule.rule_type == RuleType.NOUN_CLAUSE_IS_ATTRIBUTE_CLAUSE
         and len(rule.text_piece_types) == 3
         and isinstance(rule.text_piece_types[0], NounTextPieceType)
         and isinstance(rule.text_piece_types[1], IsTextPieceType)
@@ -105,7 +105,7 @@ def get_noun_mutations(rules: set[Rule]) -> set[NounMutation]:
                 ].associated_object_piece_type,
             )
             for rule in rules
-            if rule.rule_type == RuleType.NOUN_IS_NOUN
+            if rule.rule_type == RuleType.NOUN_CLAUSE_IS_NOUN
             and len(rule.text_piece_types) == 3
             and isinstance(rule.text_piece_types[0], NounTextPieceType)
             and isinstance(rule.text_piece_types[1], IsTextPieceType)

@@ -33,6 +33,17 @@ IsText
 SinkText
 4 3
 
+DoorText
+1 4
+IsText
+2 4
+BeltText
+3 4
+AndText
+4 4
+JellyText
+5 4
+
 BabaObject
 6 5
 RockObject
