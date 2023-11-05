@@ -4,11 +4,8 @@ import copy
 from piecetype import *
 
 
-# TODO: Somehow implement rule overriding logic
 class Rule:
     def __init__(self, text_piece_types: list[TextPieceType]):
-        # TODO: Incorporate 'NOT', 'AND', etc. etc.
-        assert len(text_piece_types) == 3
         self.rule = copy.deepcopy(text_piece_types)
 
     def __repr__(self) -> str:

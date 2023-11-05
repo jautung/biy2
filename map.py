@@ -58,6 +58,7 @@ class Map:
             generate_from_row=RuleGenerationHelper.generate_rules_for_row
         )
         # By default, "TEXT IS PUSH" is always a rule
+        # TODO: Somehow implement rule overriding logic
         rules.add(
             Rule(
                 text_piece_types=[
