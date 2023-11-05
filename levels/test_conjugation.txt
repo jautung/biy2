@@ -34,7 +34,7 @@ JellyText
 4 3
 IsText
 5 3
-SinkText
+PushText
 6 3
 
 DoorText
