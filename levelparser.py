@@ -97,7 +97,7 @@ def _get_direction(direction_str: str) -> MoveDirection:
 
 
 def _get_name_to_piece_type_dict() -> dict[str, Type[PieceType]]:
-    name_to_piece_type_dict: dict[str, Type[PieceType]] = {}
+    name_to_piece_type_dict: dict[str, Type[PieceType]] = dict()
 
     def add_piece_type_subclasses_to_name_to_piece_type_dict(
         piece_type: Type[PieceType],

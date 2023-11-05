@@ -1,6 +1,8 @@
+import inspect
 import itertools
 from typing import Type
 
+import rulehelper as RuleHelper
 from nounmutation import NounMutation
 from piecetype import *
 from rule import Rule
@@ -28,10 +30,8 @@ def _simplify_rule(rule: Rule) -> set[Rule]:
 
 def _simplify_noun_clause_is_attribute_clause_rule(rule: Rule) -> set[Rule]:
     assert rule.rule_type == RuleType.NOUN_CLAUSE_IS_ATTRIBUTE_CLAUSE
-    index_of_is = next(
-        index
-        for index, piece_type in enumerate(rule.text_piece_types)
-        if isinstance(piece_type, IsTextPieceType)
+    index_of_is = RuleHelper.index_of_is_text_piece_type_in_list(
+        text_piece_types=rule.text_piece_types
     )
     noun_clause_before_is = rule.text_piece_types[:index_of_is]
     attribute_clause_after_is = rule.text_piece_types[index_of_is + 1 :]
@@ -55,10 +55,8 @@ def _simplify_noun_clause_is_attribute_clause_rule(rule: Rule) -> set[Rule]:
 
 def _simplify_noun_clause_is_noun_rule(rule: Rule) -> set[Rule]:
     assert rule.rule_type == RuleType.NOUN_CLAUSE_IS_NOUN
-    index_of_is = next(
-        index
-        for index, piece_type in enumerate(rule.text_piece_types)
-        if isinstance(piece_type, IsTextPieceType)
+    index_of_is = RuleHelper.index_of_is_text_piece_type_in_list(
+        text_piece_types=rule.text_piece_types
     )
     noun_clause_before_is = rule.text_piece_types[:index_of_is]
     noun_after_is = rule.text_piece_types[index_of_is + 1 :]
@@ -78,10 +76,8 @@ def _simplify_noun_clause_is_noun_rule(rule: Rule) -> set[Rule]:
 
 def _simplify_noun_clause_has_noun_rule(rule: Rule) -> set[Rule]:
     assert rule.rule_type == RuleType.NOUN_CLAUSE_HAS_NOUN
-    index_of_has = next(
-        index
-        for index, piece_type in enumerate(rule.text_piece_types)
-        if isinstance(piece_type, HasTextPieceType)
+    index_of_has = RuleHelper.index_of_has_text_piece_type_in_list(
+        text_piece_types=rule.text_piece_types
     )
     noun_clause_before_has = rule.text_piece_types[:index_of_has]
     noun_after_has = rule.text_piece_types[index_of_has + 1 :]
@@ -228,3 +224,39 @@ def get_noun_mutations(simplified_rules: set[Rule]) -> set[NounMutation]:
             and isinstance(simplified_rule.text_piece_types[2], NounTextPieceType)
         ]
     )
+
+
+def _get_simplified_noun_clause_from_simplified_rule(
+    simplified_rule: Rule,
+) -> list[TextPieceType]:
+    if simplified_rule.rule_type == RuleType.NOUN_CLAUSE_IS_ATTRIBUTE_CLAUSE:
+        index_of_is = RuleHelper.index_of_is_text_piece_type_in_list(
+            text_piece_types=simplified_rule.text_piece_types
+        )
+        return simplified_rule.text_piece_types[:index_of_is]
+    if simplified_rule.rule_type == RuleType.NOUN_CLAUSE_IS_NOUN:
+        index_of_is = RuleHelper.index_of_is_text_piece_type_in_list(
+            text_piece_types=simplified_rule.text_piece_types
+        )
+        return simplified_rule.text_piece_types[:index_of_is]
+    if simplified_rule.rule_type == RuleType.NOUN_CLAUSE_HAS_NOUN:
+        index_of_has = RuleHelper.index_of_has_text_piece_type_in_list(
+            text_piece_types=simplified_rule.text_piece_types
+        )
+        return simplified_rule.text_piece_types[:index_of_has]
+    assert False
+
+
+def _get_all_object_piece_types() -> set[Type[ObjectPieceType]]:
+    all_object_piece_types: set[Type[ObjectPieceType]] = set()
+
+    def search_object_piece_type_subclasses(object_piece_type: Type[ObjectPieceType]):
+        # We only care about concrete classes that can be instantiated with PieceType(),
+        # and not the PieceType, ObjectPieceType, etc. super-classes
+        if len(inspect.signature(object_piece_type.__init__).parameters) == 1:
+            all_object_piece_types.add(object_piece_type)
+        for subclass_piece_type in object_piece_type.__subclasses__():
+            search_object_piece_type_subclasses(subclass_piece_type)
+
+    search_object_piece_type_subclasses(ObjectPieceType)
+    return all_object_piece_types

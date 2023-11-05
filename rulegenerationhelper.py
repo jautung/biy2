@@ -1,6 +1,7 @@
 import copy
 from typing import Type
 
+import rulehelper as RuleHelper
 from piecetype import *
 from rule import Rule
 from ruletype import RuleType
@@ -65,10 +66,8 @@ def _get_maybe_rule_type(maybe_rule: list[TextPieceType]) -> bool:
         )
     )
     if number_of_is == 1 and number_of_has == 0:
-        index_of_is = next(
-            index
-            for index, piece_type in enumerate(maybe_rule)
-            if isinstance(piece_type, IsTextPieceType)
+        index_of_is = RuleHelper.index_of_is_text_piece_type_in_list(
+            text_piece_types=maybe_rule
         )
         clause_before_is = maybe_rule[:index_of_is]
         clause_after_is = maybe_rule[index_of_is + 1 :]
@@ -81,10 +80,8 @@ def _get_maybe_rule_type(maybe_rule: list[TextPieceType]) -> bool:
         ):
             return RuleType.NOUN_CLAUSE_IS_NOUN
     if number_of_is == 0 and number_of_has == 1:
-        index_of_has = next(
-            index
-            for index, piece_type in enumerate(maybe_rule)
-            if isinstance(piece_type, HasTextPieceType)
+        index_of_has = RuleHelper.index_of_has_text_piece_type_in_list(
+            text_piece_types=maybe_rule
         )
         clause_before_has = maybe_rule[:index_of_has]
         clause_after_has = maybe_rule[index_of_has + 1 :]
@@ -131,10 +128,8 @@ def _is_type_of_clause_with_conjugation(
             for piece_type in maybe_type_of_clause
         ]
     ):
-        index_of_and = next(
-            index
-            for index, piece_type in enumerate(maybe_type_of_clause)
-            if isinstance(piece_type, AndTextPieceType)
+        index_of_and = RuleHelper.index_of_and_text_piece_type_in_list(
+            text_piece_types=maybe_type_of_clause
         )
         clause_before_and = maybe_type_of_clause[:index_of_and]
         clause_after_and = maybe_type_of_clause[index_of_and + 1 :]
