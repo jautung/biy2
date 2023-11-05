@@ -1,5 +1,6 @@
 from typing import Type
 
+from nounmutation import NounMutation
 from piecetype import *
 from rule import Rule
 from ruletype import RuleType
@@ -89,3 +90,25 @@ def _get_noun_text_piece_type_for_attribute(
     ):
         return rule.text_piece_types[0]
     return None
+
+
+def get_noun_mutations(rules: set[Rule]) -> set[NounMutation]:
+    # TODO: Incorporate 'NOT', 'AND', etc. etc.
+    return set(
+        [
+            NounMutation(
+                from_object_piece_type=rule.text_piece_types[
+                    0
+                ].associated_object_piece_type,
+                to_object_piece_type=rule.text_piece_types[
+                    2
+                ].associated_object_piece_type,
+            )
+            for rule in rules
+            if rule.rule_type == RuleType.NOUN_IS_NOUN
+            and len(rule.text_piece_types) == 3
+            and isinstance(rule.text_piece_types[0], NounTextPieceType)
+            and isinstance(rule.text_piece_types[1], IsTextPieceType)
+            and isinstance(rule.text_piece_types[2], NounTextPieceType)
+        ]
+    )

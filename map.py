@@ -4,7 +4,6 @@ from typing import Type, TypeVar
 T = TypeVar("T")
 
 import movedirectionhelper as MoveDirectionHelper
-import nounmutationhelper as NounMutationHelper
 import piecepositionhelper as PiecePositionHelper
 import rulegenerationhelper as RuleGenerationHelper
 import rulereadinghelper as RuleReadingHelper
@@ -72,6 +71,7 @@ class Map:
             return
         self.execute_move_locked = True
         # Statically freeze rules for entire timestep, even if things move
+        # TODO: Check if this is actually true in the game!
         rules = self._generate_rules()
         # TODO: Figure out real in-game order of operations when player and npc moves to the same square
         self._execute_player_move(direction=direction, rules=rules)
@@ -84,7 +84,7 @@ class Map:
         self._apply_sink_interactions(rules=rules)
         self._apply_melt_interactions(rules=rules)
         self._apply_open_close_interactions(rules=rules)
-        self._apply_noun_mutations()
+        self._apply_noun_mutations(rules=rules)
         self.execute_move_locked = False
 
     def _execute_player_move(self, direction: MoveDirection, rules: set[Rule]):
@@ -284,10 +284,8 @@ class Map:
         if map_piece in self.map_pieces:
             self.map_pieces.remove(map_piece)
 
-    def _apply_noun_mutations(self):
-        noun_mutations = self._generate_results_for_all_rows_and_columns(
-            generate_from_row=NounMutationHelper.generate_noun_mutations_for_row
-        )
+    def _apply_noun_mutations(self, rules: set[Rule]):
+        noun_mutations = RuleReadingHelper.get_noun_mutations(rules=rules)
         for noun_mutation in noun_mutations:
             for map_piece in self.map_pieces:
                 if isinstance(
