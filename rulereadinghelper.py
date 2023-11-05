@@ -2,6 +2,7 @@ from typing import Type
 
 from piecetype import *
 from rule import Rule
+from ruletype import RuleType
 
 
 def get_object_piece_types_that_are_you(
@@ -80,10 +81,11 @@ def _get_noun_text_piece_type_for_attribute(
 ) -> NounTextPieceType:
     # TODO: Incorporate 'NOT', 'AND', etc. etc.
     if (
-        len(rule.rule) == 3
-        and isinstance(rule.rule[0], NounTextPieceType)
-        and isinstance(rule.rule[1], IsTextPieceType)
-        and isinstance(rule.rule[2], attribute_text_piece_type)
+        rule.rule_type == RuleType.NOUN_IS_ATTRIBUTE
+        and len(rule.text_piece_types) == 3
+        and isinstance(rule.text_piece_types[0], NounTextPieceType)
+        and isinstance(rule.text_piece_types[1], IsTextPieceType)
+        and isinstance(rule.text_piece_types[2], attribute_text_piece_type)
     ):
-        return rule.rule[0]
+        return rule.text_piece_types[0]
     return None

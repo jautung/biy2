@@ -1,23 +1,34 @@
 from piecetype import *
 from rule import Rule
-from ruletypes import RuleClauseType, RuleType, RULE_TYPES
+from ruletype import RuleType
+
+
+DEFAULT_TEXT_IS_PUSH_RULE = Rule(
+    rule_type=RuleType.NOUN_IS_ATTRIBUTE,
+    text_piece_types=[
+        TextTextPieceType(),
+        IsTextPieceType(),
+        PushTextPieceType(),
+    ],
+)
 
 
 def generate_rules_for_row(row: list[TextPieceType]) -> set[Rule]:
     rules: set[Rule] = set()
     for start_index in range(len(row)):
-        length = _generate_longest_possible_rule_given_start(row[start_index:])
-        if length is None:
+        rule = _generate_longest_possible_rule_given_start(row[start_index:])
+        if rule is None:
             continue
-        rules.add(Rule(text_piece_types=row[start_index : start_index + length]))
+        rules.add(rule)
     return rules
 
 
-def _generate_longest_possible_rule_given_start(row: list[TextPieceType]) -> int:
+def _generate_longest_possible_rule_given_start(row: list[TextPieceType]) -> Rule:
     for end_index in range(len(row), 1, -1):
-        rule_type = _get_maybe_rule_type(maybe_rule=row[:end_index])
-        if rule_type != None:
-            return end_index
+        maybe_rule = row[:end_index]
+        maybe_rule_type = _get_maybe_rule_type(maybe_rule=maybe_rule)
+        if maybe_rule_type is not None:
+            return Rule(rule_type=maybe_rule_type, text_piece_types=maybe_rule)
     return None
 
 

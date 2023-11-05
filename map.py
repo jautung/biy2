@@ -59,15 +59,7 @@ class Map:
         )
         # By default, "TEXT IS PUSH" is always a rule
         # TODO: Somehow implement rule overriding logic
-        rules.add(
-            Rule(
-                text_piece_types=[
-                    TextTextPieceType(),
-                    IsTextPieceType(),
-                    PushTextPieceType(),
-                ]
-            )
-        )
+        rules.add(RuleGenerationHelper.DEFAULT_TEXT_IS_PUSH_RULE)
         return rules
 
     def print_rules(self):
