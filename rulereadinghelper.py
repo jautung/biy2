@@ -65,13 +65,25 @@ def _get_object_piece_types_that_have_attribute(
 ) -> set[Type[ObjectPieceType]]:
     object_piece_types_that_are_attribute: set[Type[ObjectPieceType]] = set()
     for rule in rules:
-        noun_text_piece_type_for_attribute = (
-            rule.get_noun_text_piece_type_for_attribute(
-                attribute_text_piece_type=attribute_text_piece_type
-            )
+        noun_text_piece_type_for_attribute = _get_noun_text_piece_type_for_attribute(
+            rule=rule, attribute_text_piece_type=attribute_text_piece_type
         )
         if noun_text_piece_type_for_attribute:
             object_piece_types_that_are_attribute.add(
                 noun_text_piece_type_for_attribute.associated_object_piece_type
             )
     return object_piece_types_that_are_attribute
+
+
+def _get_noun_text_piece_type_for_attribute(
+    rule: Rule, attribute_text_piece_type: Type[TextPieceType]
+) -> NounTextPieceType:
+    # TODO: Incorporate 'NOT', 'AND', etc. etc.
+    if (
+        len(rule.rule) == 3
+        and isinstance(rule.rule[0], NounTextPieceType)
+        and isinstance(rule.rule[1], IsTextPieceType)
+        and isinstance(rule.rule[2], attribute_text_piece_type)
+    ):
+        return rule.rule[0]
+    return None
