@@ -199,7 +199,7 @@ def _get_object_piece_types_that_have_attribute(
                 assert isinstance(simplified_noun_clause[1], NounTextPieceType)
                 object_piece_types_that_are_attribute = (
                     object_piece_types_that_are_attribute.union(
-                        _get_all_object_piece_types().difference(
+                        _get_all_object_not_text_piece_types().difference(
                             set(
                                 [simplified_noun_clause[1].associated_object_piece_type]
                             )
@@ -264,7 +264,7 @@ def _get_simplified_attribute_clause_from_simplified_noun_clause_is_attribute_ru
     return simplified_rule.text_piece_types[index_of_is + 1 :]
 
 
-def _get_all_object_piece_types() -> set[Type[ObjectPieceType]]:
+def _get_all_object_not_text_piece_types() -> set[Type[ObjectPieceType]]:
     all_object_piece_types: set[Type[ObjectPieceType]] = set()
 
     def search_object_piece_type_subclasses(object_piece_type: Type[ObjectPieceType]):
@@ -273,6 +273,8 @@ def _get_all_object_piece_types() -> set[Type[ObjectPieceType]]:
         if len(inspect.signature(object_piece_type.__init__).parameters) == 1:
             all_object_piece_types.add(object_piece_type)
         for subclass_piece_type in object_piece_type.__subclasses__():
+            if subclass_piece_type == TextPieceType:
+                continue
             search_object_piece_type_subclasses(subclass_piece_type)
 
     search_object_piece_type_subclasses(ObjectPieceType)
