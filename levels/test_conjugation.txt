@@ -1,0 +1,41 @@
+Title: Test Conjugation
+Rows: 8
+Columns: 10
+
+BabaText
+1 1
+IsText
+2 1
+YouText
+3 1
+
+RockText
+1 2
+AndText
+2 2
+FlagText
+3 2
+IsText
+4 2
+WinText
+5 2
+
+NotText
+1 3
+JellyText
+2 3
+IsText
+3 3
+SinkText
+4 3
+
+BabaObject
+6 5
+RockObject
+7 5
+FlagObject
+8 5
+JellyObject
+6 6
+WaterObject
+7 6
