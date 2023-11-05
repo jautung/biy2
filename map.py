@@ -57,10 +57,7 @@ class Map:
         rules = self._generate_results_for_all_rows_and_columns(
             generate_from_row=RuleGenerationHelper.generate_rules_for_row
         )
-        # By default, "TEXT IS PUSH" is always a rule
-        # TODO: Somehow implement rule overriding logic
-        rules.add(RuleGenerationHelper.DEFAULT_TEXT_IS_PUSH_RULE)
-        return rules
+        return RuleGenerationHelper.get_final_rules_from_all_on_map_rules(rules=rules)
 
     def print_rules(self):
         rules = self._generate_rules()

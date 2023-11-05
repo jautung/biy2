@@ -23,6 +23,13 @@ def generate_rules_for_row(row: list[TextPieceType]) -> set[Rule]:
     return rules
 
 
+def get_final_rules_from_all_on_map_rules(rules: set[Rule]) -> set[Rule]:
+    # By default, "TEXT IS PUSH" is always a rule, even if it is not on the map
+    rules.add(DEFAULT_TEXT_IS_PUSH_RULE)
+    # TODO: Somehow implement rule overriding logic
+    return rules
+
+
 def _generate_longest_possible_rule_given_start(row: list[TextPieceType]) -> Rule:
     for end_index in range(len(row), 1, -1):
         maybe_rule = row[:end_index]
