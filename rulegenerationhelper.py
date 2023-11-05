@@ -34,6 +34,7 @@ def get_final_rules_from_all_on_map_rules(on_map_rules: set[Rule]) -> set[Rule]:
     # By default, "TEXT IS PUSH" is always a rule, even if it is not on the map
     rules.add(DEFAULT_TEXT_IS_PUSH_RULE)
     # TODO: Somehow implement rule overriding logic
+    # Incorporate 'NOT' as a rule right-hand-side modifier
     return rules
 
 

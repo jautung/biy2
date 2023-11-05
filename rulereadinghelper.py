@@ -196,7 +196,7 @@ def _get_object_piece_types_that_have_attribute(
 def _get_noun_text_piece_type_for_attribute(
     simplified_rule: Rule, attribute_text_piece_type: Type[TextPieceType]
 ) -> NounTextPieceType:
-    # TODO: Incorporate 'NOT'
+    # TODO: Incorporate 'NOT' as a rule left-hand-side modifier
     if (
         simplified_rule.rule_type == RuleType.NOUN_CLAUSE_IS_ATTRIBUTE_CLAUSE
         and len(simplified_rule.text_piece_types) == 3
@@ -209,7 +209,7 @@ def _get_noun_text_piece_type_for_attribute(
 
 
 def get_noun_mutations(simplified_rules: set[Rule]) -> set[NounMutation]:
-    # TODO: Incorporate 'NOT'
+    # TODO: Incorporate 'NOT' as a rule left-hand-side modifier
     return set(
         [
             NounMutation(
