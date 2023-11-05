@@ -45,9 +45,8 @@ class Map:
                 lambda piece_type: isinstance(piece_type, TextPieceType), piece_types
             )
         )
-        assert (
-            len(text_piece_types) <= 1
-        )  # There can never be more than 1 text piece at a given position
+        # There can never be more than 1 text piece at a given position
+        assert len(text_piece_types) <= 1
         if len(text_piece_types) == 0:
             return None
         return text_piece_types[0]
@@ -84,7 +83,7 @@ class Map:
         rules = self._generate_rules()
         self._apply_defeat_interactions(rules=rules)
         self._apply_sink_interactions(rules=rules)
-        self._apply_melt_interactions(rules=rules)
+        self._apply_hot_melt_interactions(rules=rules)
         self._apply_open_close_interactions(rules=rules)
         self._apply_noun_mutations(rules=rules)
         self.execute_move_locked = False
@@ -274,7 +273,7 @@ class Map:
             for map_piece in overlapping_map_pieces_to_be_sunk:
                 self._remove_map_piece(map_piece=map_piece)
 
-    def _apply_melt_interactions(self, rules: set[Rule]):
+    def _apply_hot_melt_interactions(self, rules: set[Rule]):
         # TODO: Implement hot melt
         pass
 
