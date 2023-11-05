@@ -62,6 +62,42 @@ class IsTextPieceType(TextPieceType):
         return "IsTextPieceType"
 
 
+class AndTextPieceType(TextPieceType):
+    def __init__(self):
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_and.png"
+            )
+        )
+
+    def __repr__(self) -> str:
+        return "AndTextPieceType"
+
+
+class NotTextPieceType(TextPieceType):
+    def __init__(self):
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_not.png"
+            )
+        )
+
+    def __repr__(self) -> str:
+        return "NotTextPieceType"
+
+
+class HasTextPieceType(TextPieceType):
+    def __init__(self):
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_has.png"
+            )
+        )
+
+    def __repr__(self) -> str:
+        return "HasTextPieceType"
+
+
 class AttributeTextPieceType(TextPieceType):
     def __init__(self, asset_set: AssetSet):
         super().__init__(asset_set=asset_set)
