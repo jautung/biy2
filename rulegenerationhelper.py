@@ -1,3 +1,4 @@
+import copy
 from typing import Type
 
 from piecetype import *
@@ -25,7 +26,8 @@ def generate_rules_for_row(row: list[TextPieceType]) -> set[Rule]:
     return rules
 
 
-def get_final_rules_from_all_on_map_rules(rules: set[Rule]) -> set[Rule]:
+def get_final_rules_from_all_on_map_rules(on_map_rules: set[Rule]) -> set[Rule]:
+    rules = copy.deepcopy(on_map_rules)
     # By default, "TEXT IS PUSH" is always a rule, even if it is not on the map
     rules.add(DEFAULT_TEXT_IS_PUSH_RULE)
     # TODO: Somehow implement rule overriding logic

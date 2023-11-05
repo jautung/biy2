@@ -53,10 +53,12 @@ class Map:
         return text_piece_types[0]
 
     def _generate_rules(self) -> set[Rule]:
-        rules = self._generate_results_for_all_rows_and_columns(
+        on_map_rules = self._generate_results_for_all_rows_and_columns(
             generate_from_row=RuleGenerationHelper.generate_rules_for_row
         )
-        return RuleGenerationHelper.get_final_rules_from_all_on_map_rules(rules=rules)
+        return RuleGenerationHelper.get_final_rules_from_all_on_map_rules(
+            on_map_rules=on_map_rules
+        )
 
     def print_rules(self):
         rules = self._generate_rules()
