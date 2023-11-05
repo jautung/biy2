@@ -6,7 +6,8 @@ T = TypeVar("T")
 import movedirectionhelper as MoveDirectionHelper
 import nounmutationhelper as NounMutationHelper
 import piecepositionhelper as PiecePositionHelper
-import rulehelper as RuleHelper
+import rulegenerationhelper as RuleGenerationHelper
+import rulereadinghelper as RuleReadingHelper
 from mappiece import MapPiece
 from movedirection import MoveDirection
 from piecetype import *
@@ -54,7 +55,7 @@ class Map:
 
     def _generate_rules(self) -> set[Rule]:
         rules = self._generate_results_for_all_rows_and_columns(
-            generate_from_row=RuleHelper.generate_rules_for_row
+            generate_from_row=RuleGenerationHelper.generate_rules_for_row
         )
         # By default, "TEXT IS PUSH" is always a rule
         rules.add(
@@ -97,7 +98,7 @@ class Map:
 
     def _execute_player_move(self, direction: MoveDirection, rules: set[Rule]):
         object_piece_types_that_are_you = (
-            RuleHelper.get_object_piece_types_that_are_you(rules=rules)
+            RuleReadingHelper.get_object_piece_types_that_are_you(rules=rules)
         )
         for map_piece in self.map_pieces:
             if self._is_piece_type_within_object_piece_types(
@@ -110,7 +111,7 @@ class Map:
 
     def _execute_npc_move(self, rules: set[Rule]):
         object_piece_types_that_are_move = (
-            RuleHelper.get_object_piece_types_that_are_move(rules=rules)
+            RuleReadingHelper.get_object_piece_types_that_are_move(rules=rules)
         )
         for map_piece in self.map_pieces:
             if self._is_piece_type_within_object_piece_types(
@@ -164,7 +165,7 @@ class Map:
     ) -> bool:
         if self._is_piece_type_within_object_piece_types(
             piece_type=map_piece.piece_type,
-            object_piece_types=RuleHelper.get_object_piece_types_that_are_stop(
+            object_piece_types=RuleReadingHelper.get_object_piece_types_that_are_stop(
                 rules=rules
             ),
         ):
@@ -193,7 +194,7 @@ class Map:
     ) -> set[MapPiece]:
         map_pieces_in_new_position = self._get_map_pieces_at(position=position)
         object_piece_types_that_are_push = (
-            RuleHelper.get_object_piece_types_that_are_push(rules=rules)
+            RuleReadingHelper.get_object_piece_types_that_are_push(rules=rules)
         )
         return set(
             list(
@@ -226,7 +227,7 @@ class Map:
         self, position: PiecePosition, rules: set[Rule]
     ) -> bool:
         object_piece_types_that_are_stop = (
-            RuleHelper.get_object_piece_types_that_are_stop(rules=rules)
+            RuleReadingHelper.get_object_piece_types_that_are_stop(rules=rules)
         )
         return any(
             [
@@ -241,10 +242,10 @@ class Map:
     def _apply_defeat_interactions(self, rules: set[Rule]):
         overlapping_map_pieces = (
             self._get_all_overlapping_map_pieces_between_object_piece_types(
-                object_piece_types_1=RuleHelper.get_object_piece_types_that_are_you(
+                object_piece_types_1=RuleReadingHelper.get_object_piece_types_that_are_you(
                     rules
                 ),
-                object_piece_types_2=RuleHelper.get_object_piece_types_that_are_defeat(
+                object_piece_types_2=RuleReadingHelper.get_object_piece_types_that_are_defeat(
                     rules
                 ),
             )
@@ -257,7 +258,7 @@ class Map:
         # TODO: Handle negation here so that floating objects do not sink
         overlapping_map_pieces = (
             self._get_all_overlapping_map_pieces_between_object_piece_types(
-                object_piece_types_1=RuleHelper.get_object_piece_types_that_are_sink(
+                object_piece_types_1=RuleReadingHelper.get_object_piece_types_that_are_sink(
                     rules
                 ),
                 object_piece_types_2=[ObjectPieceType],
@@ -311,10 +312,10 @@ class Map:
         rules = self._generate_rules()
         overlapping_map_pieces = (
             self._get_all_overlapping_map_pieces_between_object_piece_types(
-                object_piece_types_1=RuleHelper.get_object_piece_types_that_are_you(
+                object_piece_types_1=RuleReadingHelper.get_object_piece_types_that_are_you(
                     rules
                 ),
-                object_piece_types_2=RuleHelper.get_object_piece_types_that_are_win(
+                object_piece_types_2=RuleReadingHelper.get_object_piece_types_that_are_win(
                     rules
                 ),
             )
