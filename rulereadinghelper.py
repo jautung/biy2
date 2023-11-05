@@ -42,7 +42,7 @@ def _simplify_noun_clause_is_attribute_clause_rule(rule: Rule) -> set[Rule]:
     return set(
         [
             Rule(
-                rule_type=RuleType.NOUN_CLAUSE_IS_ATTRIBUTE_CLAUSE,
+                rule_type=rule.rule_type,
                 text_piece_types=simplified_noun_clause_before_is
                 + [IsTextPieceType()]
                 + simplified_attribute_clause_after_is,
@@ -66,7 +66,7 @@ def _simplify_noun_clause_is_noun_rule(rule: Rule) -> set[Rule]:
     return set(
         [
             Rule(
-                rule_type=RuleType.NOUN_CLAUSE_IS_NOUN,
+                rule_type=rule.rule_type,
                 text_piece_types=simplified_noun_clause_before_is
                 + [IsTextPieceType()]
                 + noun_after_is,
@@ -89,9 +89,9 @@ def _simplify_noun_clause_has_noun_rule(rule: Rule) -> set[Rule]:
     return set(
         [
             Rule(
-                rule_type=RuleType.NOUN_CLAUSE_IS_NOUN,
+                rule_type=rule.rule_type,
                 text_piece_types=simplified_noun_clause_before_has
-                + [IsTextPieceType()]
+                + [HasTextPieceType()]
                 + noun_after_has,
             )
             for simplified_noun_clause_before_has in simplified_noun_clauses_before_has
