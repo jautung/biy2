@@ -66,6 +66,16 @@ class Map:
             print(f"* {rule}")
         print()
 
+    def _generate_simplified_rules(self) -> set[Rule]:
+        return RuleReadingHelper.simplify_rules(rules=self._generate_rules())
+
+    def print_simplified_rules(self):
+        simplified_rules = self._generate_simplified_rules()
+        print("Simplified Rules:")
+        for simplified_rule in simplified_rules:
+            print(f"* {simplified_rule}")
+        print()
+
     def execute_move(self, direction: MoveDirection):
         if self.execute_move_locked:
             print("Excuse me, please stop mashing the keyboard!!!")
@@ -73,24 +83,30 @@ class Map:
         self.execute_move_locked = True
         # Statically freeze rules for entire timestep, even if things move
         # TODO: Check if this is actually true in the game!
-        rules = self._generate_rules()
+        simplified_rules = self._generate_simplified_rules()
         # TODO: Figure out real in-game order of operations when player and npc moves to the same square
-        self._execute_player_move(direction=direction, rules=rules)
-        self._execute_npc_move(rules=rules)
-        self._execute_shifts(rules=rules)
+        self._execute_player_move(
+            direction=direction, simplified_rules=simplified_rules
+        )
+        self._execute_npc_move(simplified_rules=simplified_rules)
+        self._execute_shifts(simplified_rules=simplified_rules)
         # TODO: Figure out what the actual order of operations of these are in-game
         # I'm 80% sure that we freeze new rules to calculate these after movement, but I could be mistaken
-        rules = self._generate_rules()
-        self._apply_defeat_interactions(rules=rules)
-        self._apply_sink_interactions(rules=rules)
-        self._apply_hot_melt_interactions(rules=rules)
-        self._apply_open_close_interactions(rules=rules)
-        self._apply_noun_mutations(rules=rules)
+        simplified_rules = self._generate_simplified_rules()
+        self._apply_defeat_interactions(simplified_rules=simplified_rules)
+        self._apply_sink_interactions(simplified_rules=simplified_rules)
+        self._apply_hot_melt_interactions(simplified_rules=simplified_rules)
+        self._apply_open_close_interactions(simplified_rules=simplified_rules)
+        self._apply_noun_mutations(simplified_rules=simplified_rules)
         self.execute_move_locked = False
 
-    def _execute_player_move(self, direction: MoveDirection, rules: set[Rule]):
+    def _execute_player_move(
+        self, direction: MoveDirection, simplified_rules: set[Rule]
+    ):
         object_piece_types_that_are_you = (
-            RuleReadingHelper.get_object_piece_types_that_are_you(rules=rules)
+            RuleReadingHelper.get_object_piece_types_that_are_you(
+                simplified_rules=simplified_rules
+            )
         )
         for map_piece in self.map_pieces:
             if self._is_piece_type_within_object_piece_types(
@@ -98,12 +114,16 @@ class Map:
                 object_piece_types=object_piece_types_that_are_you,
             ):
                 self._execute_object_move(
-                    map_piece=map_piece, direction=direction, rules=rules
+                    map_piece=map_piece,
+                    direction=direction,
+                    simplified_rules=simplified_rules,
                 )
 
-    def _execute_npc_move(self, rules: set[Rule]):
+    def _execute_npc_move(self, simplified_rules: set[Rule]):
         object_piece_types_that_are_move = (
-            RuleReadingHelper.get_object_piece_types_that_are_move(rules=rules)
+            RuleReadingHelper.get_object_piece_types_that_are_move(
+                simplified_rules=simplified_rules
+            )
         )
         for map_piece in self.map_pieces:
             if self._is_piece_type_within_object_piece_types(
@@ -112,16 +132,20 @@ class Map:
             ):
                 assert map_piece.direction != MoveDirection.WAIT
                 if not self._can_object_move(
-                    map_piece=map_piece, direction=map_piece.direction, rules=rules
+                    map_piece=map_piece,
+                    direction=map_piece.direction,
+                    simplified_rules=simplified_rules,
                 ):
                     map_piece.direction = MoveDirectionHelper.reverse_direction(
                         map_piece.direction
                     )
                 self._execute_object_move(
-                    map_piece=map_piece, direction=map_piece.direction, rules=rules
+                    map_piece=map_piece,
+                    direction=map_piece.direction,
+                    simplified_rules=simplified_rules,
                 )
 
-    def _execute_shifts(self, rules: set[Rule]):
+    def _execute_shifts(self, simplified_rules: set[Rule]):
         # TODO: Implement shift
         pass
 
@@ -129,22 +153,24 @@ class Map:
         self,
         map_piece: MapPiece,
         direction: MoveDirection,
-        rules: set[Rule],
+        simplified_rules: set[Rule],
     ):
         if direction == MoveDirection.WAIT:
             return
         if not self._can_object_move(
-            map_piece=map_piece, direction=direction, rules=rules
+            map_piece=map_piece, direction=direction, simplified_rules=simplified_rules
         ):
             return
         new_position = PiecePositionHelper.get_position_after_move(
             position=map_piece.position, direction=direction
         )
         for pushable_map_piece in self._get_map_pieces_in_position_that_are_push(
-            position=new_position, rules=rules
+            position=new_position, simplified_rules=simplified_rules
         ):
             self._execute_object_move(
-                map_piece=pushable_map_piece, direction=direction, rules=rules
+                map_piece=pushable_map_piece,
+                direction=direction,
+                simplified_rules=simplified_rules,
             )
         map_piece.position = new_position
         map_piece.direction = direction
@@ -153,40 +179,46 @@ class Map:
         self,
         map_piece: MapPiece,
         direction: MoveDirection,
-        rules: set[Rule],
+        simplified_rules: set[Rule],
     ) -> bool:
         if self._is_piece_type_within_object_piece_types(
             piece_type=map_piece.piece_type,
             object_piece_types=RuleReadingHelper.get_object_piece_types_that_are_stop(
-                rules=rules
+                simplified_rules=simplified_rules
             ),
         ):
             return False
         new_position = PiecePositionHelper.get_position_after_move(
             position=map_piece.position, direction=direction
         )
-        if not self._can_object_enter_position(position=new_position, rules=rules):
+        if not self._can_object_enter_position(
+            position=new_position, simplified_rules=simplified_rules
+        ):
             return False
         map_pieces_in_new_position_that_are_push = (
             self._get_map_pieces_in_position_that_are_push(
-                position=new_position, rules=rules
+                position=new_position, simplified_rules=simplified_rules
             )
         )
         return all(
             [
                 self._can_object_move(
-                    map_piece=map_piece, direction=direction, rules=rules
+                    map_piece=map_piece,
+                    direction=direction,
+                    simplified_rules=simplified_rules,
                 )
                 for map_piece in map_pieces_in_new_position_that_are_push
             ]
         )
 
     def _get_map_pieces_in_position_that_are_push(
-        self, position: PiecePosition, rules: set[Rule]
+        self, position: PiecePosition, simplified_rules: set[Rule]
     ) -> set[MapPiece]:
         map_pieces_in_new_position = self._get_map_pieces_at(position=position)
         object_piece_types_that_are_push = (
-            RuleReadingHelper.get_object_piece_types_that_are_push(rules=rules)
+            RuleReadingHelper.get_object_piece_types_that_are_push(
+                simplified_rules=simplified_rules
+            )
         )
         return set(
             list(
@@ -201,7 +233,7 @@ class Map:
         )
 
     def _can_object_enter_position(
-        self, position: PiecePosition, rules: set[Rule]
+        self, position: PiecePosition, simplified_rules: set[Rule]
     ) -> bool:
         if position.x < 0:
             return False
@@ -211,15 +243,19 @@ class Map:
             return False
         if position.y >= self.number_rows:
             return False
-        if self._has_map_piece_in_position_that_is_stop(position=position, rules=rules):
+        if self._has_map_piece_in_position_that_is_stop(
+            position=position, simplified_rules=simplified_rules
+        ):
             return False
         return True
 
     def _has_map_piece_in_position_that_is_stop(
-        self, position: PiecePosition, rules: set[Rule]
+        self, position: PiecePosition, simplified_rules: set[Rule]
     ) -> bool:
         object_piece_types_that_are_stop = (
-            RuleReadingHelper.get_object_piece_types_that_are_stop(rules=rules)
+            RuleReadingHelper.get_object_piece_types_that_are_stop(
+                simplified_rules=simplified_rules
+            )
         )
         return any(
             [
@@ -231,24 +267,24 @@ class Map:
             ]
         )
 
-    def _apply_defeat_interactions(self, rules: set[Rule]):
+    def _apply_defeat_interactions(self, simplified_rules: set[Rule]):
         overlapping_map_pieces = self._get_all_overlapping_map_pieces_between_object_piece_types(
             object_piece_types_1=RuleReadingHelper.get_object_piece_types_that_are_you(
-                rules
+                simplified_rules=simplified_rules
             ),
             object_piece_types_2=RuleReadingHelper.get_object_piece_types_that_are_defeat(
-                rules
+                simplified_rules=simplified_rules
             ),
         )
         for overlapping_map_pieces_that_are_you, _ in overlapping_map_pieces:
             for map_piece in overlapping_map_pieces_that_are_you:
                 self._remove_map_piece(map_piece=map_piece)
 
-    def _apply_sink_interactions(self, rules: set[Rule]):
+    def _apply_sink_interactions(self, simplified_rules: set[Rule]):
         # TODO: Handle negation here so that floating objects do not sink
         overlapping_map_pieces = self._get_all_overlapping_map_pieces_between_object_piece_types(
             object_piece_types_1=RuleReadingHelper.get_object_piece_types_that_are_sink(
-                rules
+                simplified_rules=simplified_rules
             ),
             object_piece_types_2=[ObjectPieceType],
         )
@@ -273,11 +309,11 @@ class Map:
             for map_piece in overlapping_map_pieces_to_be_sunk:
                 self._remove_map_piece(map_piece=map_piece)
 
-    def _apply_hot_melt_interactions(self, rules: set[Rule]):
+    def _apply_hot_melt_interactions(self, simplified_rules: set[Rule]):
         # TODO: Implement hot melt
         pass
 
-    def _apply_open_close_interactions(self, rules: set[Rule]):
+    def _apply_open_close_interactions(self, simplified_rules: set[Rule]):
         # TODO: Implement open close
         pass
 
@@ -285,8 +321,10 @@ class Map:
         if map_piece in self.map_pieces:
             self.map_pieces.remove(map_piece)
 
-    def _apply_noun_mutations(self, rules: set[Rule]):
-        noun_mutations = RuleReadingHelper.get_noun_mutations(rules=rules)
+    def _apply_noun_mutations(self, simplified_rules: set[Rule]):
+        noun_mutations = RuleReadingHelper.get_noun_mutations(
+            simplified_rules=simplified_rules
+        )
         for noun_mutation in noun_mutations:
             for map_piece in self.map_pieces:
                 if isinstance(
@@ -295,13 +333,13 @@ class Map:
                     map_piece.piece_type = noun_mutation.to_object_piece_type()
 
     def is_in_win_state(self) -> bool:
-        rules = self._generate_rules()
+        simplified_rules = self._generate_simplified_rules()
         overlapping_map_pieces = self._get_all_overlapping_map_pieces_between_object_piece_types(
             object_piece_types_1=RuleReadingHelper.get_object_piece_types_that_are_you(
-                rules
+                simplified_rules=simplified_rules
             ),
             object_piece_types_2=RuleReadingHelper.get_object_piece_types_that_are_win(
-                rules
+                simplified_rules=simplified_rules
             ),
         )
         return len(overlapping_map_pieces) > 0

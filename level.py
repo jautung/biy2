@@ -125,6 +125,8 @@ class Level:
             GLHelper.destroy_glut_window(glut_window=self.glut_window)
         elif key == b"/":
             self.map.print_rules()
+        elif key == b".":
+            self.map.print_simplified_rules()
 
     def _special_func(self, key, x, y):
         if key == GLUT_KEY_UP:
