@@ -18,11 +18,14 @@ DEFAULT_TEXT_IS_PUSH_RULE = Rule(
 
 def generate_rules_for_row(row: list[TextPieceType]) -> set[Rule]:
     rules: set[Rule] = set()
-    for start_index in range(len(row)):
+    start_index = 0
+    while start_index < len(row):
         rule = _generate_longest_possible_rule_given_start(row[start_index:])
         if rule is None:
+            start_index += 1
             continue
         rules.add(rule)
+        start_index += rule.get_length()
     return rules
 
 

@@ -26,12 +26,16 @@ WinText
 
 NotText
 1 3
-JellyText
+NotText
 2 3
-IsText
+NotText
 3 3
-SinkText
+JellyText
 4 3
+IsText
+5 3
+SinkText
+6 3
 
 DoorText
 1 4
