@@ -205,6 +205,45 @@ class JellyObjectPieceType(ObjectPieceType):
         return "JellyObjectPieceType"
 
 
+class BeltObjectPieceType(ObjectPieceType):
+    def __init__(self):
+        super().__init__(
+            asset_set=AssetSet.from_directional_assets(
+                up_asset_name="object_belt_up.png",
+                down_asset_name="object_belt_down.png",
+                left_asset_name="object_belt_left.png",
+                right_asset_name="object_belt_right.png",
+            )
+        )
+
+    def __repr__(self) -> str:
+        return "BeltObjectPieceType"
+
+
+class DoorObjectPieceType(ObjectPieceType):
+    def __init__(self):
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="object_door.png"
+            )
+        )
+
+    def __repr__(self) -> str:
+        return "DoorObjectPieceType"
+
+
+class KeyObjectPieceType(ObjectPieceType):
+    def __init__(self):
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="object_key.png"
+            )
+        )
+
+    def __repr__(self) -> str:
+        return "KeyObjectPieceType"
+
+
 class BabaTextPieceType(NounTextPieceType):
     def __init__(self):
         super().__init__(
@@ -320,6 +359,45 @@ class JellyTextPieceType(NounTextPieceType):
 
     def __repr__(self) -> str:
         return "JellyTextPieceType"
+
+
+class BeltTextPieceType(NounTextPieceType):
+    def __init__(self):
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_belt.png"
+            ),
+            associated_object_piece_type=BeltObjectPieceType,
+        )
+
+    def __repr__(self) -> str:
+        return "BeltTextPieceType"
+
+
+class DoorTextPieceType(NounTextPieceType):
+    def __init__(self):
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_door.png"
+            ),
+            associated_object_piece_type=DoorObjectPieceType,
+        )
+
+    def __repr__(self) -> str:
+        return "DoorTextPieceType"
+
+
+class KeyTextPieceType(NounTextPieceType):
+    def __init__(self):
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_key.png"
+            ),
+            associated_object_piece_type=KeyObjectPieceType,
+        )
+
+    def __repr__(self) -> str:
+        return "KeyTextPieceType"
 
 
 class WinTextPieceType(AttributeTextPieceType):
