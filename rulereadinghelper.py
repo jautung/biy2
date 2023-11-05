@@ -178,30 +178,37 @@ def _get_object_piece_types_that_have_attribute(
 ) -> set[Type[ObjectPieceType]]:
     object_piece_types_that_are_attribute: set[Type[ObjectPieceType]] = set()
     for simplified_rule in simplified_rules:
-        noun_text_piece_type_for_attribute = _get_noun_text_piece_type_for_attribute(
-            simplified_rule=simplified_rule,
-            attribute_text_piece_type=attribute_text_piece_type,
+        if simplified_rule.rule_type != RuleType.NOUN_CLAUSE_IS_ATTRIBUTE_CLAUSE:
+            continue
+        simplified_attribute_clause = _get_simplified_attribute_clause_from_simplified_noun_clause_is_attribute_rule(
+            simplified_rule=simplified_rule
         )
-        if noun_text_piece_type_for_attribute:
-            object_piece_types_that_are_attribute.add(
-                noun_text_piece_type_for_attribute.associated_object_piece_type
+        if len(simplified_attribute_clause) == 1 and isinstance(
+            simplified_attribute_clause[0], attribute_text_piece_type
+        ):
+            simplified_noun_clause = _get_simplified_noun_clause_from_simplified_rule(
+                simplified_rule=simplified_rule
             )
+            if len(simplified_noun_clause) == 1:
+                assert isinstance(simplified_noun_clause[0], NounTextPieceType)
+                object_piece_types_that_are_attribute.add(
+                    simplified_noun_clause[0].associated_object_piece_type
+                )
+            elif len(simplified_noun_clause) == 2:
+                assert isinstance(simplified_noun_clause[0], NotTextPieceType)
+                assert isinstance(simplified_noun_clause[1], NounTextPieceType)
+                object_piece_types_that_are_attribute = (
+                    object_piece_types_that_are_attribute.union(
+                        _get_all_object_piece_types().difference(
+                            set(
+                                [simplified_noun_clause[1].associated_object_piece_type]
+                            )
+                        )
+                    )
+                )
+            else:
+                assert False
     return object_piece_types_that_are_attribute
-
-
-def _get_noun_text_piece_type_for_attribute(
-    simplified_rule: Rule, attribute_text_piece_type: Type[TextPieceType]
-) -> NounTextPieceType:
-    # TODO: Incorporate 'NOT' as a rule left-hand-side modifier
-    if (
-        simplified_rule.rule_type == RuleType.NOUN_CLAUSE_IS_ATTRIBUTE_CLAUSE
-        and len(simplified_rule.text_piece_types) == 3
-        and isinstance(simplified_rule.text_piece_types[0], NounTextPieceType)
-        and isinstance(simplified_rule.text_piece_types[1], IsTextPieceType)
-        and isinstance(simplified_rule.text_piece_types[2], attribute_text_piece_type)
-    ):
-        return simplified_rule.text_piece_types[0]
-    return None
 
 
 def get_noun_mutations(simplified_rules: set[Rule]) -> set[NounMutation]:
@@ -245,6 +252,16 @@ def _get_simplified_noun_clause_from_simplified_rule(
         )
         return simplified_rule.text_piece_types[:index_of_has]
     assert False
+
+
+def _get_simplified_attribute_clause_from_simplified_noun_clause_is_attribute_rule(
+    simplified_rule: Rule,
+) -> list[TextPieceType]:
+    assert simplified_rule.rule_type == RuleType.NOUN_CLAUSE_IS_ATTRIBUTE_CLAUSE
+    index_of_is = RuleHelper.index_of_is_text_piece_type_in_list(
+        text_piece_types=simplified_rule.text_piece_types
+    )
+    return simplified_rule.text_piece_types[index_of_is + 1 :]
 
 
 def _get_all_object_piece_types() -> set[Type[ObjectPieceType]]:
