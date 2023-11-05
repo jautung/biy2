@@ -83,10 +83,11 @@ class Map:
         self.execute_move_locked = True
         # Statically freeze rules for entire timestep, even if things move
         rules = self._generate_rules()
+        # TODO: Figure out real in-game order of operations when player and npc moves to the same square
         self._execute_player_move(direction=direction, rules=rules)
         self._execute_npc_move(rules=rules)
         self._execute_shifts(rules=rules)
-        # TODO Figure out what the actual order of operations of these are in-game
+        # TODO: Figure out what the actual order of operations of these are in-game
         # I'm 80% sure that we freeze new rules to calculate these after movement, but I could be mistaken
         rules = self._generate_rules()
         self._apply_defeat_interactions(rules=rules)
@@ -130,7 +131,7 @@ class Map:
                 )
 
     def _execute_shifts(self, rules: set[Rule]):
-        # TODO for shift
+        # TODO: Implement shift
         pass
 
     def _execute_object_move(
@@ -240,15 +241,13 @@ class Map:
         )
 
     def _apply_defeat_interactions(self, rules: set[Rule]):
-        overlapping_map_pieces = (
-            self._get_all_overlapping_map_pieces_between_object_piece_types(
-                object_piece_types_1=RuleReadingHelper.get_object_piece_types_that_are_you(
-                    rules
-                ),
-                object_piece_types_2=RuleReadingHelper.get_object_piece_types_that_are_defeat(
-                    rules
-                ),
-            )
+        overlapping_map_pieces = self._get_all_overlapping_map_pieces_between_object_piece_types(
+            object_piece_types_1=RuleReadingHelper.get_object_piece_types_that_are_you(
+                rules
+            ),
+            object_piece_types_2=RuleReadingHelper.get_object_piece_types_that_are_defeat(
+                rules
+            ),
         )
         for overlapping_map_pieces_that_are_you, _ in overlapping_map_pieces:
             for map_piece in overlapping_map_pieces_that_are_you:
@@ -256,13 +255,11 @@ class Map:
 
     def _apply_sink_interactions(self, rules: set[Rule]):
         # TODO: Handle negation here so that floating objects do not sink
-        overlapping_map_pieces = (
-            self._get_all_overlapping_map_pieces_between_object_piece_types(
-                object_piece_types_1=RuleReadingHelper.get_object_piece_types_that_are_sink(
-                    rules
-                ),
-                object_piece_types_2=[ObjectPieceType],
-            )
+        overlapping_map_pieces = self._get_all_overlapping_map_pieces_between_object_piece_types(
+            object_piece_types_1=RuleReadingHelper.get_object_piece_types_that_are_sink(
+                rules
+            ),
+            object_piece_types_2=[ObjectPieceType],
         )
         for (
             overlapping_map_pieces_that_are_sink,
@@ -286,11 +283,11 @@ class Map:
                 self._remove_map_piece(map_piece=map_piece)
 
     def _apply_melt_interactions(self, rules: set[Rule]):
-        # TODO for melt
+        # TODO: Implement hot melt
         pass
 
     def _apply_open_close_interactions(self, rules: set[Rule]):
-        # TODO for open close
+        # TODO: Implement open close
         pass
 
     def _remove_map_piece(self, map_piece: MapPiece):
@@ -310,15 +307,13 @@ class Map:
 
     def is_in_win_state(self) -> bool:
         rules = self._generate_rules()
-        overlapping_map_pieces = (
-            self._get_all_overlapping_map_pieces_between_object_piece_types(
-                object_piece_types_1=RuleReadingHelper.get_object_piece_types_that_are_you(
-                    rules
-                ),
-                object_piece_types_2=RuleReadingHelper.get_object_piece_types_that_are_win(
-                    rules
-                ),
-            )
+        overlapping_map_pieces = self._get_all_overlapping_map_pieces_between_object_piece_types(
+            object_piece_types_1=RuleReadingHelper.get_object_piece_types_that_are_you(
+                rules
+            ),
+            object_piece_types_2=RuleReadingHelper.get_object_piece_types_that_are_win(
+                rules
+            ),
         )
         return len(overlapping_map_pieces) > 0
 

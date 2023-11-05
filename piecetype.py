@@ -404,3 +404,63 @@ class MoveTextPieceType(AttributeTextPieceType):
 
     def __repr__(self) -> str:
         return "MoveTextPieceType"
+
+
+class HotTextPieceType(AttributeTextPieceType):
+    def __init__(self):
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_hot.png"
+            )
+        )
+
+    def __repr__(self) -> str:
+        return "HotTextPieceType"
+
+
+class MeltTextPieceType(AttributeTextPieceType):
+    def __init__(self):
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_melt.png"
+            )
+        )
+
+    def __repr__(self) -> str:
+        return "MeltTextPieceType"
+
+
+class OpenTextPieceType(AttributeTextPieceType):
+    def __init__(self):
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_open.png"
+            )
+        )
+
+    def __repr__(self) -> str:
+        return "OpenTextPieceType"
+
+
+class CloseTextPieceType(AttributeTextPieceType):
+    def __init__(self):
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_close.png"
+            )
+        )
+
+    def __repr__(self) -> str:
+        return "CloseTextPieceType"
+
+
+class ShiftTextPieceType(AttributeTextPieceType):
+    def __init__(self):
+        super().__init__(
+            asset_set=AssetSet.from_single_default_asset(
+                default_asset_name="text_shift.png"
+            )
+        )
+
+    def __repr__(self) -> str:
+        return "ShiftTextPieceType"
