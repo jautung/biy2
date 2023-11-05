@@ -1,3 +1,5 @@
+from typing import Type
+
 from piecetype import *
 from rule import Rule
 from ruletype import RuleType
@@ -88,14 +90,49 @@ def _get_maybe_rule_type(maybe_rule: list[TextPieceType]) -> bool:
 
 
 def _is_noun_clause(maybe_noun_clause: list[TextPieceType]) -> bool:
-    # TODO: Properly implement this
-    return len(maybe_noun_clause) == 1 and isinstance(
-        maybe_noun_clause[0], NounTextPieceType
+    return _is_type_of_clause_with_conjugation(
+        maybe_type_of_clause=maybe_noun_clause, base_case_piece_type=NounTextPieceType
     )
 
 
 def _is_attribute_clause(maybe_attribute_clause: list[TextPieceType]) -> bool:
-    # TODO: Properly implement this
-    return len(maybe_attribute_clause) == 1 and isinstance(
-        maybe_attribute_clause[0], AttributeTextPieceType
+    return _is_type_of_clause_with_conjugation(
+        maybe_type_of_clause=maybe_attribute_clause,
+        base_case_piece_type=AttributeTextPieceType,
     )
+
+
+def _is_type_of_clause_with_conjugation(
+    maybe_type_of_clause: list[TextPieceType],
+    base_case_piece_type: Type[PieceType],
+) -> bool:
+    if len(maybe_type_of_clause) == 0:
+        return False
+    if len(maybe_type_of_clause) == 1:
+        return isinstance(maybe_type_of_clause[0], base_case_piece_type)
+    if isinstance(maybe_type_of_clause[0], NotTextPieceType):
+        return _is_type_of_clause_with_conjugation(
+            maybe_type_of_clause=maybe_type_of_clause[1:],
+            base_case_piece_type=base_case_piece_type,
+        )
+    if any(
+        [
+            isinstance(piece_type, AndTextPieceType)
+            for piece_type in maybe_type_of_clause
+        ]
+    ):
+        index_of_and = next(
+            index
+            for index, piece_type in enumerate(maybe_type_of_clause)
+            if isinstance(piece_type, AndTextPieceType)
+        )
+        clause_before_and = maybe_type_of_clause[:index_of_and]
+        clause_after_and = maybe_type_of_clause[index_of_and + 1 :]
+        return _is_type_of_clause_with_conjugation(
+            maybe_type_of_clause=clause_before_and,
+            base_case_piece_type=base_case_piece_type,
+        ) and _is_type_of_clause_with_conjugation(
+            maybe_type_of_clause=clause_after_and,
+            base_case_piece_type=base_case_piece_type,
+        )
+    return False
