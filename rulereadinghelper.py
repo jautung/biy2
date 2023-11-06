@@ -183,31 +183,23 @@ def _get_object_piece_types_that_have_attribute(
         simplified_attribute_clause = _get_simplified_attribute_clause_from_simplified_noun_clause_is_attribute_rule(
             simplified_rule=simplified_rule
         )
-        if len(simplified_attribute_clause) == 1 and isinstance(
+        if not len(simplified_attribute_clause) == 1 or not isinstance(
             simplified_attribute_clause[0], attribute_text_piece_type
         ):
-            simplified_noun_clause = _get_simplified_noun_clause_from_simplified_rule(
-                simplified_rule=simplified_rule
+            continue
+        simplified_noun_clause = _get_simplified_noun_clause_from_simplified_rule(
+            simplified_rule=simplified_rule
+        )
+        object_piece_types_that_are_attribute_from_this_simplified_rule = (
+            _get_object_piece_types_from_simplified_noun_clause(
+                simplified_noun_clause=simplified_noun_clause
             )
-            if len(simplified_noun_clause) == 1:
-                assert isinstance(simplified_noun_clause[0], NounTextPieceType)
-                object_piece_types_that_are_attribute.add(
-                    simplified_noun_clause[0].associated_object_piece_type
-                )
-            elif len(simplified_noun_clause) == 2:
-                assert isinstance(simplified_noun_clause[0], NotTextPieceType)
-                assert isinstance(simplified_noun_clause[1], NounTextPieceType)
-                object_piece_types_that_are_attribute = (
-                    object_piece_types_that_are_attribute.union(
-                        _get_all_object_not_text_piece_types().difference(
-                            set(
-                                [simplified_noun_clause[1].associated_object_piece_type]
-                            )
-                        )
-                    )
-                )
-            else:
-                assert False
+        )
+        object_piece_types_that_are_attribute = (
+            object_piece_types_that_are_attribute.union(
+                object_piece_types_that_are_attribute_from_this_simplified_rule
+            )
+        )
     return object_piece_types_that_are_attribute
 
 
@@ -264,7 +256,22 @@ def _get_simplified_attribute_clause_from_simplified_noun_clause_is_attribute_ru
     return simplified_rule.text_piece_types[index_of_is + 1 :]
 
 
-def _get_all_object_not_text_piece_types() -> set[Type[ObjectPieceType]]:
+def _get_object_piece_types_from_simplified_noun_clause(
+    simplified_noun_clause: list[TextPieceType],
+) -> set[Type[ObjectPieceType]]:
+    if len(simplified_noun_clause) == 1:
+        assert isinstance(simplified_noun_clause[0], NounTextPieceType)
+        return set([simplified_noun_clause[0].associated_object_piece_type])
+    if len(simplified_noun_clause) == 2:
+        assert isinstance(simplified_noun_clause[0], NotTextPieceType)
+        assert isinstance(simplified_noun_clause[1], NounTextPieceType)
+        return _get_all_object_but_not_text_piece_types().difference(
+            set([simplified_noun_clause[1].associated_object_piece_type])
+        )
+    assert False
+
+
+def _get_all_object_but_not_text_piece_types() -> set[Type[ObjectPieceType]]:
     all_object_piece_types: set[Type[ObjectPieceType]] = set()
 
     def search_object_piece_type_subclasses(object_piece_type: Type[ObjectPieceType]):
